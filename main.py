@@ -1,0 +1,47 @@
+from flask import Flask
+from flask_cors import CORS
+from model.db import db, ma
+from view.dashboard import dashboard_routes, smorest_dashboard_route
+from flask_smorest import Api
+#init app
+app = Flask(__name__)
+
+class Apiconfig:
+    API_TITLE = 'Sales Analyzer'
+    API_VERSION = 'v1'
+    OPENAPI_VERSION = '3.0.2'
+    OPENAPI_URL_PREFIX = '/api'
+    OPENAPI_SWAGGER_UI_PATH = '/docs'
+    OPENAPI_SWAGGER_UI_URL = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
+
+app.config.from_object(Apiconfig)
+
+#database init
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Je$u$wept_.145@localhost/superstore_sales'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+#init CORS {CROSS ORIGIN RESOURCE SHARING}
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [
+            "http://127.0.0.1:5000",  # Remove the trailing slash
+            "http://localhost:5000"   # Add localhost variant
+        ]
+    }
+})
+
+#init db
+db.init_app(app=app)
+#init ma
+ma.init_app(app=app)
+
+api = Api(app)
+
+app.register_blueprint(dashboard_routes)
+api.register_blueprint(smorest_dashboard_route)
+
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

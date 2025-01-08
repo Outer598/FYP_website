@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Rev</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <button class="sidebar-menu-button">
+        <span class="material-symbols-rounded">menu</span>
+    </button>    
+
+    <aside class="sidebar">
+        <header class="sidebar-header">
+            <a href="#" class="header-logo">
+                <img src="" alt="SalesRev-logo">
+            </a>
+            <button class="sidebar-toggler">
+                <span class="material-symbols-rounded">chevron_left</span>
+            </button>    
+        </header>
+        <nav class="sidebar-nav">
+            <!-- primary nav bar -->
+            <ul class="nav-list primary-nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="material-symbols-rounded">home</span>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-title">Dashboard</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="material-symbols-rounded">inventory</span>
+                        <span class="nav-label">Inventory</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-title">Inventory</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown-container">
+                    <a href="#" class="nav-link dropdown-toggle">
+                        <span class="material-symbols-rounded">Draft</span>
+                        <span class="nav-label">Reports</span>
+                        <span class="dropdown-icon material-symbols-rounded">keyboard_arrow_down</span>
+                    </a>
+                    <!-- dropdown menu -->
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-title">Report</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-link">Weekly</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-link">Monthly</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-link">Yearly</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-link">All reports</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="material-symbols-rounded">group</span>
+                        <span class="nav-label">Suppliers</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-title">Suppliers</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown-container">
+                    <a href="#" class="nav-link dropdown-toggle">
+                        <span class="material-symbols-rounded">notifications</span>
+                        <span class="nav-label">Notifications</span>
+                        <span class="dropdown-icon material-symbols-rounded">keyboard_arrow_down</span>
+                    </a>
+                    <!-- dropdown menu -->
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-title">Notifications</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-link">Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-link">Messages</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <!-- secondary nav bar -->
+             <ul class="nav-list secondary-nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="material-symbols-rounded">logout</span>
+                        <span class="nav-label">Log Out</span>
+                    </a>
+                </li>
+             </ul>
+        </nav>
+    </aside>
+
+    <!-- Adding a search bar and user profile nd name -->
+
+    <div class="search-profile">
+        <div class="search">
+            <input type="text" placeholder="Search for suppliers, product, and categories" name="search">
+            <button><span class="material-symbols-rounded">search</span></button>
+        </div>
+        
+        <div class="user-info">
+            <span>Welcome back - John Doe</span>
+            <img src="../static/img/profileImage.png" alt="users profile image" class="profile-image">
+        </div>
+    </div>
+
+    <!-- Adding chart.js combo chart -->
+    <div class="chart-container salrev">
+        <span>Sales & Revenue</span>
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <div class="income-container">
+        <div class="chart-container highest-income">
+            <span>Top categories</span>
+            <canvas id="myChart2"></canvas>
+        </div>
+        <div class="period-income">
+            <div class="daily">
+                <p>Daily Revenue</p>
+                <h6>₦xxxx</h6>
+            </div>
+            <div class="weekly">
+                <p>Weekly Revenue</p>
+                <h6>₦xxxxx</h6>
+            </div>
+            <div class="monthly">
+                <p>Monthly Revenue</p>
+                <h6>₦xxxxx</h6>
+            </div>
+            <div class="yearly">
+                <p>Yearly Revenue</p>
+                <h6>₦xxxx</h6>
+            </div>
+        </div>
+    </div>
+    <div class="recent-orders">
+        <div class="order-head">
+            <span>Recent Order</span>
+            <a href="#">See all</a>
+        </div>
+        <table>
+            <colgroup>
+                <col class="col1">
+                <col class="col2">
+                <col class="col3">
+                <col class="col4">
+                <col class="col5">
+            </colgroup>
+            <tr>
+                <th>Date</th>
+                <th>Customers Name</th>
+                <th>Order Id</th>
+                <th>Amount</th>
+                <th>Satus</th>
+            </tr>
+
+            <tr>
+                <td>2024-05-19</td>
+                <td>Aasa Olufisayo</td>
+                <td>a23835-6</td>
+                <td>₦xxxxx</td>
+                <td class="unpaid">Paid</td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../static/js/index.js"></script>
+</body>
+</html>
