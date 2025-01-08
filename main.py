@@ -2,9 +2,14 @@ from flask import Flask
 from flask_cors import CORS
 from model.db import db, ma
 from view.dashboard import dashboard_routes, smorest_dashboard_route
+from dotenv import load_dotenv, dotenv_values
+import os
 from flask_smorest import Api
 #init app
 app = Flask(__name__)
+
+load_dotenv()
+config = dotenv_values(".env")
 
 class Apiconfig:
     API_TITLE = 'Sales Analyzer'
@@ -17,7 +22,7 @@ class Apiconfig:
 app.config.from_object(Apiconfig)
 
 #database init
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Je$u$wept_.145@localhost/superstore_sales'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{os.getenv("myDatabaseUsername")}:{os.getenv("myDatabasePassword")}@{os.getenv("myDatabaseHost")}/{os.getenv("myDatabaseName")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #init CORS {CROSS ORIGIN RESOURCE SHARING}
