@@ -4,16 +4,16 @@ from flask_smorest import Blueprint as apiBlueprint
 from model.db import *
 import pandas as pd
 
-dashboard_routes = Blueprint("dashboard_routes", __name__)
-smorest_dashboard_route = apiBlueprint('t_cat', __name__, url_prefix='/api/dashboard', description='Get the top three categories for sales')
+dashBoard = Blueprint("dashBoard", __name__)
+dashboard_route = apiBlueprint('dashboard_route', __name__, url_prefix='/api/dashboard', description='Get the top three categories for sales')
 
 
-@dashboard_routes.route('/')
+@dashBoard.route('/')
 def dashboard():
-    return render_template("newIndex.html")
+    return render_template("index.html")
 
 
-@smorest_dashboard_route.route('/tCat')
+@dashboard_route.route('/tCat')
 class top_categories(MethodView):
 
     def get(self):
@@ -78,7 +78,7 @@ class top_categories(MethodView):
         return jsonify(top_cat), 200
 
 
-@smorest_dashboard_route.route('/salRev')
+@dashboard_route.route('/salRev')
 class SalRev(MethodView):
     def get(self):
         #to get the sales and revenue data for each year from the database
@@ -111,7 +111,7 @@ class SalRev(MethodView):
         
         return jsonify(sales_revenue), 200
 
-@smorest_dashboard_route.route('/average')
+@dashboard_route.route('/average')
 class avgCash(MethodView):
     
     def get(self):

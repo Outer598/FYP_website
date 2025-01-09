@@ -1,0 +1,71 @@
+{%extends "index.html"%}
+
+{% block title %}Categories{%endblock%}
+
+{% block extra_css %}
+<link rel="stylesheet" href="../static/css/category.css">
+{% endblock %}
+
+{%block content%}
+
+<div class="table">
+    <div class="table-head">
+        <div class="head">
+            <h1>Categories</h1>
+            <button><span>&plus; New Category</span></button>
+        </div>
+    </div>
+    <div class="table-section">
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Name</th>
+                    <th>Products</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <a href="#">
+                    <tr>
+                        <td>1</td>
+                        <td>Cocoa Beverage</td>
+                        <td>2 products</td>
+                        <td>
+                            <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
+                            <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
+                        </td>
+                    </tr>
+                </a>
+                <a href="#">
+                    <tr>
+                        <td>2</td>
+                        <td>rice</td>
+                        <td>2 products</td>
+                        <td>
+                            <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
+                            <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
+                        </td>
+                    </tr>
+                </a>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="edit-add display-none">
+    <h2>Edit</h2>
+    <form action="">
+        <label for="category_name">
+            Name
+        </label>
+        <input type="text" id="category_name">
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="../static/js/index.js"></script>
+<script src="../static/js/category.js"></script>
+{%endblock%}

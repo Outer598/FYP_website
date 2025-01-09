@@ -37,11 +37,16 @@ $(document).ready(function(){
     if (window.innerWidth <= 1024) {
         $(".sidebar").toggleClass("collapsed");
     }
+
     $(".search input").on("focus", function(){
       $(".search button").css("color", "rgba(21, 26, 46, 0.5)")
     })
+    $(".search input").on("blur", function(){
+      $(".search button").css("color", "rgba(21, 26, 46, 0.2)")
+    })
+
     // for graph data calls
-    salveRevenue();
+    salRevenue();
     topCategories();
     periodicRevenue();
 });
@@ -58,9 +63,14 @@ function closeAllDropdowns(){
     });
 }
 
-function salveRevenue() {
+function salRevenue() {
   // Get the canvas context
-  const ctx = $("#myChart")[0].getContext("2d");
+  const canvas = $("#myChart")
+  if (!canvas) {
+        console.log("Canvas not needed or not found, skipping.");
+        return; // Exit the function if canvas is not needed
+    }
+  const ctx = canvas[0].getContext("2d");
 
   // Helper function to format large numbers
   const formatNumber = (value) => {
@@ -253,7 +263,12 @@ function salveRevenue() {
 
 function topCategories() {
   // Get the canvas context
-  const ctx = $("#myChart2")[0].getContext("2d");
+  const canvas = $("#myChart2")
+  if (!canvas) {
+        console.log("Canvas not needed or not found, skipping.");
+        return; // Exit the function if canvas is not needed
+    }
+  const ctx = canvas[0].getContext("2d");
 
   // Helper function to format large numbers
   const formatNumber = (value) => {

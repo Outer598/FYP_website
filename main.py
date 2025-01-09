@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 from model.db import db, ma
-from view.dashboard import dashboard_routes, smorest_dashboard_route
+from view.dashboard import dashBoard, dashboard_route
+from view.category import category, category_route
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
@@ -42,8 +43,11 @@ ma.init_app(app=app)
 
 api = Api(app)
 
-app.register_blueprint(dashboard_routes)
-api.register_blueprint(smorest_dashboard_route)
+app.register_blueprint(dashBoard)
+app.register_blueprint(category)
+
+api.register_blueprint(dashboard_route)
+api.register_blueprint(category_route)
 
 
 
