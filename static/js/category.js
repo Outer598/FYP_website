@@ -13,7 +13,20 @@ $(document).ready(function(){
         });
     });
 
-     $(".sidebar").on("click", function(){
+    $(".sidebar").on("click", function(){
         $(".table").toggleClass("widen");
-     });
+    });
+
+    $(".edit").each(function(){
+        $(this).on("click", function(){
+            $(".edit-add").removeClass("display-none");
+            $(".table").addClass("opac");
+        });
+    });
+    $("#cancel").on("click", function(e){
+        e.preventDefault();
+
+        $(".edit-add").addClass("display-none");
+        $(".table").removeClass("opac");
+    })
 })
