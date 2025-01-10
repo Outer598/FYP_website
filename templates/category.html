@@ -25,29 +25,16 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                <a href="#">
-                    <tr>
-                        <td>1</td>
-                        <td>Cocoa Beverage</td>
-                        <td>2 products</td>
-                        <td>
-                            <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
-                            <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
-                        </td>
-                    </tr>
-                </a>
-                <a href="#">
-                    <tr>
-                        <td>2</td>
-                        <td>rice</td>
-                        <td>2 products</td>
-                        <td>
-                            <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
-                            <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
-                        </td>
-                    </tr>
-                </a>
+            <tbody class="category-container">
+                <tr class="category-list">
+                    <td class="id"></td>
+                    <td class="name"></td>
+                    <td class="product-count"></td>
+                    <td>
+                        <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
+                        <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -57,7 +44,7 @@
     <h2>Edit a Category</h2>
     <form action="">
         <label for="category_name">
-            Name
+            Name:
         </label>
         <input type="text" id="category_name">
         <button type="submit" id="update">Update</button>
@@ -65,10 +52,10 @@
     </form>
 </div>
 <div class="add-cat display-none">
-    <h2>Edit a Category</h2>
-    <form action="">
+    <h2>Add New Category</h2>
+    <form action="" method="post">
         <label for="category_name">
-            Name
+            Name:
         </label>
         <input type="text" id="category_name">
         <button type="submit" id="add">Create</button>
@@ -80,7 +67,9 @@
     <button type="submit" id="delete-cancel">Cancel</button>
     <button type="submit" id="delete">Delete</button>
 </div>
-
+<div class="message display-none">
+    <h6>Category Created Successfully</h6>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

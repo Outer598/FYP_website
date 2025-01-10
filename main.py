@@ -49,8 +49,5 @@ app.register_blueprint(category)
 api.register_blueprint(dashboard_route)
 api.register_blueprint(category_route)
 
-
-
-
 if __name__ == "__main__":
     app.run(debug=True)

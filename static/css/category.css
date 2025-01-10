@@ -134,7 +134,7 @@ tr:hover td{
 
 .edit-cat input, .add-cat input{
     border: 0px;
-    width: 82%;
+    width: 80%;
     height: 30px;
     background-color: white;
     border-radius: 10px;
@@ -185,4 +185,16 @@ tr:hover td{
     transition: 0.4 ease 0.5s;
 }
 
+.message{
+    background: #228B22; /* Fix the syntax error: remove extra space after ':' */
+    width: 200px;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    left: 83%; /* Adjust to ensure proper alignment */
+    bottom: 100px; /* Fixed position, no layout shifts */
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000; 
+}
 
