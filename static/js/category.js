@@ -76,7 +76,9 @@ $(document).ready(function(){
                     $(".edit-cat, .add-cat, .delete-cat").addClass("display-none");
                     $(".table").removeClass("opac");
                     $(".message").fadeIn(1000).fadeOut(1000)
-                    window.location.href = "/inventory"
+                    setTimeout(function() {
+                        window.location.href = "/inventory";
+                    }, 2000); 
                 },
                 error: function(xhr, status, error){
                     console.log('error: ' + error)
