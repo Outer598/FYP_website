@@ -111,7 +111,7 @@ tr:hover td{
 }
 
 
-.edit-add{
+.edit-cat, .add-cat, .delete-cat{
     background-color: whitesmoke;
     width: 400px;
     height: 200px;
@@ -126,13 +126,13 @@ tr:hover td{
 }
 
 
-.edit-add h2{
+.edit-cat h2, .add-cat h2, .delete-cat h2{
     text-align: center;
     font-weight: normal;
     margin-bottom: 35px;
 }
 
-.edit-add input{
+.edit-cat input, .add-cat input{
     border: 0px;
     width: 82%;
     height: 30px;
@@ -142,7 +142,7 @@ tr:hover td{
     margin-left: 10px;
 }
 
-.edit-add #update{
+.edit-cat #update, .add-cat #add, .delete-cat #delete-cancel{
     background-color: blue;
     width: 100px;
     margin-left: 60px;
@@ -154,7 +154,7 @@ tr:hover td{
     border-radius: 10px;
 }
 
-.edit-add #cancel{
+.edit-cat #edit-cancel, .add-cat #add-cancel, .delete-cat #delete{
     background-color: red;
     width: 100px;
     margin-left: 90px;
