@@ -125,6 +125,9 @@ tr:hover td{
     box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.4);
 }
 
+.delete-cat{
+    height: 250px;
+}
 
 .edit-cat h2, .add-cat h2, .delete-cat h2{
     text-align: center;
@@ -165,6 +168,11 @@ tr:hover td{
     border: none;
     border-radius: 10px;
 }
+
+.delete-cat #delete{
+    margin-left: 50px;
+}
+
 .opac{
     opacity: 0.5;
 }

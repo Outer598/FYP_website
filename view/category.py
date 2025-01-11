@@ -42,3 +42,43 @@ class Cat(MethodView):
         except Exception as e:
             db.session.rollback()
             return jsonify({'message': "Error creating category", "error": f"{str(e)}"}), 400
+
+
+@category_route.route("/upDelCat/<int:id>")
+class uDCat(MethodView):
+
+    def patch(self, id):
+        data = request.get_json()
+
+        category = Category.query.filter_by(id=id).first()
+        
+        if category == None:
+            return jsonify({"message": "Category does not exist"}), 404
+        
+        if data['category_name'] == "":
+            return jsonify({"message": "Category Id not given"}), 400
+        
+        try:
+            for key, value in data.items():
+                if hasattr(category, key):
+                    setattr(category, key, value.title())
+
+            db.session.commit()
+            return jsonify({"message":"Category Name Updated"}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"message": "Error updating category", "Error": f"{str(e)}"}), 400
+    
+    def delete(self, id):
+        category = Category.query.filter_by(id=id).first()
+
+        if category == None:
+            return jsonify({"message": "Category does not exist"}), 404
+
+        try:
+            db.session.delete(category)
+            db.session.commit()
+            return jsonify({"message": "Deleted Category"}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"message": "Error deleting category", "error": f"{str(e)}"}), 400
