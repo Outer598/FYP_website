@@ -8,13 +8,11 @@ from sqlalchemy.orm import relationship
 db = SQLAlchemy()
 ma = Marshmallow()
 
-#category
 class Category(db.Model):
     __tablename__ = 'categories'
     id = Column(Integer, primary_key=True, nullable=False)
     category_name = Column(String(50), unique=True, nullable=False)
 
-#supllier
 class Supplier(db.Model):
     __tablename__ = 'suppliers'
     id = Column(Integer, primary_key=True, nullable=False)
@@ -24,31 +22,28 @@ class Supplier(db.Model):
     email = Column(String(100), nullable=False)
     company_name = Column(String(100))
 
-#product
 class Product(db.Model):
     __tablename__ = 'products'
     id = Column(Integer, primary_key=True, nullable=False)
     product_name = Column(String(100), nullable=False)
-    category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
-    supplier_id = Column(Integer, ForeignKey('suppliers.id'), nullable=False)
+    category_id = Column(Integer, ForeignKey('categories.id', ondelete='CASCADE'), nullable=False)
+    supplier_id = Column(Integer, ForeignKey('suppliers.id', ondelete='CASCADE'), nullable=False)
     price = Column(DECIMAL(10, 2), nullable=False)
     amount_sold = Column(Integer, default=0)
 
-    category = relationship('Category')
-    supplier = relationship('Supplier')
+    category = relationship('Category', cascade="all, delete")
+    supplier = relationship('Supplier', cascade="all, delete")
 
-#inventory
 class Inventory(db.Model):
     __tablename__ = 'inventory'
     id = Column(Integer, primary_key=True, nullable=False)
-    product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
     current_stock_level = Column(Integer, nullable=False)
     original_stock_level = Column(Integer, nullable=False)
     reordering_threshold = Column(Integer, default=0)
 
-    product = relationship('Product')
+    product = relationship('Product', cascade="all, delete")
 
-#customer
 class Customer(db.Model):
     __tablename__ = 'customers'
     id = Column(Integer, primary_key=True, nullable=False)
@@ -58,59 +53,53 @@ class Customer(db.Model):
     email = Column(String(100), nullable=False)
     customer_password = Column(String(100), nullable=False)
 
-#order
 class Order(db.Model):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True, nullable=False)
-    customer_id = Column(Integer, ForeignKey('customers.id'), nullable=False)
-    product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
+    customer_id = Column(Integer, ForeignKey('customers.id', ondelete='CASCADE'), nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
     quantity = Column(Integer, nullable=False)
     line_total = Column(Integer, nullable=False)
 
-    customer = relationship('Customer')
-    product = relationship('Product')
+    customer = relationship('Customer', cascade="all, delete")
+    product = relationship('Product', cascade="all, delete")
 
-#transaction
 class Transaction(db.Model):
     __tablename__ = 'transactions'
     id = Column(Integer, primary_key=True, nullable=False)
-    customer_id = Column(Integer, ForeignKey('customers.id'))
-    order_id = Column(Integer, ForeignKey('orders.id'), nullable=False)
+    customer_id = Column(Integer, ForeignKey('customers.id', ondelete='CASCADE'))
+    order_id = Column(Integer, ForeignKey('orders.id', ondelete='CASCADE'), nullable=False)
     total_amount = Column(Integer, default=0, nullable=False)
     payment_method = Column(String(50), nullable=False)
 
-    order = relationship('Order')
-    customer = relationship('Customer')
+    order = relationship('Order', cascade="all, delete")
+    customer = relationship('Customer', cascade="all, delete")
 
-#productincome
 class ProductIncome(db.Model):
     __tablename__ = 'product_incomes'
     id = Column(Integer, primary_key=True, nullable=False)
-    product_id = Column(Integer, ForeignKey('products.id'), nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id', ondelete='CASCADE'), nullable=False)
     product_specific_income = Column(DECIMAL(10, 2))
     total_units_sold = Column(Integer, nullable=False)
     period_type = Column(String(50), nullable=False)
     record_date = Column(Date, nullable=False)
 
-    product = relationship('Product')
+    product = relationship('Product', cascade="all, delete")
 
-#report
 class Report(db.Model):
     __tablename__ = 'reports'
     id = Column(Integer, primary_key=True, nullable=False)
     report_name = Column(String(120), nullable=False)
     report_type = Column(String(20), nullable=False)
-    product_income_id = Column(Integer, ForeignKey('product_incomes.id'), nullable=False)
+    product_income_id = Column(Integer, ForeignKey('product_incomes.id', ondelete='CASCADE'), nullable=False)
 
-    product_income = relationship('ProductIncome')
+    product_income = relationship('ProductIncome', cascade="all, delete")
 
-#department
 class Department(db.Model):
     __tablename__ = 'departments'
     id = Column(Integer, primary_key=True, nullable=False)
     department_name = Column(String(50), nullable=False)
 
-#employees
 class Employee(db.Model):
     __tablename__ = 'employees'
     id = Column(Integer, primary_key=True, nullable=False)
@@ -121,25 +110,26 @@ class Employee(db.Model):
     email = Column(String(100), nullable=False)
     emp_password = Column(String(100), nullable=False)
     emp_position = Column(String(100))
-    department_id = Column(Integer, ForeignKey('departments.id'), nullable=False)
-    supervisor_id = Column(Integer, ForeignKey('employees.id'))
+    department_id = Column(Integer, ForeignKey('departments.id', ondelete='CASCADE'), nullable=False)
+    supervisor_id = Column(Integer, ForeignKey('employees.id', ondelete='SET NULL'))
 
-    department = relationship('Department')
-    supervisor = relationship('Employee', remote_side=[id])
+    department = relationship('Department', cascade="all, delete")
+    supervisor = relationship('Employee', remote_side=[id], cascade="all, delete")
 
-#receipt
 class Receipt(db.Model):
     __tablename__ = 'receipt'
     id = Column(String(10), primary_key=True, nullable=False)
     receipt_name = Column(String(50))
     date_issued = Column(Date, nullable=False)
-    customer_id = Column(Integer, ForeignKey('customers.id'), nullable=False)
-    order_id = Column(Integer, ForeignKey('orders.id'), nullable=False)
-    transaction_id = Column(Integer, ForeignKey('transactions.id'), nullable=False)
+    customer_id = Column(Integer, ForeignKey('customers.id', ondelete='CASCADE'), nullable=False)
+    order_id = Column(Integer, ForeignKey('orders.id', ondelete='CASCADE'), nullable=False)
+    transaction_id = Column(Integer, ForeignKey('transactions.id', ondelete='CASCADE'), nullable=False)
 
-    order = relationship('Order')
-    transaction = relationship('Transaction')
-    customer = relationship('Customer')
+    order = relationship('Order', cascade="all, delete")
+    transaction = relationship('Transaction', cascade="all, delete")
+    customer = relationship('Customer', cascade="all, delete")
+
+
 
 
 #marshmallow chema declarations
