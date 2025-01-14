@@ -114,7 +114,7 @@ class Employee(db.Model):
     supervisor_id = Column(Integer, ForeignKey('employees.id', ondelete='SET NULL'))
 
     department = relationship('Department', cascade="all, delete")
-    supervisor = relationship('Employee', remote_side=[id], cascade="all, delete")
+    supervisor = relationship('Employee', remote_side=[id])
 
 class Receipt(db.Model):
     __tablename__ = 'receipt'
