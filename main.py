@@ -3,6 +3,7 @@ from flask_cors import CORS
 from model.db import db, ma
 from view.dashboard import dashBoard, dashboard_route
 from view.category import category, category_route
+from view.product import product, product_route
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
@@ -45,9 +46,11 @@ api = Api(app)
 
 app.register_blueprint(dashBoard)
 app.register_blueprint(category)
+app.register_blueprint(product)
 
 api.register_blueprint(dashboard_route)
 api.register_blueprint(category_route)
+api.register_blueprint(product_route)
 
 if __name__ == "__main__":
     app.run(debug=True)
