@@ -150,10 +150,10 @@ tr:hover td{
 }
 
 
-.edit-cat, .add-cat, .delete-cat{
+.edit-pro, .add-pro, .delete-pro{
     background-color: whitesmoke;
-    width: 400px;
-    height: 200px;
+    width: 500px;
+    height: 300px;
     justify-content: center;
     position: relative;
     left: 60%;
@@ -164,17 +164,17 @@ tr:hover td{
     box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.4);
 }
 
-.delete-cat{
+.delete-pro{
     height: 250px;
 }
 
-.edit-cat h2, .add-cat h2, .delete-cat h2{
+.edit-pro h2, .add-pro h2, .delete-pro h2{
     text-align: center;
     font-weight: normal;
     margin-bottom: 35px;
 }
 
-.edit-cat input, .add-cat input{
+.edit-pro #product_name, .add-pro #add-product_name{
     border: 0px;
     width: 80%;
     height: 30px;
@@ -182,9 +182,20 @@ tr:hover td{
     border-radius: 10px;
     padding: 20px;
     margin-left: 10px;
+    margin-bottom: 20px;
+}
+.edit-pro #in-stock, .add-pro #add-in-stock{
+    border: 0px;
+    width: 63%;
+    height: 30px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-left: 10px;
+    margin-bottom: 20px;
 }
 
-.edit-cat #update, .add-cat #add, .delete-cat #delete-cancel{
+.edit-pro #update, .add-pro #add, .delete-pro #delete-cancel{
     background-color: blue;
     width: 100px;
     margin-left: 60px;
@@ -196,7 +207,7 @@ tr:hover td{
     border-radius: 10px;
 }
 
-.edit-cat #edit-cancel, .add-cat #add-cancel, .delete-cat #delete{
+.edit-pro #edit-cancel, .add-pro #add-cancel, .delete-pro #delete{
     background-color: red;
     width: 100px;
     margin-left: 90px;
@@ -208,7 +219,7 @@ tr:hover td{
     border-radius: 10px;
 }
 
-.delete-cat #delete{
+.delete-pro #delete{
     margin-left: 50px;
 }
 

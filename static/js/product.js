@@ -1,5 +1,64 @@
 $(document).ready(function(){
 
+    $(".head #search").on("input", function() {
+        let search_data = $(this).val().toLowerCase();
+        
+        // Get the rows dynamically each time instead of storing them
+        $("tbody tr").each(function(index, element) {
+            let table_data = $(element).text().toLowerCase();
+            $(element).toggleClass("hide", table_data.indexOf(search_data) < 0)
+                        .css("--delay", index/25 + "s");
+        });
+    });
+
+    $(document).on("click", '.edit', function() {
+        const row = $(this).closest("tr");
+        
+        const getColumnData = (index) => {
+            return row.find('td').eq(index).text();
+        };
+        
+        // Store the category ID for the update operation
+        $(".edit-pro").data('categoryId', getColumnData(0));
+        
+        $(".edit-pro").removeClass("display-none");
+        $(".table").addClass("opac");
+        $(".edit-pro #product_name").attr("value", getColumnData(1));
+        $(".edit-pro #in-stock").attr("value", getColumnData(2));
+    });
+
+    $("#edit-cancel, #add-cancel, #delete-cancel").on("click", function(e){
+        e.preventDefault();
+
+        $(".edit-pro, .add-pro, .delete-pro").addClass("display-none");
+        $(".table").removeClass("opac");
+    });
+
+    $(".table-head .head button").on("click", function(){
+        $(".add-pro").removeClass("display-none");
+        $(".table").addClass("opac");
+
+        
+    });
+
+    $(document).on("click", '.delete', function() {
+        const row = $(this).closest("tr");
+        
+        const getColumnData = (index) => {
+            return row.find('td').eq(index).text().trim(); // Added trim() to remove whitespace
+        };
+    
+        // Log the ID we're getting
+        console.log("Category ID:", getColumnData(0));
+    
+        $(".delete-pro h2").html(`Are you sure you want to Delete: ${getColumnData(1)}?`);
+        $(".delete-pro").removeClass("display-none");
+        $(".table").addClass("opac");
+        
+        // Store the row data for later use
+        $(".delete-pro").data('row', row);
+    });
+
     topProducts();
     leastProducts();
 });

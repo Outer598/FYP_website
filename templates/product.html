@@ -38,8 +38,8 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody class="category-container">
-                <tr class="category-list">
+            <tbody class="product-container">
+                <tr class="product-list">
                     <td class="id">1</td>
                     <td class="name">Yam</td>
                     <td class="instock">1000</td>
@@ -49,7 +49,7 @@
                         <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
                     </td>
                 </tr>
-                <tr class="category-list">
+                <tr class="product-list">
                     <td class="id">2</td>
                     <td class="name">rice</td>
                     <td class="instock">500</td>
@@ -64,36 +64,40 @@
     </div>
 </div>
 
-<div class="edit-cat display-none">
-    <h2>Edit a Category</h2>
+<div class="edit-pro display-none">
+    <h2>Edit Product</h2>
     <form action="">
-        <label for="category_name">
+        <label for="product_name">
             Name:
         </label>
-        <input type="text" id="category_name">
+        <input type="text" id="product_name">
+        <label for="in-stock">Amount Instock:</label>
+        <input type="text" id="in-stock">
         <button type="submit" id="update">Update</button>
         <button type="submit" id="edit-cancel">Cancel</button>
     </form>
 </div>
-<div class="add-cat display-none">
-    <h2>Add New Category</h2>
+<div class="add-pro display-none">
+    <h2>Add New Product</h2>
     <form action="" method="post">
-        <label for="category_name">
+        <label for="add-product_name">
             Name:
         </label>
-        <input type="text" id="category_name">
+        <input type="text" id="add-product_name">
+        <label for="add-in-stock">Stock Amount:</label>
+        <input type="text" name="add-in-stock" id="add-in-stock">
         <button type="submit" id="add">Create</button>
         <button type="submit" id="add-cancel">Cancel</button>
     </form>
 </div>
-<div class="delete-cat display-none">
-    <h2>Are you sure you want to delete Category</h2>
-    <h6>Please note by clicking delete everything associated with the this category will be deleted</h6>
+<div class="delete-pro display-none">
+    <h2>Are you sure you want to delete Product</h2>
+    <h6>Please note by clicking delete everything associated with the this Product will be deleted</h6>
     <button type="submit" id="delete">Delete</button>
     <button type="submit" id="delete-cancel">Cancel</button>
 </div>
 <div class="message display-none">
-    <h6>Category Created Successfully</h6>
+    <h6>Product Created Successfully</h6>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>

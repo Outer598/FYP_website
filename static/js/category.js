@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $(".search input").attr("placeholder", "Search for Categories")
+    $(".search input").attr("placeholder", "Search for Categories");
  
     // Move the search event handler inside document.ready but update how it works
     $(".search input").on("input", function() {
