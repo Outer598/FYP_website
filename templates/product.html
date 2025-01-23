@@ -23,7 +23,7 @@
         <div class="head">
             <h1>Products</h1>
             <label for="lookUp"></label>
-            <input type="text" name="lookUp" id="search" placeholder="Search for Product">
+            <input type="text" name="lookUp" id="lookUp" placeholder="Search for Product">
             <button><span>&plus; New Product</span></button>
         </div>
     </div>
@@ -35,25 +35,17 @@
                     <th>Name</th>
                     <th>In-stock</th>
                     <th>Amount-Sold</th>
+                    <th>Price</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody class="product-container">
                 <tr class="product-list">
-                    <td class="id">1</td>
-                    <td class="name">Yam</td>
-                    <td class="instock">1000</td>
-                    <td class="amountsold">200</td>
-                    <td>
-                        <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
-                        <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
-                    </td>
-                </tr>
-                <tr class="product-list">
-                    <td class="id">2</td>
-                    <td class="name">rice</td>
-                    <td class="instock">500</td>
-                    <td class="amountsold">20</td>
+                    <td class="id"></td>
+                    <td class="name"></td>
+                    <td class="instock"></td>
+                    <td class="amountsold"></td>
+                    <td class="price"></td>
                     <td>
                         <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
                         <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
@@ -73,6 +65,8 @@
         <input type="text" id="product_name">
         <label for="in-stock">Amount Instock:</label>
         <input type="text" id="in-stock">
+        <label for="price">Price:</label>
+        <input type="text" id="price">
         <button type="submit" id="update">Update</button>
         <button type="submit" id="edit-cancel">Cancel</button>
     </form>
@@ -86,6 +80,8 @@
         <input type="text" id="add-product_name">
         <label for="add-in-stock">Stock Amount:</label>
         <input type="text" name="add-in-stock" id="add-in-stock">
+        <label for="add-price">Price:</label>
+        <input type="text" name="add-price" id="add-price">
         <button type="submit" id="add">Create</button>
         <button type="submit" id="add-cancel">Cancel</button>
     </form>

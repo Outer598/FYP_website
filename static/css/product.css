@@ -61,7 +61,7 @@
     color: white;
 }
 
-#search{
+#lookUp{
     width: 200px;
     height: 40px;
     border: 1px solid black;
@@ -153,7 +153,7 @@ tr:hover td{
 .edit-pro, .add-pro, .delete-pro{
     background-color: whitesmoke;
     width: 500px;
-    height: 300px;
+    height: 400px;
     justify-content: center;
     position: relative;
     left: 60%;
@@ -174,7 +174,7 @@ tr:hover td{
     margin-bottom: 35px;
 }
 
-.edit-pro #product_name, .add-pro #add-product_name{
+.edit-pro #product_name, .edit-pro #price, .add-pro #add-product_name, .add-pro #add-price{
     border: 0px;
     width: 80%;
     height: 30px;

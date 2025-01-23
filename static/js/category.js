@@ -192,6 +192,12 @@ $(document).ready(function(){
     });
 
     Categories();
+
+    $(document).on("click", '.category-container .category-list', function(){
+        const itemId= $(this).find('.id').text();
+
+        window.location.href = `/category/product?id=${itemId}`;
+    })
 })
 
 function Categories(){
