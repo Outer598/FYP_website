@@ -82,5 +82,41 @@ class item(MethodView):
         if data["productName"].title() in all_products:
             return jsonify({"message":'Item already in Database'}), 400
         
-        if data['productName'] == "" or data['price'] == "" or data['stockLevel'] == "" or data['reorderThreshold'] == "":
-            return jsonify({"message":'Required fields not'}), 400
+        if data['productName'] == "" or data['price'] == "" or data['stockLevel'] == "" or data['reorderThreshold'] == "" or data['supplierName'] == "":
+            return jsonify({"message":'Required fields not completed'}), 400
+        
+        supplierid = Supplier.query.filter(and_(
+            Supplier.f_name.like(f"%{data['supplierName'].split(" ")[0]}%"),
+            Supplier.l_name.like(f"%{data['supplierName'].split(" ")[1]}%")))\
+            .with_entities(Supplier.id).first()
+        
+        if supplierid == None:
+            return jsonify({"message": "Supplier does not exist"}), 404
+        else:
+            supplierid = supplierid[0]
+        
+        try:
+            newProduct = Product(
+                product_name=data['productName'].title(),
+                amount_sold=0,
+                price=data['price'],
+                category_id=itemId,
+                supplier_id=supplierid
+            )
+            db.session.add(newProduct)
+            db.session.commit()
+
+            newInventory = Inventory(
+                product_id=Product.query.filter_by(product_name=data['productName'].title()).with_entities(Product.id).first()[0],
+                current_stock_level=data['stockLevel'],
+                original_stock_level=data['stockLevel'],
+                reordering_threshold=data['reorderThreshold']
+            )
+            db.session.add(newInventory)
+            db.session.commit()
+            return jsonify({"message": 'Product created successfully'}), 201
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'message': "Error creating product", "error": f"{str(e)}"}), 400
+        
+        
