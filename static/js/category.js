@@ -193,10 +193,17 @@ $(document).ready(function(){
 
     Categories();
 
-    $(document).on("click", '.category-container .category-list', function(){
-        const itemId= $(this).find('.id').text();
+    $(document).on("click", '.category-container .category-list .id, .category-container .category-list .name, .category-container .category-list .product-count', function(){
+        const item= $(this).closest("tr");
+        console.log(item);
 
-        window.location.href = `/category/product?id=${itemId}`;
+        const itemData = (index) => {
+            return item.find('td').eq(index).text().trim(); // Added trim() to remove whitespace
+        };
+        const itemId = itemData(0);
+        const itemName = itemData(1);
+
+        window.location.href = `/category/product?id=${itemId}&name=${itemName}`;
     })
 })
 

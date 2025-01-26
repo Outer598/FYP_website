@@ -52,7 +52,7 @@ class item(MethodView):
     def get(self):
         categoryId = request.args.get('id')
         categoryProducts = Product.query.filter_by(category_id=categoryId).join(Inventory, Product.id==Inventory.product_id).\
-        with_entities(Product.id, Product.product_name, Inventory.current_stock_level,Product.amount_sold,Product.price).all()
+        with_entities(Product.id, Product.product_name, Product.amount_sold,Product.price,  Inventory.current_stock_level, Inventory.reordering_threshold).all()
 
         items = []
         for item in categoryProducts:
@@ -60,9 +60,10 @@ class item(MethodView):
                 {
                     'id': item[0],
                     'name': item[1],
-                    'in-stock': item[2],
-                    'amount-sold': item[3],
-                    'price': float(item[4])
+                    'amount-sold': item[2],
+                    'price': float(item[3]),
+                    'in-stock': item[4],
+                    'reordering-threshold': item[5],
                 }
             )
 

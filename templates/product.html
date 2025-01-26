@@ -33,9 +33,10 @@
                 <tr>
                     <th>id</th>
                     <th>Name</th>
+                    <th>Price</th>
                     <th>In-stock</th>
                     <th>Amount-Sold</th>
-                    <th>Price</th>
+                    <th>Reordering<br>Threshold</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -43,9 +44,10 @@
                 <tr class="product-list">
                     <td class="id"></td>
                     <td class="name"></td>
+                    <td class="price"></td>
                     <td class="instock"></td>
                     <td class="amountsold"></td>
-                    <td class="price"></td>
+                    <td class="reorder"></td>
                     <td>
                         <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
                         <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
@@ -63,10 +65,12 @@
             Name:
         </label>
         <input type="text" id="product_name">
-        <label for="in-stock">Amount Instock:</label>
-        <input type="text" id="in-stock">
         <label for="price">Price:</label>
         <input type="text" id="price">
+        <label for="in-stock">Amount Instock:</label>
+        <input type="text" id="in-stock">
+        <label for="edit-reorder">Reordering Threshold:</label>
+        <input type="text" name="edit-reorder" id="edit-reorder">
         <button type="submit" id="update">Update</button>
         <button type="submit" id="edit-cancel">Cancel</button>
     </form>
@@ -78,10 +82,12 @@
             Name:
         </label>
         <input type="text" id="add-product_name">
-        <label for="add-in-stock">Stock Amount:</label>
-        <input type="text" name="add-in-stock" id="add-in-stock">
         <label for="add-price">Price:</label>
         <input type="text" name="add-price" id="add-price">
+        <label for="add-in-stock">Stock Amount:</label>
+        <input type="text" name="add-in-stock" id="add-in-stock">
+        <label for="add-reorder">Reordering Threshold:</label>
+        <input type="text" name="add-reorder" id="add-reorder">
         <button type="submit" id="add">Create</button>
         <button type="submit" id="add-cancel">Cancel</button>
     </form>
@@ -93,7 +99,7 @@
     <button type="submit" id="delete-cancel">Cancel</button>
 </div>
 <div class="message display-none">
-    <h6>Product Created Successfully</h6>
+    <h6></h6>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>

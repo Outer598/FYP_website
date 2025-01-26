@@ -1,4 +1,5 @@
 const categoryId = window.location.search.substring(1).split('&')[0].split('=')[1];
+
 $(document).ready(function(){
 
     $(".head #lookUp").on("input", function() {
@@ -25,8 +26,9 @@ $(document).ready(function(){
         $(".edit-pro").removeClass("display-none");
         $(".table").addClass("opac");
         $(".edit-pro #product_name").attr("value", getColumnData(1));
-        $(".edit-pro #in-stock").attr("value", getColumnData(2));
-        $(".edit-pro #price").attr("value", getColumnData(4));
+        $(".edit-pro #in-stock").attr("value", getColumnData(3));
+        $(".edit-pro #price").attr("value", getColumnData(2));
+        $(".edit-pro #edit-reorder").attr("value", getColumnData(5));
     });
 
     $("#edit-cancel, #add-cancel, #delete-cancel").on("click", function(e){
@@ -60,7 +62,7 @@ $(document).ready(function(){
         // Store the row data for later use
         $(".delete-pro").data('row', row);
     });
-
+    
     topProducts();
     leastProducts();
     categoryProducts();
@@ -247,24 +249,30 @@ function categoryProducts(){
         type:'GET',
         contentType: 'application/json',
         success: function(response){
-            const productRowTemplate = $('.product-list').first();
-            productRowTemplate.find('.id').text(response[0].id);
-            productRowTemplate.find('.name').text(response[0].name);
-            productRowTemplate.find('.instock').text(response[0]['in-stock']);
-            productRowTemplate.find('.amountsold').text(response[0]['amount-sold']);
-            productRowTemplate.find('.price').text(`₦ ${response[0].price}`);
+            if (response.length !== 0){
+                const productRowTemplate = $('.product-list').first();
+                productRowTemplate.find('.id').text(response[0].id);
+                productRowTemplate.find('.name').text(response[0].name);
+                productRowTemplate.find('.price').text(`₦ ${response[0].price}`);
+                productRowTemplate.find('.instock').text(response[0]['in-stock']);
+                productRowTemplate.find('.amountsold').text(response[0]['amount-sold']);
+                productRowTemplate.find('.reorder').text(response[0]['reordering-threshold']);
 
-            for (let i = 1; i < response.length; i++){
-                let newProduct = productRowTemplate.clone();
-                newProduct.find('.id').text(response[i].id);
-                newProduct.find('.name').text(response[i].name);
-                newProduct.find('.instock').text(response[i]['in-stock']);
-                newProduct.find('.amountsold').text(response[i]['amount-sold']);
-                newProduct.find('.price').text(`₦ ${response[i].price}`);
-                
-                $('tbody').append(newProduct);
+                for (let i = 1; i < response.length; i++){
+                    let newProduct = productRowTemplate.clone();
+                    newProduct.find('.id').text(response[i].id);
+                    newProduct.find('.name').text(response[i].name);
+                    newProduct.find('.price').text(`₦ ${response[i].price}`);
+                    newProduct.find('.instock').text(response[i]['in-stock']);
+                    newProduct.find('.amountsold').text(response[i]['amount-sold']);
+                    newProduct.find('.reorder').text(response[i]['reordering-threshold']);
+                    
+                    $('tbody').append(newProduct);
 
-            }
+                } 
+            } else {
+                $(".product-list").remove();
+            };
         },
     });
 }
