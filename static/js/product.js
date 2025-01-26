@@ -1,4 +1,5 @@
 const categoryId = window.location.search.substring(1).split('&')[0].split('=')[1];
+const categoryName = window.location.search.substring(1).split('&')[1].split('=')[1];
 
 $(document).ready(function(){
 
@@ -42,8 +43,50 @@ $(document).ready(function(){
     $(".table-head .head button").on("click", function(){
         $(".add-pro").removeClass("display-none");
         $(".table").addClass("opac");
+    });
 
-        
+    $(document).on("click", ".add-pro #add", function(e){
+        e.preventDefault();
+
+        const newProductnName = $(".add-pro #add-product_name").val();
+        const newProductPrice = $(".add-pro #add-price").val();
+        const newProductInStock = $(".add-pro #add-in-stock").val();
+        const newProductReorder = $(".add-pro #add-reorder").val();
+        const newProductSupplier = $(".add-pro #add-supply").val();
+        console.log(newProductnName, newProductPrice, newProductInStock, newProductReorder, newProductSupplier);
+
+        $.ajax({
+            url: `/api/Products/product?id=${categoryId}&name=${categoryName}`,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "productName": newProductnName,
+                "price": newProductPrice,
+                "stockLevel": newProductInStock,
+                "reorderThreshold": newProductReorder,
+                "supplierName": newProductSupplier
+            }),
+            success: function(response){
+                console.log(response);
+                $(".message").css("background", '#228B22');
+                $(".message h6").html(`${response.message}`);
+
+                $(".add-pro").addClass("display-none");
+                $(".table").removeClass("opac");
+                $(".message").fadeIn(1000).fadeOut(1000)
+                setTimeout(function() {
+                    window.location.href = `/product?id=${categoryId}&name=${categoryName}`;
+                }, 2000);
+            },
+            error: function(xhr, status, error){    
+                console.log('error: ' + error)
+                let response = JSON.parse(xhr.responseText);
+
+                $(".message").css("background", '#FF3131');
+                $(".message h6").html(`${response.message}`);
+                $(".message").fadeIn(1000).fadeOut(1000)
+            }
+        })
     });
 
     $(document).on("click", '.delete', function() {
