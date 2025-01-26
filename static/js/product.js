@@ -258,7 +258,7 @@ function categoryProducts(){
                 productRowTemplate.find('.instock').text(response[0]['in-stock']);
                 productRowTemplate.find('.amountsold').text(response[0]['amount-sold']);
                 productRowTemplate.find('.reorder').text(response[0]['reordering-threshold']);
-                productRowTemplate.find('.supplier').html(`${response[0].supplier.split(' ')[0]}<br>${response[0].supplier.split(' ')[1]}`);
+                productRowTemplate.find('.supplier').html(`${response[0].supplier.split(' ')[0]} <br>${response[0].supplier.split(' ')[1]}`);
 
                 for (let i = 1; i < response.length; i++){
                     let newProduct = productRowTemplate.clone();
@@ -268,7 +268,7 @@ function categoryProducts(){
                     newProduct.find('.instock').text(response[i]['in-stock']);
                     newProduct.find('.amountsold').text(response[i]['amount-sold']);
                     newProduct.find('.reorder').text(response[i]['reordering-threshold']);
-                    newProduct.find('.supplier').html(`${response[i].supplier.split(' ')[0]}<br>${response[i].supplier.split(' ')[1]}`);
+                    newProduct.find('.supplier').html(`${response[i].supplier.split(' ')[0]} <br>${response[i].supplier.split(' ')[1]}`);
                     
                     $('tbody').append(newProduct);
 
