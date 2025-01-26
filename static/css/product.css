@@ -174,7 +174,10 @@ tr:hover td{
     margin-bottom: 35px;
 }
 
-.edit-pro #product_name, .edit-pro #price, .add-pro #add-product_name, .add-pro #add-price{
+.edit-pro #product_name, 
+.edit-pro #price, 
+.add-pro #add-product_name, 
+.add-pro #add-price{
     border: 0px;
     width: 80%;
     height: 30px;
@@ -184,7 +187,12 @@ tr:hover td{
     margin-left: 10px;
     margin-bottom: 20px;
 }
-.edit-pro #in-stock, .add-pro #add-in-stock, .add-pro #add-reorder, .edit-pro #edit-reorder{
+.edit-pro #in-stock, 
+.add-pro #add-in-stock, 
+.add-pro #add-reorder, 
+.edit-pro #edit-reorder, 
+.add-pro #add-supply, 
+.edit-pro #edit-supply{
     border: 0px;
     width: 63%;
     height: 30px;

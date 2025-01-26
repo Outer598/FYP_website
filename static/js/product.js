@@ -29,6 +29,7 @@ $(document).ready(function(){
         $(".edit-pro #in-stock").attr("value", getColumnData(3));
         $(".edit-pro #price").attr("value", getColumnData(2));
         $(".edit-pro #edit-reorder").attr("value", getColumnData(5));
+        $(".edit-pro #edit-supply").attr("value", getColumnData(6));
     });
 
     $("#edit-cancel, #add-cancel, #delete-cancel").on("click", function(e){
@@ -62,7 +63,7 @@ $(document).ready(function(){
         // Store the row data for later use
         $(".delete-pro").data('row', row);
     });
-    
+
     topProducts();
     leastProducts();
     categoryProducts();
@@ -257,6 +258,7 @@ function categoryProducts(){
                 productRowTemplate.find('.instock').text(response[0]['in-stock']);
                 productRowTemplate.find('.amountsold').text(response[0]['amount-sold']);
                 productRowTemplate.find('.reorder').text(response[0]['reordering-threshold']);
+                productRowTemplate.find('.supplier').html(`${response[0].supplier.split(' ')[0]}<br>${response[0].supplier.split(' ')[1]}`);
 
                 for (let i = 1; i < response.length; i++){
                     let newProduct = productRowTemplate.clone();
@@ -266,6 +268,7 @@ function categoryProducts(){
                     newProduct.find('.instock').text(response[i]['in-stock']);
                     newProduct.find('.amountsold').text(response[i]['amount-sold']);
                     newProduct.find('.reorder').text(response[i]['reordering-threshold']);
+                    newProduct.find('.supplier').html(`${response[i].supplier.split(' ')[0]}<br>${response[i].supplier.split(' ')[1]}`);
                     
                     $('tbody').append(newProduct);
 

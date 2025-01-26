@@ -37,6 +37,7 @@
                     <th>In-stock</th>
                     <th>Amount-Sold</th>
                     <th>Reordering<br>Threshold</th>
+                    <th>Supplier</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -48,6 +49,7 @@
                     <td class="instock"></td>
                     <td class="amountsold"></td>
                     <td class="reorder"></td>
+                    <td class="supplier"></td>
                     <td>
                         <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
                         <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
@@ -71,6 +73,8 @@
         <input type="text" id="in-stock">
         <label for="edit-reorder">Reordering Threshold:</label>
         <input type="text" name="edit-reorder" id="edit-reorder">
+        <label for="edit-supply">Supplier Name:</label>
+        <input type="text" name="edit-supply" id="edit-supply">
         <button type="submit" id="update">Update</button>
         <button type="submit" id="edit-cancel">Cancel</button>
     </form>
@@ -88,6 +92,8 @@
         <input type="text" name="add-in-stock" id="add-in-stock">
         <label for="add-reorder">Reordering Threshold:</label>
         <input type="text" name="add-reorder" id="add-reorder">
+        <label for="add-supply">Supplier Name:</label>
+        <input type="text" name="add-supply" id="add-supply">
         <button type="submit" id="add">Create</button>
         <button type="submit" id="add-cancel">Cancel</button>
     </form>
