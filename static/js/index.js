@@ -66,7 +66,8 @@ function closeAllDropdowns(){
 function salRevenue() {
   // Get the canvas context
   const canvas = $("#myChart")
-  if (!canvas) {
+  console.log(canvas);
+  if (canvas.length === 0) {
         console.log("Canvas not needed or not found, skipping.");
         return; // Exit the function if canvas is not needed
     }
@@ -264,7 +265,7 @@ function salRevenue() {
 function topCategories() {
   // Get the canvas context
   const canvas = $("#myChart2")
-  if (!canvas) {
+  if (canvas.length === 0) {
         console.log("Canvas not needed or not found, skipping.");
         return; // Exit the function if canvas is not needed
     }
@@ -423,7 +424,6 @@ function periodicRevenue(){
     type: 'GET',
     contentType: 'application/json',
     success: function(response){
-      console.log(response);
       const daily = response.daily;
       const weekly = response.weekly;
       const monthly = response.monthly;
