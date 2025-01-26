@@ -56,7 +56,7 @@ class uDCat(MethodView):
             return jsonify({"message": "Category does not exist"}), 404
         
         if data['category_name'] == "":
-            return jsonify({"message": "Category Id not given"}), 400
+            return jsonify({"message": "Category Name not given"}), 400
         
         try:
             for key, value in data.items():

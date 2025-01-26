@@ -27,10 +27,57 @@ $(document).ready(function(){
         $(".edit-pro").removeClass("display-none");
         $(".table").addClass("opac");
         $(".edit-pro #product_name").attr("value", getColumnData(1));
-        $(".edit-pro #in-stock").attr("value", getColumnData(3));
         $(".edit-pro #price").attr("value", getColumnData(2));
         $(".edit-pro #edit-reorder").attr("value", getColumnData(5));
         $(".edit-pro #edit-supply").attr("value", getColumnData(6));
+    });
+
+    $(document).on("click", ".edit-pro #update", function(e){
+        e.preventDefault();
+
+        const productId = $(".edit-pro").data('categoryId');
+        const productName = $(".edit-pro #product_name").val();
+        const price = $(".edit-pro #price").val().split(" ")[1];
+        console.log(price);
+        const originalStockLevel = $(".edit-pro #in-stock").val();
+        console.log(originalStockLevel)
+        const reorderThreshold = $(".edit-pro #edit-reorder").val();
+        const supplierName = $(".edit-pro #edit-supply").val();
+
+        $.ajax({
+            url: `/api/Products/upDelProd/${productId}`,
+            type: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                'product_name': productName,
+                'price': parseFloat(price),
+                'original_stock_level': parseInt(originalStockLevel),
+                'reordering_threshold': parseInt(reorderThreshold),
+                'supplier_id': supplierName
+            }),
+            success: function(response){
+                console.log(response);
+                $(".message").css("background", '#228B22');
+                $(".message h6").html(`${response.message}`);
+
+                $(".edit-pro").addClass("display-none");
+                $(".table").removeClass("opac");
+                $(".message").fadeIn(1000).fadeOut(1000)
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
+            error: function(xhr, status, error){    
+                console.log('error: ' + error)
+                let response = JSON.parse(xhr.responseText);
+                console.log(response);
+
+                $(".message").css("background", '#FF3131');
+                $(".message h6").html(`${response.message}`);
+                $(".message").fadeIn(1000).fadeOut(1000)
+            }
+            
+        });
     });
 
     $("#edit-cancel, #add-cancel, #delete-cancel").on("click", function(e){
@@ -75,7 +122,7 @@ $(document).ready(function(){
                 $(".table").removeClass("opac");
                 $(".message").fadeIn(1000).fadeOut(1000)
                 setTimeout(function() {
-                    window.location.href = `/product?id=${categoryId}&name=${categoryName}`;
+                    location.reload();
                 }, 2000);
             },
             error: function(xhr, status, error){    
@@ -86,7 +133,7 @@ $(document).ready(function(){
                 $(".message h6").html(`${response.message}`);
                 $(".message").fadeIn(1000).fadeOut(1000)
             }
-        })
+        });
     });
 
     $(document).on("click", '.delete', function() {
@@ -107,10 +154,51 @@ $(document).ready(function(){
         $(".delete-pro").data('row', row);
     });
 
+    $(document).on("click", ".delete-pro #delete", function(e){
+        e.preventDefault();
+
+        const row = $(".delete-pro").data('row');
+        const getColumnData = (index) => {
+            return row.find('td').eq(index).text().trim();
+        };
+    
+        // Log the URL and ID being used
+        const productId = getColumnData(0);
+        console.log(categoryId);
+
+        $.ajax({
+            url: `/api/Products/upDelProd/${productId}`,
+            type: 'DELETE',
+            contentType: 'application/json',
+            success: function(response){
+                console.log(response);
+                $(".message").css("background", '#228B22');
+                $(".message h6").html(`${response.message}`);
+    
+                $(".delete-pro").addClass("display-none");
+                $(".table").removeClass("opac");
+                $(".message").fadeIn(1000).fadeOut(1000)
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
+            error: function(xhr, status, error){
+                console.log('error: ' + error)
+                let response = JSON.parse(xhr.responseText);
+    
+                $(".message").css("background", '#FF3131');
+                $(".message h6").html(`${response.message}`);
+                $(".message").fadeIn(1000).fadeOut(1000)
+            }
+        });
+
+    });
+
     topProducts();
     leastProducts();
     categoryProducts();
 });
+
 
 function topProducts(){
     const canvas = $("#myChart3")

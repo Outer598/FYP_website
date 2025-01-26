@@ -52,5 +52,8 @@ api.register_blueprint(dashboard_route)
 api.register_blueprint(category_route)
 api.register_blueprint(product_route)
 
+# with app.app_context():
+#     db.create_all()
+
 if __name__ == "__main__":
     app.run(debug=True)
