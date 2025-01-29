@@ -1,0 +1,91 @@
+{% extends 'index.html'%}
+
+{%block title%}test{%endblock%}
+
+{%block extra_css%}
+<link rel="stylesheet" href="../static/css/test.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+{%endblock%}
+
+{%block content%}
+
+<div class="header">
+    <div class="name">
+        <span>Product Name: </span>
+        <span class="productName">Garri</span>
+        <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+    </div>
+    <div class="supply">
+        <span>Suppliers Name: </span>
+        <span class="suppliersName">Fisayo Aasa</span>
+        <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+    </div>
+</div>
+
+<div class="content">
+    <div class="container">
+        <div class="currentStock">
+            <div class="header-item">
+                <span>Current Stock: </span>
+                <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+            </div>
+            <span class="instock">1000</span>
+        </div>
+        <div class="originalStock">
+            <div class="header-item">
+                <span>Original Stock: </span>
+                <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+            </div>
+            <span class="original">1000</span>
+        </div>
+        <div class="reorderlevel">
+            <div class="header-item">
+                <span>Repordering Threshold: </span>
+                <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+            </div>
+            <span class="reorder">1000</span>
+        </div>
+        <div class="itemPrice">
+            <div class="header-item">
+                <span>Price: </span>
+                <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+            </div>
+            <span class="price">1000</span>
+        </div>
+    </div>
+</div>
+
+<div class="analysis">
+    <div class="monthly-sales">
+        <div class="header-item">
+            <span>Monthly Sales & Revenue</span>
+        </div>
+        <canvas id="monthlySales"></canvas>
+    </div>
+    <div class="yearly-sales">
+        <div class="header-item">
+            <span>Yearly Sales & Revenue</span>
+        </div>
+        <canvas id="YearlySales"></canvas>
+    </div>
+</div>
+
+<div class="edit display">
+    <form action="" method="post">
+        <div class="update-items">
+            <label for="update">Something: </label>
+        <input type="text" id="update" name="update">
+        </div>
+        <div class="update-actions">
+            <input type="button" value="Update" class="submit">
+            <input type="button" value="Cancel" class="cancel">
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="../static/js/index.js"></script>
+<script src="../static/js/category.js"></script>
+{%endblock%}
