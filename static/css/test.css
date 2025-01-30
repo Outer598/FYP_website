@@ -92,11 +92,11 @@ button span{
 
 }
 
-.update-actions{
+.add-actions{
     align-self: center;
 }
 
-.update-actions input[type="button"]{
+.add-actions input[type="button"]{
     border: none;
     padding: 10px;
     border-radius: 10px;
@@ -113,7 +113,7 @@ button span{
     margin-left: 10px;
 }
 
-.update-items input[type="text"]{
+.add-items input[type="text"]{
     padding: 5px;
     border-radius: 10px;
     border: 1px solid black;
