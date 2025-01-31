@@ -1,58 +1,42 @@
 {%extends 'index.html'%}
 
-{%block title%}Category{%endblock%}
+{%block title%}Product{%endblock%}
 
 {%block extra_css%}
-<link rel="stylesheet" href="../static/css/test2.css">
+<link rel="stylesheet" href="../static/css/test3.css">
 {%endblock%}
 
 {%block content%}
 <div class="add-search">
     <div class="head-container">
-        <div class="page-name head-item"><span>Category</span></div>
+        <div class="page-name head-item"><span>Product</span></div>
         <div class="search-add head-item">
-            <input type="text" name="add-search" placeholder="Search for Categories" id="search-category">
-            <button type="button" class="add-button"><span class="add-logo">&plus;</span> New Category</button>
+            <input type="text" name="add-search" placeholder="Search for Product" id="search-category">
+            <button type="button" class="add-button"><span class="add-logo">&plus;</span> New Product </button>
         </div>
     </div>
 </div>
 <div class="container">
     <div class="container-item">
-        <div class="category-id">1</div>
-        <div class="category-name">Rice</div>
-        <div class="category-items">10 - product</div>
+        <div class="product-id">1</div>
+        <div class="product-name">Rice</div>
+        <div class="product-count">10 - remains</div>
         <div class="actions">
-            <button class="edit" type="button">Edit</button>
             <button class="delete" type="button">Delete</button>
         </div>
     </div>
     <div class="container-item">
-        <div class="category-id">2</div>
-        <div class="category-name">Yam</div>
-        <div class="category-items">20 - product</div>
+        <div class="product-id">2</div>
+        <div class="product-name">Yam</div>
+        <div class="product-count">20 - remains</div>
         <div class="actions">
-            <button class="edit" type="button">Edit</button>
             <button class="delete" type="button">Delete</button>
         </div>
     </div>
 </div>
 
-<div class="name-edit display-type">
-    <h3>Update Category</h3>
-    <form action="">
-        <div class="update-items">
-            <label for="update">Something:  </label>
-        <input type="text" id="update" name="update">
-        </div>
-        <div class="update-actions">
-            <input type="button" value="Update" class="submit">
-            <input type="button" value="Cancel" class="cancel">
-        </div>
-    </form>
-</div>
-
 <div class="name-add display-type">
-    <h3>Add Category</h3>
+    <h3>Add Product</h3>
     <form action="">
         <div class="add-items">
             <label for="create">Something:  </label>
@@ -66,7 +50,7 @@
 </div>
 
 <div class="delete-name display-type">
-    <h3>Delete a Category</h3>
+    <h3>Delete a product</h3>
     <form action="">
         <div class="delete-items">
             <span>Note by dleteing this item you are deleting items associated with it.</span>
