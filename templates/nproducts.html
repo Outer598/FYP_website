@@ -35,25 +35,31 @@
     </div>
 </div>
 
-<div class="name-add display-type">
-    <h3>Add Product</h3>
-    <form action="">
-        <div class="add-items">
-            <label for="create">Something:  </label>
-            <input type="text" id="create" name="create">
-        </div>
-        <div class="add-actions">
-            <input type="button" value="Create" class="submit">
-            <input type="button" value="Cancel" class="cancel">
-        </div>
+<div class="add-pro display-type">
+    <h2>Add New Product</h2>
+    <form action="" method="post">
+        <label for="add-product_name">
+            Name:
+        </label>
+        <input type="text" id="add-product_name">
+        <label for="add-price">Price:</label>
+        <input type="text" name="add-price" id="add-price">
+        <label for="add-in-stock">Stock Amount:</label>
+        <input type="text" name="add-in-stock" id="add-in-stock">
+        <label for="add-reorder">Reordering Threshold:</label>
+        <input type="text" name="add-reorder" id="add-reorder">
+        <label for="add-supply">Supplier Name:</label>
+        <input type="text" name="add-supply" id="add-supply">
+        <input type="submit" id="add" value="Create">
+        <input type="submit" id="add-cancel" value="Cancel">
     </form>
 </div>
 
 <div class="delete-name display-type">
-    <h3>Delete a product</h3>
+    <h3>Are your sure you want to delete</h3>
     <form action="">
         <div class="delete-items">
-            <span>Note by dleteing this item you are deleting items associated with it.</span>
+            <span>Note by deleting this item you are deleting items associated with it.</span>
         </div>
         <div class="delete-actions">
             <input type="button" value="delete" class="cancel">
@@ -65,4 +71,5 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="../static/js/index.js"></script>
+<script src="../static/js/nproduct.js"></script>
 {%endblock%}

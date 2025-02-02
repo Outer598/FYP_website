@@ -15,9 +15,14 @@
         <span class="productName">Garri</span>
         <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
     </div>
-    <div class="supply">
+    <div class="supplier">
         <span>Suppliers Name: </span>
         <span class="suppliersName">Fisayo Aasa</span>
+        <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+    </div>
+    <div class="price">
+        <span>Price: </span>
+        <span class="suppliersName">12.99</span>
         <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
     </div>
 </div>
@@ -44,10 +49,9 @@
             </div>
             <span class="reorder">1000</span>
         </div>
-        <div class="itemPrice">
+        <div class="AmountSold">
             <div class="header-item">
-                <span>Price: </span>
-                <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+                <span>Amount Sold: </span>
             </div>
             <span class="price">1000</span>
         </div>
@@ -71,11 +75,11 @@
 
 <div class="edit display">
     <form action="" method="post">
-        <div class="add-items">
-            <label for="add">Something: </label>
-        <input type="text" id="add" name="add">
+        <div class="edit-items">
+            <label for="edit">Something: </label>
+        <input type="text" id="edit" name="add">
         </div>
-        <div class="add-actions">
+        <div class="edit-actions">
             <input type="button" value="Add" class="submit">
             <input type="button" value="Cancel" class="cancel">
         </div>
@@ -86,4 +90,5 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="../static/js/index.js"></script>
+<script src="../static/js/test.js"></script>
 {%endblock%}

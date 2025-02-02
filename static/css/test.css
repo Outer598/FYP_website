@@ -30,7 +30,7 @@ button{
     grid-template-columns: 1fr 1fr;
 }
 
-.container .currentStock, .container .originalStock, .container .reorderlevel, .container .itemPrice{
+.container .currentStock, .container .originalStock, .container .reorderlevel, .container .AmountSold{
     background-color: white;
     padding: 15px;
     border-radius: 10px;
@@ -92,11 +92,11 @@ button span{
 
 }
 
-.add-actions{
+.edit-actions{
     align-self: center;
 }
 
-.add-actions input[type="button"]{
+.edit-actions input[type="button"]{
     border: none;
     padding: 10px;
     border-radius: 10px;
@@ -113,7 +113,7 @@ button span{
     margin-left: 10px;
 }
 
-.add-items input[type="text"]{
+.edit-items input[type="text"]{
     padding: 5px;
     border-radius: 10px;
     border: 1px solid black;
@@ -121,4 +121,8 @@ button span{
 
 .display{
     display: none;
+}
+
+.originalStock .header-item, .AmountSold .header-item{
+    margin-bottom: 30px;
 }
