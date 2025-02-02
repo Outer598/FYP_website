@@ -10,7 +10,7 @@ dashboard_route = apiBlueprint('dashboard_route', __name__, url_prefix='/api/das
 
 @dashBoard.route('/')
 def dashboard():
-    return render_template("nproducts.html")
+    return render_template("index.html")
 
 
 @dashboard_route.route('/tCat')
