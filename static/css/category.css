@@ -1,200 +1,162 @@
-.table{
+.add-search{
+    position: relative;
+    left: 280px;
+    width: 76%;
+    margin-bottom: 30px;
+}
+
+.head-container{
+    display: grid;
+    grid-template-columns: 3fr  2fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+}
+
+.search-add{
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-button{
+    border: none;
+    color: white;
+    background-color: blue;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#search-category{
+    border: 1px solid black;
+    width: 240px;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.page-name{
+    font-size: 30px;
+}
+
+.container{
+    position: relative;
+    left: 280px;
     display: flex;
     flex-direction: column;
-    margin-left: 260px;
-    width: 1000px;
-    padding: 10px;
+    gap: 20px;
+    width: 75%;
 }
 
-.head{
-    background: white;
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    width: 100%;
-    border-radius: 10px 10px 0px 0px; 
-    margin-bottom: 20px;
+.container-item{
+    display: grid;
+    grid-template-columns: 5% 32% 20% 15%;
+    gap: 100px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
 }
 
-.head h1{
-    font-size: 20px;
-    margin: 10px;
+.container-item:hover{
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    color: #0298cf;
 }
 
-.head button{
+.edit, .submit{
+    background-color: blue;
     border: none;
     border-radius: 5px;
-    padding: 10px;
-    position: relative;
-    left: 680px;
-    top: -2px;
-    margin: 10px;
-    background: #1F51FF;
+    padding: 5px;
     color: white;
-}
-
-.table-section{
-    height: 500px;
-    overflow: auto;
-    background: white;
-    border-radius: 0px 0px 10px 10px;
-}
-
-table{
-    width: 100%;
-    table-layout: fixed;
-    min-width: 1000px;
-}
-
-thead th{
-    position: sticky;
-    top: 0;
-    background: #f6f9fc;
-    padding: 0px;
-}
-
-td, th{
-    border-bottom: 1px solid #dddddd;
-    padding: 5px;
-    word-break: break-all;
-    text-align: center;
-}
-
-.edit, .delete{
-    border: none;
-    padding: 5px;
     width: 50px;
-    align-items: center;
+}
+
+.delete, .cancel{
+    background-color: red;
+    border: none;
     border-radius: 5px;
+    padding: 5px;
     color: white;
+    width: 50px;
 }
 
-.edit{
-    background-color: #1F51FF;
+.edit-name, .name-add{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
 }
 
-.edit span{
-    position: relative;
-    top: 2px;
+.edit-name h3, .delete-name h3, .name-add h3{
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    margin: 10px;
 }
 
-.delete{
-    background-color: #f80000;
+.update-items, .delete-items, .add-items{
+    margin: 10px;
 }
 
-.delete span{
-    position: relative;
-    top: 2px;
+.update-items #update, .add-items #create{
+    border: 1px solid black;
+    height: 30px;
+    border-radius: 10px;
+    padding: 10px;
 }
 
-tbody tr{
+.update-actions, .add-actions{
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.submit, .cancel{
+    width: 80px;
+    padding: 10px;
+}
+
+.display-type{
+    display: none;
+}
+
+.delete-name{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.container .container-item{
     --delay: 0.1s;
     transition: 0.4s ease-in-out var(--delay);
 }
 
-tbody tr.hide{
-    opacity: 0;
-    transform: translateX(100%);
+.container .container-item.hide{
+    display: none;
 }
 
-tbody tr.hide td{
+.container .container-item.hide div{
     padding: 0;
     font: 0 / 0 "Poppins", serif;
     display: none;
     transition: 0.4s ease-in-out 0.3s;
 }
 
-tr:hover td{
-    color: #0298cf;
-    cursor: pointer;
-    background-color: #f6f9fc;
-}
-
-
-.edit-cat, .add-cat, .delete-cat{
-    background-color: whitesmoke;
-    width: 400px;
-    height: 200px;
-    justify-content: center;
-    position: relative;
-    left: 60%;
-    top: -350px;
-    transform: translateX(-50%);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.4);
-}
-
-.delete-cat{
-    height: 250px;
-}
-
-.edit-cat h2, .add-cat h2, .delete-cat h2{
-    text-align: center;
-    font-weight: normal;
-    margin-bottom: 35px;
-}
-
-.edit-cat input, .add-cat input{
-    border: 0px;
-    width: 80%;
-    height: 30px;
-    background-color: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin-left: 10px;
-}
-
-.edit-cat #update, .add-cat #add, .delete-cat #delete-cancel{
-    background-color: blue;
-    width: 100px;
-    margin-left: 60px;
-    margin-top: 10px;
-    text-align: center;
-    padding: 10px;
-    color: white;
-    border: none;
-    border-radius: 10px;
-}
-
-.edit-cat #edit-cancel, .add-cat #add-cancel, .delete-cat #delete{
-    background-color: red;
-    width: 100px;
-    margin-left: 90px;
-    margin-top: 10px;
-    text-align: center;
-    padding: 10px;
-    color: white;
-    border: none;
-    border-radius: 10px;
-}
-
-.delete-cat #delete{
-    margin-left: 50px;
-}
-
-.opac{
-    opacity: 0.5;
-}
-
-.display-none{
-    display: none;
-}
-
-.widen{
-    width: 92%;
-    margin-left: 95px;
-    transition: 0.4 ease 0.5s;
-}
-
-.widen .head button{
-    position: relative;
-    left: 850px;
-    transition: 0.4 ease 0.5s;
+.container{
+    margin-bottom: 30px;
 }
 
 .message{
-    background: #228B22; /* Fix the syntax error: remove extra space after ':' */
     width: 200px;
     color: white;
     padding: 10px;
@@ -203,6 +165,5 @@ tr:hover td{
     bottom: 100px; /* Fixed position, no layout shifts */
     border-radius: 10px;
     text-align: center;
-    z-index: 1000; 
+    z-index: 1000;
 }
-

@@ -1,74 +1,75 @@
-{%extends "index.html"%}
+{%extends 'index.html'%}
 
-{% block title %}Categories{%endblock%}
+{%block title%}Category{%endblock%}
 
-{% block extra_css %}
+{%block extra_css%}
 <link rel="stylesheet" href="../static/css/category.css">
-{% endblock %}
+{%endblock%}
 
 {%block content%}
-
-<div class="table">
-    <div class="table-head">
-        <div class="head">
-            <h1>Categories</h1>
-            <button><span>&plus; New Category</span></button>
+<div class="add-search">
+    <div class="head-container">
+        <div class="page-name head-item"><span>Category</span></div>
+        <div class="search-add head-item">
+            <input type="text" name="add-search" placeholder="Search for Categories" id="search-category">
+            <button type="button" class="add-button"><span class="add-logo">&plus;</span> New Category</button>
         </div>
     </div>
-    <div class="table-section">
-        <table>
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Name</th>
-                    <th>Products</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody class="category-container">
-                <tr class="category-list">
-                    <td class="id"></td>
-                    <td class="name"></td>
-                    <td class="product-count"></td>
-                    <td>
-                        <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
-                        <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+</div>
+<div class="container">
+    <div class="container-item">
+        <div class="category-id"></div>
+        <div class="category-name"></div>
+        <div class="category-items"></div>
+        <div class="actions">
+            <button class="edit" type="button">Edit</button>
+            <button class="delete" type="button">Delete</button>
+        </div>
     </div>
 </div>
 
-<div class="edit-cat display-none">
-    <h2>Edit a Category</h2>
+<div class="edit-name display-type">
+    <h3>Update Category</h3>
     <form action="">
-        <label for="category_name">
-            Name:
-        </label>
-        <input type="text" id="category_name">
-        <button type="submit" id="update">Update</button>
-        <button type="submit" id="edit-cancel">Cancel</button>
+        <div class="update-items">
+            <label for="update">Name: </label>
+        <input type="text" id="update" name="update">
+        </div>
+        <div class="update-actions">
+            <input type="button" value="Update" class="submit">
+            <input type="button" value="Cancel" class="cancel">
+        </div>
     </form>
 </div>
-<div class="add-cat display-none">
-    <h2>Add New Category</h2>
-    <form action="" method="post">
-        <label for="category_name">
-            Name:
-        </label>
-        <input type="text" id="category_name">
-        <button type="submit" id="add">Create</button>
-        <button type="submit" id="add-cancel">Cancel</button>
+
+<div class="name-add display-type">
+    <h3>Add Category</h3>
+    <form action="">
+        <div class="add-items">
+            <label for="create">Something:  </label>
+            <input type="text" id="create" name="create">
+        </div>
+        <div class="add-actions">
+            <input type="button" value="Create" class="submit">
+            <input type="button" value="Cancel" class="cancel">
+        </div>
     </form>
 </div>
-<div class="delete-cat display-none">
-    <h2>Are you sure you want to delete Category</h2>
-    <h6>Please note by clicking delete everything associated with the this category will be deleted</h6>
-    <button type="submit" id="delete">Delete</button>
-    <button type="submit" id="delete-cancel">Cancel</button>
+
+<div class="delete-name display-type">
+    <h3>Delete a Category</h3>
+    <form action="">
+        <div class="delete-items">
+            <span>Note by deleting this item you are deleting items associated with it.</span>
+        </div>
+        <div class="delete-actions">
+            <input type="button" value="delete" class="cancel">
+            <input type="button" value="Cancel" class="submit">
+        </div>
+    </form>
 </div>
-<div class="message display-none">
+
+<div class="message display-type">
     <h6>Category Created Successfully</h6>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

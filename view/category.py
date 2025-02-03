@@ -49,14 +49,20 @@ class uDCat(MethodView):
 
     def patch(self, id):
         data = request.get_json()
+        
 
         category = Category.query.filter_by(id=id).first()
+        category_names = Category.query.with_entities(Category.category_name).all()
+        category_names = [category_name[0] for category_name in category_names]
         
         if category == None:
             return jsonify({"message": "Category does not exist"}), 404
         
         if data['category_name'] == "":
             return jsonify({"message": "Category Name not given"}), 400
+        
+        if data['category_name'] in category_names:
+            return jsonify({"message": "Can't have duplicate items"}), 400
         
         try:
             for key, value in data.items():
