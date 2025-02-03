@@ -172,10 +172,14 @@ class itemUpDel(MethodView):
             return jsonify({"message": "Product does not exist"}), 404
         
         try:
+            # First, delete related inventory
+            Inventory.query.filter_by(product_id=id).delete()
+            
+            # Then delete the product
             db.session.delete(product)
             db.session.commit()
             return jsonify({"message":"Product Deleted"}), 200
         except Exception as e:
             db.session.rollback()
             return jsonify({"message": "Error deleting product", "Error": f"{str(e)}"}), 400   
-        
+            
