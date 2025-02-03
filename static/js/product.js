@@ -1,95 +1,30 @@
 const categoryId = window.location.search.substring(1).split('&')[0].split('=')[1];
 const categoryName = window.location.search.substring(1).split('&')[1].split('=')[1];
 
+
 $(document).ready(function(){
-
-    $(".head #lookUp").on("input", function() {
-        let search_data = $(this).val().toLowerCase();
-        
-        // Get the rows dynamically each time instead of storing them
-        $("tbody tr").each(function(index, element) {
-            let table_data = $(element).text().toLowerCase();
-            $(element).toggleClass("hide", table_data.indexOf(search_data) < 0)
-                        .css("--delay", index/25 + "s");
+    $(".search-add #search-product").on("input", function() {
+        var value = $(this).val().toLowerCase().trim(); // Ensure case-insensitive & no extra spaces
+    
+        $(".container .container-item").each(function(index, element) {
+            var productData = $(element).text().toLowerCase();
+            var match = productData.indexOf(value) >= 0;
+    
+            $(element)
+                .toggleClass("hide", !match) // Hide non-matching items
+                .css("--delay", index / 25 + "s");
         });
     });
-
-    $(document).on("click", '.edit', function() {
-        const row = $(this).closest("tr");
-        
-        const getColumnData = (index) => {
-            return row.find('td').eq(index).text();
-        };
-        
-        // Store the category ID for the update operation
-        $(".edit-pro").data('categoryId', getColumnData(0));
-        
-        $(".edit-pro").removeClass("display-none");
-        $(".table").addClass("opac");
-        $(".edit-pro #product_name").attr("value", getColumnData(1));
-        $(".edit-pro #price").attr("value", getColumnData(2));
-        $(".edit-pro #edit-reorder").attr("value", getColumnData(5));
-        $(".edit-pro #edit-supply").attr("value", getColumnData(6));
+    
+    $(document).on("click", ".add-button", function(){
+        console.log("clicked");
+        $('.add-pro').removeClass("display-type");
     });
 
-    $(document).on("click", ".edit-pro #update", function(e){
+    $("#add-cancel, .delete-actions .submit").on("click", function(e){
         e.preventDefault();
-
-        const productId = $(".edit-pro").data('categoryId');
-        const productName = $(".edit-pro #product_name").val();
-        const price = $(".edit-pro #price").val().split(" ")[1];
-        console.log(price);
-        const originalStockLevel = $(".edit-pro #in-stock").val();
-        console.log(originalStockLevel)
-        const reorderThreshold = $(".edit-pro #edit-reorder").val();
-        const supplierName = $(".edit-pro #edit-supply").val();
-
-        $.ajax({
-            url: `/api/Products/upDelProd/${productId}`,
-            type: 'PATCH',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                'product_name': productName,
-                'price': parseFloat(price),
-                'original_stock_level': parseInt(originalStockLevel),
-                'reordering_threshold': parseInt(reorderThreshold),
-                'supplier_id': supplierName
-            }),
-            success: function(response){
-                console.log(response);
-                $(".message").css("background", '#228B22');
-                $(".message h6").html(`${response.message}`);
-
-                $(".edit-pro").addClass("display-none");
-                $(".table").removeClass("opac");
-                $(".message").fadeIn(1000).fadeOut(1000)
-                setTimeout(function() {
-                    location.reload();
-                }, 2000);
-            },
-            error: function(xhr, status, error){    
-                console.log('error: ' + error)
-                let response = JSON.parse(xhr.responseText);
-                console.log(response);
-
-                $(".message").css("background", '#FF3131');
-                $(".message h6").html(`${response.message}`);
-                $(".message").fadeIn(1000).fadeOut(1000)
-            }
-            
-        });
-    });
-
-    $("#edit-cancel, #add-cancel, #delete-cancel").on("click", function(e){
-        e.preventDefault();
-
-        $(".edit-pro, .add-pro, .delete-pro").addClass("display-none");
-        $(".table").removeClass("opac");
-    });
-
-    $(".table-head .head button").on("click", function(){
-        $(".add-pro").removeClass("display-none");
-        $(".table").addClass("opac");
+        $('.add-pro').addClass("display-type");
+        $('.delete-name').addClass("display-type");
     });
 
     $(document).on("click", ".add-pro #add", function(e){
@@ -136,35 +71,24 @@ $(document).ready(function(){
         });
     });
 
-    $(document).on("click", '.delete', function() {
-        const row = $(this).closest("tr");
+    let delId = ""
+    $(document).on("click", ".delete", function(){
+        console.log("clicked");
+        var productName = $(this).closest('.actions').parent().find(".product-name").text();
         
-        const getColumnData = (index) => {
-            return row.find('td').eq(index).text().trim(); // Added trim() to remove whitespace
-        };
-    
-        // Log the ID we're getting
-        console.log("Category ID:", getColumnData(0));
-    
-        $(".delete-pro h2").html(`Are you sure you want to Delete: ${getColumnData(1)}?`);
-        $(".delete-pro").removeClass("display-none");
-        $(".table").addClass("opac");
+        delId = $(this).closest('.actions').parent().find(".product-id").text();
+        console.log(delId);
         
-        // Store the row data for later use
-        $(".delete-pro").data('row', row);
+        $('.delete-name h3').text(`Are your sure you want to delete ${productName}?`);
+        $('.delete-name').removeClass("display-type");
     });
 
-    $(document).on("click", ".delete-pro #delete", function(e){
+    $(document).on("click", ".delete-name .delete-actions .cancel", function(e){
         e.preventDefault();
-
-        const row = $(".delete-pro").data('row');
-        const getColumnData = (index) => {
-            return row.find('td').eq(index).text().trim();
-        };
     
         // Log the URL and ID being used
-        const productId = getColumnData(0);
-        console.log(categoryId);
+        const productId = delId;
+        console.log(productId);
 
         $.ajax({
             url: `/api/Products/upDelProd/${productId}`,
@@ -198,7 +122,6 @@ $(document).ready(function(){
     leastProducts();
     categoryProducts();
 });
-
 
 function topProducts(){
     const canvas = $("#myChart3")
@@ -375,6 +298,7 @@ function leastProducts(){
     });
 }
 
+
 function categoryProducts(){
     $.ajax({
         url:`/api/Products/product?id=${categoryId}`,
@@ -382,30 +306,22 @@ function categoryProducts(){
         contentType: 'application/json',
         success: function(response){
             if (response.length !== 0){
-                const productRowTemplate = $('.product-list').first();
-                productRowTemplate.find('.id').text(response[0].id);
-                productRowTemplate.find('.name').text(response[0].name);
-                productRowTemplate.find('.price').text(`₦ ${response[0].price}`);
-                productRowTemplate.find('.instock').text(response[0]['in-stock']);
-                productRowTemplate.find('.amountsold').text(response[0]['amount-sold']);
-                productRowTemplate.find('.reorder').text(response[0]['reordering-threshold']);
-                productRowTemplate.find('.supplier').html(`${response[0].supplier.split(' ')[0]} <br>${response[0].supplier.split(' ')[1]}`);
-
+                const productRowTemplate = $('.container-item').first();
+                productRowTemplate.find('.product-id').text(response[0].id);
+                productRowTemplate.find('.product-name').text(response[0].name);
+                productRowTemplate.find('.product-stock').text(`${response[0]['in-stock']} - remains`);
+                
                 for (let i = 1; i < response.length; i++){
                     let newProduct = productRowTemplate.clone();
-                    newProduct.find('.id').text(response[i].id);
-                    newProduct.find('.name').text(response[i].name);
-                    newProduct.find('.price').text(`₦ ${response[i].price}`);
-                    newProduct.find('.instock').text(response[i]['in-stock']);
-                    newProduct.find('.amountsold').text(response[i]['amount-sold']);
-                    newProduct.find('.reorder').text(response[i]['reordering-threshold']);
-                    newProduct.find('.supplier').html(`${response[i].supplier.split(' ')[0]} <br>${response[i].supplier.split(' ')[1]}`);
+                    newProduct.find('.product-id').text(response[i].id);
+                    newProduct.find('.product-name').text(response[i].name);
+                    newProduct.find('.product-stock').text(`${response[i]['in-stock']} - remains`);
                     
-                    $('tbody').append(newProduct);
+                    $('.container').append(newProduct);
 
                 } 
             } else {
-                $(".product-list").remove();
+                $(".container").remove();
             };
         },
     });

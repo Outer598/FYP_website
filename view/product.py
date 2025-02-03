@@ -52,21 +52,16 @@ class item(MethodView):
     def get(self):
         categoryId = request.args.get('id')
         categoryProducts = Product.query.filter_by(category_id=categoryId).join(Inventory, Product.id==Inventory.product_id).\
-        with_entities(Product.id, Product.product_name, Product.amount_sold,Product.price,  Inventory.current_stock_level, Inventory.reordering_threshold, Product.supplier_id).all()
+        with_entities(Product.id, Product.product_name, Inventory.current_stock_level).all()
     
         items = []
         for item in categoryProducts:
-            supplerId = Supplier.query.filter_by(id=item[6]).with_entities(Supplier.f_name, Supplier.l_name).first()
 
             items.append(
                 {
                     'id': item[0],
                     'name': item[1],
-                    'amount-sold': item[2],
-                    'price': float(item[3]),
-                    'in-stock': item[4],
-                    'reordering-threshold': item[5],
-                    'supplier': f"{supplerId[0]} {supplerId[1]}"
+                    'in-stock': item[2],
                 }
             )
 

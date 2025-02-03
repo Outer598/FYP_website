@@ -1,19 +1,9 @@
-.search{
-    display: none;
-}
-
-.user-info{
-    position: relative;
-    left: 92%;
-    transform: translateX(-70%);
-}
-
 .top-pro, .least-pro{
     box-shadow: 0px 5px 5px 0px rgba(0,0,0, 0.2);
     border-radius: 10px;
     width: 500px;
     height: 400px;
-    padding: 20px;
+    padding: 25px;
     background: white !important;
 }
 
@@ -26,132 +16,167 @@
     padding: 20px;
 }
 
-.table{
-    display: flex;
-    flex-direction: column;
-    margin-left: 260px;
-    width: 1000px;
-    padding: 10px;
+
+.add-search{
+    position: relative;
+    left: 280px;
+    width: 76%;
+    margin-bottom: 30px;
 }
 
-.head{
-    background: white;
+.head-container{
+    display: grid;
+    grid-template-columns: 3fr  2fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+}
+
+.search-add{
     display: flex;
     flex-direction: row;
-    padding: 10px;
-    width: 100%;
-    border-radius: 10px 10px 0px 0px; 
-    margin-bottom: 20px;
+    gap: 10px;
 }
 
-.head h1{
-    font-size: 20px;
-    margin: 10px;
-}
-
-.head button{
+.add-button{
     border: none;
-    border-radius: 5px;
-    padding: 10px;
-    position: relative;
-    left: 500px;
-    top: -2px;
-    margin: 10px;
-    background: #1F51FF;
     color: white;
+    background-color: blue;
+    padding: 10px;
+    border-radius: 10px;
 }
 
-#lookUp{
-    width: 200px;
-    height: 40px;
+#search-product{
     border: 1px solid black;
-    border-radius: 20px;
+    width: 240px;
     padding: 10px;
+    border-radius: 20px;
+}
+
+.page-name{
+    font-size: 30px;
+}
+
+.container{
     position: relative;
-    left: 480px;
-    top: 10px;
+    left: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 75%;
+    margin-bottom: 20px;
+    
 }
 
-.table-section{
-    height: 500px;
-    overflow: auto;
-    background: white;
-    border-radius: 0px 0px 10px 10px;
+.container-item{
+    display: grid;
+    grid-template-columns: 5% 32% 20% 15%;
+    gap: 100px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
 }
 
-table{
-    width: 100%;
-    table-layout: fixed;
-    min-width: 1000px;
+.container-item:hover{
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    color: #0298cf;
+    cursor: pointer;
 }
 
-thead th{
-    position: sticky;
-    top: 0;
-    background: #f6f9fc;
-    padding: 0px;
-}
-
-td, th{
-    border-bottom: 1px solid #dddddd;
-    padding: 5px;
-    word-break: break-all;
-    text-align: center;
-}
-
-.edit, .delete{
+.edit, .submit{
+    background-color: blue;
     border: none;
-    padding: 5px;
-    width: 50px;
-    align-items: center;
     border-radius: 5px;
+    padding: 5px;
     color: white;
+    width: 50px;
 }
 
-.edit{
-    background-color: #1F51FF;
+.delete, .cancel{
+    background-color: red;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    width: 50px;
 }
 
-.edit span{
-    position: relative;
-    top: 2px;
+.name-add{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    padding: 20px;
+    border-radius: 10px;
 }
 
-.delete{
-    background-color: #f80000;
+.delete-name h3, .name-add h3{
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    margin: 10px;
 }
 
-.delete span{
-    position: relative;
-    top: 2px;
+.delete-items, .add-items{
+    margin: 10px;
 }
 
-tbody tr{
+.add-items #create{
+    border: 1px solid black;
+    height: 30px;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.add-actions{
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.submit, .cancel{
+    width: 80px;
+    padding: 10px;
+}
+
+.display-type{
+    display: none;
+}
+
+.delete-name{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.container .container-item{
     --delay: 0.1s;
     transition: 0.4s ease-in-out var(--delay);
 }
 
-tbody tr.hide{
-    opacity: 0;
-    transform: translateX(100%);
+.container .container-item.hide{
+    display: none;
 }
 
-tbody tr.hide td{
+.container .container-item.hide div{
     padding: 0;
     font: 0 / 0 "Poppins", serif;
     display: none;
     transition: 0.4s ease-in-out 0.3s;
 }
 
-tr:hover td{
-    color: #0298cf;
-    cursor: pointer;
-    background-color: #f6f9fc;
-}
-
-
-.edit-pro, .add-pro, .delete-pro{
-    background-color: whitesmoke;
+.add-pro{
+    background-color: white;
     width: 500px;
     height: auto;
     justify-content: center;
@@ -164,19 +189,13 @@ tr:hover td{
     box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.4);
 }
 
-.delete-pro{
-    height: 250px;
-}
-
-.edit-pro h2, .add-pro h2, .delete-pro h2{
+.add-pro h2{
     text-align: center;
     font-weight: normal;
     margin-bottom: 35px;
 }
 
-.edit-pro #product_name, 
-.edit-pro #price, 
-.add-pro #add-product_name, 
+.add-pro #add-product_name,
 .add-pro #add-price{
     border: 0px;
     width: 80%;
@@ -186,13 +205,12 @@ tr:hover td{
     padding: 20px;
     margin-left: 10px;
     margin-bottom: 20px;
+    border: 1px solid black;
 }
-.edit-pro #in-stock, 
+
 .add-pro #add-in-stock, 
 .add-pro #add-reorder, 
-.edit-pro #edit-reorder, 
-.add-pro #add-supply, 
-.edit-pro #edit-supply{
+.add-pro #add-supply{
     border: 0px;
     width: 63%;
     height: 30px;
@@ -201,9 +219,10 @@ tr:hover td{
     padding: 20px;
     margin-left: 10px;
     margin-bottom: 20px;
+    border: 1px solid black;
 }
 
-.edit-pro #update, .add-pro #add, .delete-pro #delete-cancel{
+.add-pro #add{
     background-color: blue;
     width: 100px;
     margin-left: 60px;
@@ -215,7 +234,7 @@ tr:hover td{
     border-radius: 10px;
 }
 
-.edit-pro #edit-cancel, .add-pro #add-cancel, .delete-pro #delete{
+.add-pro #add-cancel{
     background-color: red;
     width: 100px;
     margin-left: 90px;
@@ -227,32 +246,11 @@ tr:hover td{
     border-radius: 10px;
 }
 
-.delete-pro #delete{
-    margin-left: 50px;
-}
-
-.opac{
-    opacity: 0.5;
-}
-
-.display-none{
-    display: none;
-}
-
-.widen{
-    width: 92%;
-    margin-left: 95px;
-    transition: 0.4 ease 0.5s;
-}
-
-.widen .head button{
-    position: relative;
-    left: 850px;
-    transition: 0.4 ease 0.5s;
+.add-pro #add-reorder, .edit-pro #edit-reorder{
+    width: 52%;
 }
 
 .message{
-    background: #228B22; /* Fix the syntax error: remove extra space after ':' */
     width: 200px;
     color: white;
     padding: 10px;
@@ -262,8 +260,4 @@ tr:hover td{
     border-radius: 10px;
     text-align: center;
     z-index: 1000; 
-}
-
-.add-pro #add-reorder, .edit-pro #edit-reorder{
-    width: 52%;
 }

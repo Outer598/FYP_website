@@ -1,12 +1,13 @@
-{%extends "index.html"%}
+{%extends 'index.html'%}
 
-{%block title%}products{%endblock%}
+{%block title%}Product{%endblock%}
 
 {%block extra_css%}
-<link rel="stylesheet" href="{{url_for('static', filename='css/product.css')}}">
+<link rel="stylesheet" href="../static/css/product.css">
 {%endblock%}
 
 {%block content%}
+
 <div class="pro-rank">
     <div class="chart-container top-pro">
         <span>Top Products</span>
@@ -18,68 +19,28 @@
         <canvas id="myChart4"></canvas>
     </div>
 </div>
-<div class="table">
-    <div class="table-head">
-        <div class="head">
-            <h1>Products</h1>
-            <label for="lookUp"></label>
-            <input type="text" name="lookUp" id="lookUp" placeholder="Search for Product">
-            <button><span>&plus; New Product</span></button>
+
+<div class="add-search">
+    <div class="head-container">
+        <div class="page-name head-item"><span>Product</span></div>
+        <div class="search-add head-item">
+            <input type="text" name="add-search" placeholder="Search for Product" id="search-product">
+            <button type="button" class="add-button"><span class="add-logo">&plus;</span> New Product </button>
         </div>
     </div>
-    <div class="table-section">
-        <table>
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>In-stock</th>
-                    <th>Amount-Sold</th>
-                    <th>Reordering<br>Threshold</th>
-                    <th>Supplier</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody class="product-container">
-                <tr class="product-list">
-                    <td class="id"></td>
-                    <td class="name"></td>
-                    <td class="price"></td>
-                    <td class="instock"></td>
-                    <td class="amountsold"></td>
-                    <td class="reorder"></td>
-                    <td class="supplier"></td>
-                    <td>
-                        <button class="edit"><span class="material-symbols-rounded">Edit</span></button>
-                        <button class="delete"><span class="material-symbols-rounded">Delete</span></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+</div>
+<div class="container">
+    <div class="container-item">
+        <div class="product-id"></div>
+        <div class="product-name"></div>
+        <div class="product-stock"></div>
+        <div class="actions">
+            <button class="delete" type="button">Delete</button>
+        </div>
     </div>
 </div>
 
-<div class="edit-pro display-none">
-    <h2>Edit Product</h2>
-    <form action="">
-        <label for="product_name">
-            Name:
-        </label>
-        <input type="text" id="product_name">
-        <label for="price">Price:</label>
-        <input type="text" id="price">
-        <label for="in-stock">Amount Instock:</label>
-        <input type="text" id="in-stock">
-        <label for="edit-reorder">Reordering Threshold:</label>
-        <input type="text" name="edit-reorder" id="edit-reorder">
-        <label for="edit-supply">Supplier Name:</label>
-        <input type="text" name="edit-supply" id="edit-supply">
-        <button type="submit" id="update">Update</button>
-        <button type="submit" id="edit-cancel">Cancel</button>
-    </form>
-</div>
-<div class="add-pro display-none">
+<div class="add-pro display-type">
     <h2>Add New Product</h2>
     <form action="" method="post">
         <label for="add-product_name">
@@ -94,17 +55,25 @@
         <input type="text" name="add-reorder" id="add-reorder">
         <label for="add-supply">Supplier Name:</label>
         <input type="text" name="add-supply" id="add-supply">
-        <button type="submit" id="add">Create</button>
-        <button type="submit" id="add-cancel">Cancel</button>
+        <input type="submit" id="add" value="Create">
+        <input type="submit" id="add-cancel" value="Cancel">
     </form>
 </div>
-<div class="delete-pro display-none">
-    <h2>Are you sure you want to delete Product</h2>
-    <h6>Please note by clicking delete everything associated with the this Product will be deleted</h6>
-    <button type="submit" id="delete">Delete</button>
-    <button type="submit" id="delete-cancel">Cancel</button>
+
+<div class="delete-name display-type">
+    <h3>Are your sure you want to delete</h3>
+    <form action="">
+        <div class="delete-items">
+            <span>Note by deleting this item you are deleting items associated with it.</span>
+        </div>
+        <div class="delete-actions">
+            <input type="button" value="delete" class="cancel">
+            <input type="button" value="Cancel" class="submit">
+        </div>
+    </form>
 </div>
-<div class="message display-none">
+
+<div class="message display-type">
     <h6></h6>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
