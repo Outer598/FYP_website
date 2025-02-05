@@ -7,7 +7,7 @@ from model.db import *
 category = Blueprint("category", __name__)
 category_route = apiBlueprint('category_route', __name__, url_prefix='/api/category', description='Get the top three categories for sales')
 
-@category.route("/inventory")
+@category.route("/category")
 def categories():
     return render_template("category.html")
 

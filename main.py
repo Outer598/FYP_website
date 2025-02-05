@@ -4,6 +4,7 @@ from model.db import db, ma
 from view.dashboard import dashBoard, dashboard_route
 from view.category import category, category_route
 from view.product import product, product_route
+from view.description import description, description_route
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
@@ -28,14 +29,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{os.getenv("myDatabase
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #init CORS {CROSS ORIGIN RESOURCE SHARING}
-CORS(app, resources={
-    r"/api/*": {
-        "origins": [
-            "http://127.0.0.1:5000",  # Remove the trailing slash
-            "http://localhost:5000"   # Add localhost variant
-        ]
-    }
-})
+CORS(app)
 
 #init db
 db.init_app(app=app)
@@ -47,10 +41,12 @@ api = Api(app)
 app.register_blueprint(dashBoard)
 app.register_blueprint(category)
 app.register_blueprint(product)
+app.register_blueprint(description)
 
 api.register_blueprint(dashboard_route)
 api.register_blueprint(category_route)
 api.register_blueprint(product_route)
+api.register_blueprint(description_route)
 
 # with app.app_context():
 #     db.create_all()

@@ -118,6 +118,15 @@ $(document).ready(function(){
 
     });
 
+    $(document).on('click', '.container .container-item', function(){
+        console.log('clicked')
+        const item= $(this).closest(".container-item");
+        const itemId = item.find('.product-id').text();
+        const itemName = item.find('.product-name').text();
+        console.log(itemId, itemName);
+        window.location.href = `/product/description?id=${itemId}&name=${itemName}`
+    });
+
     topProducts();
     leastProducts();
     categoryProducts();

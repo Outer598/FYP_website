@@ -49,7 +49,7 @@ button{
     background-color: white;
 }
 
-span.instock, span.original, span.reorder, span.price{
+span.instock, span.original, span.reorder, span.amountsold{
     font-size: 30px;
 }
 
