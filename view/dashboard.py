@@ -123,13 +123,13 @@ class avgCash(MethodView):
         
 
         #to get the amount sold by each product in the last seven days
-        daily = {}
-        for product_id in product_ids:
-            day  = ProductIncome.query.join(Product, ProductIncome.product_id == Product.id).\
-                order_by(desc(ProductIncome.record_date)).filter(ProductIncome.product_id == product_id, ProductIncome.period_type == 'daily').\
-                    with_entities(ProductIncome.product_specific_income).limit(7).all()
-            day = [float(product[0]) for product in day]
-            daily[product_name[product_id - 1]] = round(sum(day), 2)
+        # daily = {}
+        # for product_id in product_ids:
+        #     day  = ProductIncome.query.join(Product, ProductIncome.product_id == Product.id).\
+        #         order_by(desc(ProductIncome.record_date)).filter(ProductIncome.product_id == product_id, ProductIncome.period_type == 'daily').\
+        #             with_entities(ProductIncome.product_specific_income).limit(7).all()
+        #     day = [float(product[0]) for product in day]
+        #     daily[product_name[product_id - 1]] = round(sum(day), 2)
 
         # to get the amount sold by each product in the last 4 weeks
         weekly = {}
@@ -160,10 +160,10 @@ class avgCash(MethodView):
             yearly[product_name[product_id - 1]] = round(sum(year), 2)
         
         #to return the average for a daily, weekly, monthly, yearly
-        daily_avg, weekly_avg, monthly_avg, yearly_avg = avgYrMonDay(day=daily, wek=weekly,mon=monthly, year=yearly)
+        weekly_avg, monthly_avg, yearly_avg = avgYrMonDay(wek=weekly,mon=monthly, year=yearly)
         
         time_periods = {
-            'daily': daily_avg,
+            # 'daily': daily_avg,
             'weekly': weekly_avg,
             'monthly': monthly_avg,
             'yearly': yearly_avg,
@@ -191,9 +191,9 @@ def getTop3Categories(data:dict, years:list):
         return final_dict
 
 
-def avgYrMonDay(day: dict, wek:dict, mon: dict, year: dict):
-    avg_day = round((sum(day.values())/ 7), 2)
+def avgYrMonDay(wek:dict, mon: dict, year: dict):
+    # avg_day = round((sum(day.values())/ 7), 2)
     avg_week = round((sum(wek.values())/ 4), 2)
     avg_month = round((sum(mon.values())/ 12), 2)
     avg_year = round((sum(year.values())/ 7), 2)
-    return avg_day, avg_week,avg_month, avg_year
+    return avg_week,avg_month, avg_year

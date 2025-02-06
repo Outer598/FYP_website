@@ -117,53 +117,6 @@ class item(MethodView):
 
 @product_route.route('/upDelProd/<int:id>')
 class itemUpDel(MethodView):
-    def patch(self, id):
-        prodId = id
-        data = request.get_json()
-        print(data['original_stock_level'])
-        
-        if data['product_name'] == "" or data['price'] == None or data['reordering_threshold'] == "" or data['supplier_id'] == "":
-            return jsonify({"message": "Required fields not completed"}), 400
-        
-        product = Product.query.filter_by(id=prodId).first()
-        inventory = Inventory.query.filter_by(product_id=prodId).first()
-        
-        if product == None:
-            return jsonify({"message": "Product does not exist"}), 404
-        
-        supplier = Supplier.query.filter(and_(Supplier.f_name.like(f"%{data['supplier_id'].split(" ")[0]}%"),
-                                             Supplier.l_name.like(f"%{data['supplier_id'].split(" ")[1]}%"))).with_entities(Supplier.id).first()
-        
-        if supplier == None:
-            return jsonify({"message": "Supplier does not exist"}), 404
-        
-        if   data['original_stock_level'] == None:
-            data.update({'supplier_id': supplier[0],
-                    })
-            
-            data.pop('original_stock_level')
-        else:
-            data.update({'supplier_id': supplier[0],
-                     'current_stock_level': data['original_stock_level'] + inventory.current_stock_level,
-                     'original_stock_level': data['original_stock_level'] + inventory.current_stock_level,
-                     'amount_sold': inventory.original_stock_level - inventory.current_stock_level})
-
-        try:
-            for key, value in data.items():
-                if hasattr(product, key):
-                    if type(value) == str:
-                        setattr(product, key, value.title())
-                    else:
-                        setattr(product, key, value)
-
-                if hasattr(inventory, key):
-                    setattr(inventory, key, value)
-            
-            db.session.commit()
-            return jsonify({"message":"Product Updated"}), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({"message": "Error updating product", "Error": f"{str(e)}"}), 400
 
     def delete(self, id):
         product = Product.query.filter_by(id=id).first()

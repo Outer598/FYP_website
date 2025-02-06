@@ -424,14 +424,14 @@ function periodicRevenue(){
     type: 'GET',
     contentType: 'application/json',
     success: function(response){
-      const daily = response.daily;
+    //   const daily = response.daily;
       const weekly = response.weekly;
       const monthly = response.monthly;
       const yearly = response.yearly;
-      $(".daily h6").html(`₦ ${daily.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      })}`);
+    //   $(".daily h6").html(`₦ ${daily.toLocaleString('en-US', {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2
+    //   })}`);
       $(".weekly h6").html(`₦ ${weekly.toLocaleString('en-US', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
