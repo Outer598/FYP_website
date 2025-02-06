@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
-from sqlalchemy import Integer, String, DECIMAL, Date, ForeignKey, extract, desc, Column, and_
+from sqlalchemy import Integer, String, DECIMAL, Date, ForeignKey, extract, desc, Column, and_, func
 from sqlalchemy.orm import relationship
 
 

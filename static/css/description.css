@@ -126,3 +126,8 @@ button span{
 .originalStock .header-item, .AmountSold .header-item{
     margin-bottom: 30px;
 }
+
+.graph{
+    width: 100%;
+    height: 90%;
+}
