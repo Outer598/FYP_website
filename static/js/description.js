@@ -1,12 +1,77 @@
 const productId = window.location.search.substring(1).split('&')[0].split('=')[1];
 
 $(document).ready(function() {
-    $(".header div button").on("click", function(){
-        var actor = $(this).parent().attr('class');
-        console.log(actor);
+    let actor = ''
+    $(".header div button, div .header-item button").on("click", function(){
+        actor = $(this).parent().attr('class');
+        
+        if (actor === 'header-item'){
+            actor = $(this).parent().parent().attr('class');
+        }
+        const currentValue = $(`.${actor} .productName, .${actor} .suppliersName, .${actor} .pricecon, .${actor} .instock, .${actor} .reorder`).text();
 
+        
+        
         $(".edit .edit-items label").text(`${actor}: `);
+        $('.edit .edit-items #edit').attr('value', `${currentValue}`);
         $(".edit").removeClass("display");
+    });
+
+    $('.edit .edit-actions .submit').on('click', function(e){
+        let changes = $('.edit .edit-items #edit').val();
+        
+        let dataToSend = {}
+        if (actor === 'reordering-level'){
+            dataToSend = {
+                'reordering_threshold': parseInt(changes),
+            }
+        } else if (actor === 'current-stock'){
+            dataToSend = {
+                'current_stock_level': parseInt(changes),
+            }
+        } else if (actor === 'price'){
+            changes = parseFloat(changes.split(' ')[1]);
+            dataToSend = {
+                'price': changes
+            }
+        } else if (actor === 'supplier'){
+            dataToSend = {
+                'supplier_id': changes
+            }
+        } else if (actor === 'name'){
+            dataToSend = {
+                'product_name': changes
+            }
+        }
+
+        console.log(dataToSend);
+
+        $.ajax({
+            url: `/api/description/update?id=${productId}`,
+            type: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify(dataToSend),
+            success: function(response) {
+                console.log(response);
+                
+                $(".message").css("background", '#228B22');
+                $(".message h6").html(`${response.message}`);
+
+                $(".edit").addClass("display");
+                $(".message").fadeIn(1000).fadeOut(1000)
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
+            error: function(xhr, status, error) {
+                console.log('error: ' + error)
+                let response = JSON.parse(xhr.responseText);
+
+                $(".message").css("background", '#FF3131');
+                $(".message h6").html(`${response.message}`);
+                $(".message").fadeIn(1000).fadeOut(1000)
+            }
+        });
     });
 
     $(".edit .cancel").on("click", function(){
@@ -15,7 +80,7 @@ $(document).ready(function() {
 
     $(".container .header-item button").on("click", function(){
         var actor = $(this).closest('.header-item').parent().attr('class');
-        console.log(actor);
+        
 
         $(".edit .edit-items label").text(`${actor}: `);
         $(".edit").removeClass("display");
@@ -32,7 +97,6 @@ function productInfo(){
         type: 'GET',
         contentType:'application/json',
         success: function(response){
-            console.log(response);
 
             // product core info
             $(document).find('.name .productName').text(response.productName);
@@ -40,9 +104,9 @@ function productInfo(){
             $(document).find('.price .pricecon').text(`₦ ${response.price}`);
 
             //further info
-            $(document).find('.currentStock .instock').text(response.currentStockLevel);
+            $(document).find('.current-stock .instock').text(response.currentStockLevel);
             $(document).find('.originalStock .original').text(response.originalStockLevel);
-            $(document).find('.reorderlevel .reorder').text(response.reorderingThreshold);
+            $(document).find('.reordering-level .reorder').text(response.reorderingThreshold);
             $(document).find('.AmountSold .amountsold').text(response.AmountSold);
         },
     });
@@ -73,7 +137,6 @@ function monthlySR() {
         type: 'GET',
         contentType: 'application/json',
         success: function(response){
-            console.log(response)
             new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -251,7 +314,6 @@ function yearlySR() {
         type: 'GET',
         contentType: 'application/json',
         success: function(response){
-            console.log(response)
             new Chart(ctx, {
                 type: 'bar',
                 data: {

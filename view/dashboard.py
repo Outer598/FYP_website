@@ -115,55 +115,42 @@ class SalRev(MethodView):
 class avgCash(MethodView):
     
     def get(self):
-        #to get product id and product names
-        product_ids = Product.query.with_entities(Product.id).all()
-        product_name = Product.query.with_entities(Product.product_name).all()
-        product_ids = [product_id[0] for product_id in product_ids]
-        product_name = [product_name[0] for product_name in product_name]
-        
+        # Get product info and create a mapping
+        products = Product.query.with_entities(Product.id, Product.product_name).all()
+        product_map = {product.id: product.product_name for product in products}
+        product_ids = [product.id for product in products]
 
-        #to get the amount sold by each product in the last seven days
-        # daily = {}
-        # for product_id in product_ids:
-        #     day  = ProductIncome.query.join(Product, ProductIncome.product_id == Product.id).\
-        #         order_by(desc(ProductIncome.record_date)).filter(ProductIncome.product_id == product_id, ProductIncome.period_type == 'daily').\
-        #             with_entities(ProductIncome.product_specific_income).limit(7).all()
-        #     day = [float(product[0]) for product in day]
-        #     daily[product_name[product_id - 1]] = round(sum(day), 2)
-
-        # to get the amount sold by each product in the last 4 weeks
+        # Weekly data
         weekly = {}
         for product_id in product_ids:
             week = ProductIncome.query.join(Product, ProductIncome.product_id == Product.id).\
             order_by(desc(ProductIncome.record_date)).filter(ProductIncome.product_id == product_id, ProductIncome.period_type == 'weekly').\
             with_entities(ProductIncome.product_specific_income).limit(4).all()
             week = [float(product[0]) for product in week]
-            weekly[product_name[product_id - 1]] = round(sum(week), 2)
+            weekly[product_map[product_id]] = round(sum(week), 2)
         
-        
-        #to get the amount sold by each product in the last 12 months
+        # Monthly data
         monthly = {}
         for product_id in product_ids:
             month = ProductIncome.query.join(Product, ProductIncome.product_id == Product.id).\
             order_by(desc(ProductIncome.record_date)).filter(ProductIncome.product_id == product_id, ProductIncome.period_type == 'monthly').\
             with_entities(ProductIncome.product_specific_income).limit(12).all()
             month = [float(product[0]) for product in month]
-            monthly[product_name[product_id - 1]] = round(sum(month), 2)
+            monthly[product_map[product_id]] = round(sum(month), 2)
 
-        #to get the amount sold by each product in the last 7 years
+        # Yearly data
         yearly = {}
         for product_id in product_ids:
             year = ProductIncome.query.join(Product, ProductIncome.product_id == Product.id).\
             order_by(desc(ProductIncome.record_date)).filter(ProductIncome.product_id == product_id, ProductIncome.period_type == 'yearly').\
             with_entities(ProductIncome.product_specific_income).limit(7).all()
             year = [float(product[0]) for product in year]
-            yearly[product_name[product_id - 1]] = round(sum(year), 2)
+            yearly[product_map[product_id]] = round(sum(year), 2)
         
-        #to return the average for a daily, weekly, monthly, yearly
-        weekly_avg, monthly_avg, yearly_avg = avgYrMonDay(wek=weekly,mon=monthly, year=yearly)
+        # Calculate averages
+        weekly_avg, monthly_avg, yearly_avg = avgYrMonDay(wek=weekly, mon=monthly, year=yearly)
         
         time_periods = {
-            # 'daily': daily_avg,
             'weekly': weekly_avg,
             'monthly': monthly_avg,
             'yearly': yearly_avg,

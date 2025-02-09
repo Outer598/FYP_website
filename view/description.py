@@ -25,7 +25,7 @@ class prodInfo(MethodView):
                 .all()
 
         productInfo = {
-            'productName': info[0][0],
+            'productName': info[0][0].title(),
             'SupplierName': info[0][1] + " " + info[0][2],
             'price': info[0][3],
             'currentStockLevel': info[0][4],
@@ -134,3 +134,56 @@ class yearlySR(MethodView):
         })
 
         return jsonify(productYearlyData), 200
+
+@description_route.route('/update')
+class desUpdate(MethodView):
+
+    def patch(self):
+        proId = request.args.get('id')
+        print(proId)
+        data = request.get_json()
+        print(data)
+
+        product = Product.query.filter(Product.id == proId).first()
+        inventory = Inventory.query.filter(Inventory.product_id == proId).first()
+        for key, value in data.items():
+            if value == '':
+                return {'message': "Field cannot be empty"}, 400
+        
+        if 'current_stock_level' in data:
+            stock  = Inventory.query.filter(Inventory.product_id == proId).with_entities(Inventory.current_stock_level).first()
+            original = stock[0] + int(data['current_stock_level'])
+            data.update({
+                'current_stock_level': original,
+                'original_stock_level': original,
+            })
+        print(data)
+        if 'supplier_id' in data:
+            first_name = data['supplier_id'].split(" ")[0]
+            last_name = data['supplier_id'].split(' ')[1]
+            supplier_id = Supplier.query.filter(and_(Supplier.f_name.like(f"%{first_name}%"),
+                                                     Supplier.l_name.like(f"%{last_name}%")))\
+                                                        .with_entities(Supplier.id).all()[0][0]
+            
+            data.update({
+                'supplier_id': supplier_id
+            })
+        
+        try:
+            for key, value in data.items():
+                if hasattr(product, key):
+                    if type(value) == str:
+                        setattr(product, key, value.title())
+                    
+                    setattr(product, key, value)
+                
+                if hasattr(inventory, key):
+                    setattr(inventory, key, value)
+
+                db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return {'message': 'Unable to update item', 'error': str(e)}, 404
+
+        return {'message': 'Item updated Successfully'}, 200
+        

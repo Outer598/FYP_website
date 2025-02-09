@@ -30,7 +30,7 @@ button{
     grid-template-columns: 1fr 1fr;
 }
 
-.container .currentStock, .container .originalStock, .container .reorderlevel, .container .AmountSold{
+.container .current-stock, .container .originalStock, .container .reordering-level, .container .AmountSold{
     background-color: white;
     padding: 15px;
     border-radius: 10px;
@@ -130,4 +130,22 @@ button span{
 .graph{
     width: 100%;
     height: 90%;
+}
+
+.update-head-container{
+    text-align: center;
+    font-size: 18px;
+    margin: 10px;
+}
+
+.message{
+    width: 200px;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    left: 83%; /* Adjust to ensure proper alignment */
+    bottom: 100px; /* Fixed position, no layout shifts */
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
 }
