@@ -117,7 +117,7 @@ class weeklyReport(MethodView):
 
         # Create timestamp for filename
         timestamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-        filename = f'monthly_sales_report_{timestamp}.xlsx'
+        filename = f'weekly_sales_report_{timestamp}.xlsx'
 
         # Create full file path (put this in your desired directory)
         file_path = os.path.join('C:/Users/james/OneDrive/Documents/Babcock/project/FYP/Main project chapters/FYP_website/view', filename)
