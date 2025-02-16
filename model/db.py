@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from marshmallow import fields
-from sqlalchemy import Integer, String, DECIMAL, Date, ForeignKey, extract, desc, Column, and_, func
+from sqlalchemy import Integer, String, DECIMAL, Date, ForeignKey, extract, desc, Column, and_, func, LargeBinary
 from sqlalchemy.orm import relationship
 
 
@@ -90,10 +90,7 @@ class Report(db.Model):
     __tablename__ = 'reports'
     id = Column(Integer, primary_key=True, nullable=False)
     report_name = Column(String(120), nullable=False)
-    report_type = Column(String(20), nullable=False)
-    product_income_id = Column(Integer, ForeignKey('product_incomes.id'), nullable=False)
-
-    product_income = relationship('ProductIncome', cascade=None)
+    report_data = Column(LargeBinary, nullable=False)
 
 class Department(db.Model):
     __tablename__ = 'departments'
