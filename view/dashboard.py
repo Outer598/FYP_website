@@ -97,7 +97,7 @@ class SalRev(MethodView):
 
             #to convert the data gotten from the database to a list of floating point numbers
             revs = [float(rev[0]) for rev in revs]
-            sales = [float(sale[0]) for sale in sales]
+            sales = [sale[0] for sale in sales]
 
             #to sum up the gotten sales and revenue data and store them in a dict to their corresponding year
             revenue[year] = round(sum(revs), 2)
