@@ -53,16 +53,18 @@ $(document).ready(function(){
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
             
-                // Add new product directly to the list
+                // Add new product manually
                 let newProduct = $('.container-item').first().clone();
                 newProduct.find('.product-id').text(response.newProduct.id);
                 newProduct.find('.product-name').text(response.newProduct.name);
                 newProduct.find('.product-stock').text(`${response.newProduct['in-stock']} - remains`);
+                
                 $(".container").append(newProduct);
             
                 $(".message").fadeIn(1000).fadeOut(1000);
                 $('.add-pro').addClass("display-type");
-            },
+            }
+            ,
             error: function(xhr, status, error){    
                 console.log('error: ' + error)
                 let response = JSON.parse(xhr.responseText);
