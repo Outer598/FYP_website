@@ -52,13 +52,16 @@ $(document).ready(function(){
                 console.log(response);
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
-
-                $(".add-pro").addClass("display-none");
-                $(".table").removeClass("opac");
-                $(".message").fadeIn(1000).fadeOut(1000)
-                setTimeout(function() {
-                    location.reload();
-                }, 2000);
+            
+                // Add new product directly to the list
+                let newProduct = $('.container-item').first().clone();
+                newProduct.find('.product-id').text(response.newProduct.id);
+                newProduct.find('.product-name').text(response.newProduct.name);
+                newProduct.find('.product-stock').text(`${response.newProduct['in-stock']} - remains`);
+                $(".container").append(newProduct);
+            
+                $(".message").fadeIn(1000).fadeOut(1000);
+                $('.add-pro').addClass("display-type");
             },
             error: function(xhr, status, error){    
                 console.log('error: ' + error)
@@ -98,13 +101,12 @@ $(document).ready(function(){
                 console.log(response);
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
-    
-                $(".delete-pro").addClass("display-none");
-                $(".table").removeClass("opac");
-                $(".message").fadeIn(1000).fadeOut(1000)
-                setTimeout(function() {
-                    location.reload();
-                }, 2000);
+            
+                // Remove deleted product from the DOM
+                $(`.container-item:has(.product-id:contains(${delId}))`).remove();
+            
+                $(".message").fadeIn(1000).fadeOut(1000);
+                $('.delete-name').addClass("display-type");
             },
             error: function(xhr, status, error){
                 console.log('error: ' + error)
@@ -118,7 +120,7 @@ $(document).ready(function(){
 
     });
 
-    $(document).on('click', '.container .container-item', function(){
+    $(document).on('click', '.container-item .product-id, .container-item .product-name, .container-item .product-stock', function(){
         console.log('clicked')
         const item= $(this).closest(".container-item");
         const itemId = item.find('.product-id').text();

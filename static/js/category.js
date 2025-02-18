@@ -29,17 +29,19 @@ $(document).ready(function(){
                 "categoryName": newCat
             }),
             success: function(response){
-                console.log(response)
-
+                console.log(response);
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
+                $(".message").fadeIn(1000).fadeOut(1000);
 
-                $(".add-cat").addClass("display-none");
-                $(".table").removeClass("opac");
-                $(".message").fadeIn(1000).fadeOut(1000)
-                setTimeout(function() {
-                    location.reload();
-                }, 2000); 
+                // Create new category row dynamically
+                let newRow = $(".container-item").first().clone(); // Clone existing row structure
+                newRow.find(".category-id").text(response.id);
+                newRow.find(".category-name").text(newCat);
+                newRow.find(".category-items").text("0-Products"); // Since it's new, no products yet
+
+                $(".container").append(newRow); // Append without reload
+                $(".name-add").addClass("display-type");
             },
             error: function(xhr, status, error){
                 console.log('error: ' + error)
@@ -84,16 +86,16 @@ $(document).ready(function(){
             contentType: 'application/json',
             success: function(response) {
                 console.log('Success:', response);
-                
+            
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
-    
-                $(".delete-cat").addClass("display-none");
-                $(".table").removeClass("opac");
                 $(".message").fadeIn(1000).fadeOut(1000);
-                setTimeout(function() {
-                    location.reload();
-                }, 2000);
+            
+                // Remove category row without reload
+                $(`.container-item:has(.category-id:contains(${delID}))`).remove();
+            
+                $('.delete-name').addClass("display-type"); // Hide delete prompt
+                
             },
             error: function(xhr, status, error) {
                 console.log('Error status:', xhr.status);
@@ -138,16 +140,15 @@ $(document).ready(function(){
             data: JSON.stringify({"category_name": editedName}),
             success: function(response) {
                 console.log(response);
-                
+            
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
-
-                $(".edit-cat").addClass("display-none");
-                $(".table").removeClass("opac");
-                $(".message").fadeIn(1000).fadeOut(1000)
-                setTimeout(function() {
-                    location.reload();
-                }, 2000);
+                $(".message").fadeIn(1000).fadeOut(1000);
+            
+                // Update category name dynamically
+                $(`.container-item:has(.category-id:contains(${editCategoryId})) .category-name`).text(editedName);
+            
+                $(".edit-name").addClass("display-type"); // Hide edit form
             },
             error: function(xhr, status, error) {
                 console.log('error: ' + error)

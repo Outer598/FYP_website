@@ -109,7 +109,14 @@ class item(MethodView):
             )
             db.session.add(newInventory)
             db.session.commit()
-            return jsonify({"message": 'Product created successfully'}), 201
+            return jsonify({
+                "message": 'Product created successfully',
+                "newProduct": {
+                    "id": newProduct.id,
+                    "name": newProduct.product_name,
+                    "in-stock": newInventory.current_stock_level
+                }
+            }), 201
         except Exception as e:
             db.session.rollback()
             return jsonify({'message': "Error creating product", "error": f"{str(e)}"}), 400
