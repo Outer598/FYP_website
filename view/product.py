@@ -18,13 +18,19 @@ class topP(MethodView):
 
     def get(self):
         categoryId = request.args.get('id')
-        topProduct = Product.query.filter_by(category_id=categoryId).\
-            with_entities(Product.product_name, Product.amount_sold).\
-                order_by(Product.amount_sold.desc()).limit(3).all()
         
-        leastProduct = Product.query.filter_by(category_id=categoryId).\
-            with_entities(Product.product_name, Product.amount_sold).\
-                order_by(Product.amount_sold).limit(3).all()
+        
+        topProduct = Product.query.join(Inventory, Product.id == Inventory.product_id)\
+        .filter(Product.category_id == categoryId).order_by(desc(Inventory.original_stock_level - Inventory.current_stock_level))\
+        .with_entities(Product.product_name, (Inventory.original_stock_level - Inventory.current_stock_level))\
+        .limit(3).all()
+        print(topProduct)
+        
+        leastProduct = Product.query.join(Inventory, Product.id == Inventory.product_id)\
+        .filter(Product.category_id == categoryId).order_by((Inventory.original_stock_level - Inventory.current_stock_level))\
+        .with_entities(Product.product_name, (Inventory.original_stock_level - Inventory.current_stock_level))\
+        .limit(3).all()
+        print(leastProduct)
         
         name = []
         amount_sold = []
@@ -80,9 +86,8 @@ class item(MethodView):
         if data['productName'] == "" or data['price'] == "" or data['stockLevel'] == "" or data['reorderThreshold'] == "" or data['supplierName'] == "":
             return jsonify({"message":'Required fields not completed'}), 400
         
-        supplierid = Supplier.query.filter(and_(
-            Supplier.f_name.like(f"%{data['supplierName'].split(" ")[0]}%"),
-            Supplier.l_name.like(f"%{data['supplierName'].split(" ")[1]}%")))\
+        supplierid = Supplier.query.filter(
+            Supplier.s_name.like(f"%{data['supplierName'].split(" ")[0]}%"))\
             .with_entities(Supplier.id).first()
         
         if supplierid == None:
@@ -93,7 +98,6 @@ class item(MethodView):
         try:
             newProduct = Product(
                 product_name=data['productName'].title(),
-                amount_sold=0,
                 price=data['price'],
                 category_id=itemId,
                 supplier_id=supplierid

@@ -42,6 +42,9 @@ $(document).ready(function(){
 
                 $(".container").append(newRow); // Append without reload
                 $(".name-add").addClass("display-type");
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
             },
             error: function(xhr, status, error){
                 console.log('error: ' + error)
@@ -95,6 +98,9 @@ $(document).ready(function(){
                 $(`.container-item:has(.category-id:contains(${delID}))`).remove();
             
                 $('.delete-name').addClass("display-type"); // Hide delete prompt
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
                 
             },
             error: function(xhr, status, error) {
@@ -149,6 +155,9 @@ $(document).ready(function(){
                 $(`.container-item:has(.category-id:contains(${editCategoryId})) .category-name`).text(editedName);
             
                 $(".edit-name").addClass("display-type"); // Hide edit form
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
             },
             error: function(xhr, status, error) {
                 console.log('error: ' + error)

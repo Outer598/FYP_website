@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
-from model.db import db, ma
+from model.db import *
 from view.dashboard import dashBoard, dashboard_route
 from view.category import category, category_route
 from view.product import product, product_route
@@ -9,6 +9,56 @@ from view.report import *
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
+
+
+def insert_users():
+    users = [
+        {"u_name": "John Doe", "phone_no": "+1-555-0001", "hire_date": "2023-05-10", "email": "john.doe@example.com", "password": "securepass123"},
+        {"u_name": "Jane Smith", "phone_no": "+1-555-0002", "hire_date": "2022-08-15", "email": "jane.smith@example.com", "password": "myp@ssw0rd"},
+        {"u_name": "Michael Brown", "phone_no": "+1-555-0003", "hire_date": "2021-11-20", "email": "michael.b@example.com", "password": "Pa$$w0rd!"},
+    ]
+
+    for data in users:
+        user = User(
+            u_name=data["u_name"],
+            phone_no=data["phone_no"],
+            hire_date=data["hire_date"],
+            email=data["email"]
+        )
+        user.password = data["password"]  # This will use the password property setter
+        db.session.add(user)
+
+    db.session.commit()
+    print("Users inserted successfully!")
+
+
+def insert_suppliers():
+    suppliers = [
+        {"s_name": "Fisayo Aasa", "contact": "+2347014180591", "email": "fisayoaasa@gmail.com", "company_name": "Global Brands Distribution", "password": "12345"},
+        {"s_name": "Sarah Johnson", "contact": "+1-555-0102", "email": "sarah.j@worldwideretail.com", "company_name": "Worldwide Retail Solutions", "password": "w&*OxJKKro^`"},
+        {"s_name": "Michael Brown", "contact": "+1-555-0103", "email": "michael.b@supremegoods.com", "company_name": "Supreme Goods Co.", "password": "y3o>865Y|DmT"},
+        {"s_name": "Emily Davis", "contact": "+1-555-0104", "email": "emily.d@universalmerch.com", "company_name": "Universal Merchandise", "password": "3Sa#a5u7*UXv"},
+        {"s_name": "David Wilson", "contact": "+1-555-0105", "email": "david.w@primeproducts.com", "company_name": "Prime Products International", "password": "4<Lqh&-vy9))"},
+        {"s_name": "Lisa Anderson", "contact": "+1-555-0106", "email": "lisa.a@elitetraders.com", "company_name": "Elite Traders LLC", "password": "^9O=u19{@\\D)"},
+        {"s_name": "James Taylor", "contact": "+1-555-0107", "email": "james.t@toptierdist.com", "company_name": "Top Tier Distributors", "password": "b?Hp2KNCQ-|k"},
+        {"s_name": "Jennifer Thomas", "contact": "+1-555-0108", "email": "jennifer.t@qualitygoods.com", "company_name": "Quality Goods Corp", "password": "wmdz^O1{Y}5f"},
+        {"s_name": "Robert Martinez", "contact": "+1-555-0109", "email": "robert.m@premiumsupply.com", "company_name": "Premium Supply Chain", "password": 'XaSy2"/:Jr+H'},
+        {"s_name": "Maria Garcia", "contact": "+1-555-0110", "email": "maria.g@megamarket.com", "company_name": "Mega Market Solutions", "password": "Q1+uGI$8n9<%"}
+    ]
+
+    for data in suppliers:
+        supplier = Supplier(
+            s_name=data["s_name"],
+            contact=data["contact"],
+            email=data["email"],
+            company_name=data["company_name"]
+        )
+        supplier.password = data["password"]  # This will use the password property setter
+        db.session.add(supplier)
+
+    db.session.commit()
+    print("Suppliers inserted successfully!")
+
 #init app
 app = Flask(__name__)
 
@@ -34,8 +84,6 @@ CORS(app)
 
 #init db
 db.init_app(app=app)
-#init ma
-ma.init_app(app=app)
 
 api = Api(app)
 
@@ -52,6 +100,9 @@ api.register_blueprint(report_route)
 
 # with app.app_context():
 #     db.create_all()
+
+#     insert_users()
+#     insert_suppliers()
 
 if __name__ == "__main__":
     app.run(debug=True)

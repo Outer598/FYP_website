@@ -53,16 +53,11 @@ $(document).ready(function(){
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
             
-                // Add new product manually
-                let newProduct = $('.container-item').first().clone();
-                newProduct.find('.product-id').text(response.newProduct.id);
-                newProduct.find('.product-name').text(response.newProduct.name);
-                newProduct.find('.product-stock').text(`${response.newProduct['in-stock']} - remains`);
-                
-                $(".container").append(newProduct);
-            
                 $(".message").fadeIn(1000).fadeOut(1000);
                 $('.add-pro').addClass("display-type");
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
             }
             ,
             error: function(xhr, status, error){    
@@ -109,6 +104,9 @@ $(document).ready(function(){
             
                 $(".message").fadeIn(1000).fadeOut(1000);
                 $('.delete-name').addClass("display-type");
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
             },
             error: function(xhr, status, error){
                 console.log('error: ' + error)

@@ -21,17 +21,17 @@ class prodInfo(MethodView):
 
         info = Product.query.join(Inventory, Product.id == Inventory.product_id)\
             .join(Supplier, Product.supplier_id == Supplier.id).filter(Product.id == prodId)\
-            .with_entities(Product.product_name, Supplier.f_name, Supplier.l_name, Product.price, Inventory.current_stock_level, Inventory.original_stock_level, Inventory.reordering_threshold)\
+            .with_entities(Product.product_name, Supplier.s_name, Product.price, Inventory.current_stock_level, Inventory.original_stock_level, Inventory.reordering_threshold)\
                 .all()
 
         productInfo = {
             'productName': info[0][0].title(),
-            'SupplierName': info[0][1] + " " + info[0][2],
-            'price': info[0][3],
-            'currentStockLevel': info[0][4],
-            'originalStockLevel': info[0][5],
-            'reorderingThreshold': info[0][6],
-            'AmountSold': info[0][5] - info[0][4]
+            'SupplierName': info[0][1],
+            'price': info[0][2],
+            'currentStockLevel': info[0][3],
+            'originalStockLevel': info[0][4],
+            'reorderingThreshold': info[0][5],
+            'AmountSold': info[0][4] - info[0][3]
         }
 
         return productInfo, 200
@@ -159,10 +159,7 @@ class desUpdate(MethodView):
             })
         print(data)
         if 'supplier_id' in data:
-            first_name = data['supplier_id'].split(" ")[0]
-            last_name = data['supplier_id'].split(' ')[1]
-            supplier_id = Supplier.query.filter(and_(Supplier.f_name.like(f"%{first_name}%"),
-                                                     Supplier.l_name.like(f"%{last_name}%")))\
+            supplier_id = Supplier.query.filter(Supplier.s_name.like(f"%{data['supplier_id']}%"))\
                                                         .with_entities(Supplier.id).all()[0][0]
             
             data.update({
