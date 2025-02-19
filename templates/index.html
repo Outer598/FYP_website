@@ -59,13 +59,13 @@
                             <a href="" class="nav-link dropdown-title">Report</a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link dropdown-link">Weekly</a>
+                            <a href="{{ url_for('report_route.weeklyReport') }}" class="nav-link dropdown-link">Weekly</a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link dropdown-link">Monthly</a>
+                            <a href="{{ url_for('report_route.monthlyReport') }}" class="nav-link dropdown-link">Monthly</a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link dropdown-link">Yearly</a>
+                            <a href="{{ url_for('report_route.yearlyReport') }}" class="nav-link dropdown-link">Yearly</a>
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link dropdown-link">All reports</a>

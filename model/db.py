@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String, DECIMAL, Date, ForeignKey, extract, desc, Column, and_, func, LargeBinary, text
+from sqlalchemy import Integer, String, DECIMAL, Date, DateTime, ForeignKey, extract, desc, Column, and_, func, LargeBinary, text
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -18,6 +18,7 @@ class Supplier(db.Model):
     contact = Column(String(20), nullable=False)
     email = Column(String(100), nullable=False)
     company_name = Column(String(100))
+    p_picture = Column(LargeBinary, nullable=True)
     l_password = Column(String(255), nullable=False)  # Store hashed password
 
     @property
@@ -59,7 +60,7 @@ class ProductIncome(db.Model):
     product_specific_income = Column(DECIMAL(10, 2))
     total_units_sold = Column(Integer, nullable=False)
     period_type = Column(String(50), nullable=False)
-    record_date = Column(Date, nullable=False)
+    record_date = Column(DateTime, nullable=False)
 
     product = relationship('Product', cascade=None)
 
@@ -68,17 +69,18 @@ class Report(db.Model):
     id = Column(Integer, primary_key=True, nullable=False)
     report_name = Column(String(120), nullable=False)
     report_data = Column(LargeBinary, nullable=False)
-    date_issued = Column(Date, nullable=False)
+    date_issued = Column(DateTime, nullable=False)
 
 class User(db.Model):
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    u_name = db.Column(db.String(50), nullable=False)
-    phone_no = db.Column(db.String(20), nullable=False)
-    hire_date = db.Column(db.Date, nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    l_password = db.Column(db.String(255), nullable=False)  # Store hashed password
+    id = Column(Integer, primary_key=True, nullable=False)
+    u_name = Column(String(50), nullable=False)
+    phone_no = Column(String(20), nullable=False)
+    hire_date = Column(Date, nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+    p_picture = Column(LargeBinary, nullable=True)
+    l_password = Column(String(255), nullable=False)  # Store hashed password
 
     @property
     def password(self):
@@ -97,11 +99,11 @@ class Receipt(db.Model):
     id = Column(String(10), primary_key=True, nullable=False)
     receipt_name = Column(String(50))
     receipt_data = Column(LargeBinary, nullable=False)
-    date_issued = Column(Date, nullable=False)
+    date_issued = Column(DateTime, nullable=False)
 
 class Invoice(db.Model):
     __tablename__ = 'invoice'
     id = Column(String(10), primary_key=True, nullable=False)
     invoice_name = Column(String(50))
     invoice_data = Column(LargeBinary, nullable=False)
-    date_issued = Column(Date, nullable=False)
+    date_issued = Column(DateTime, nullable=False)
