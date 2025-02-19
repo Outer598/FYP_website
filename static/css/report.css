@@ -1,0 +1,122 @@
+.add-search{
+    position: relative;
+    left: 280px;
+    width: 76%;
+    margin-bottom: 30px;
+}
+
+.head-container{
+    display: grid;
+    grid-template-columns: 3fr  2fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+}
+
+#search-report{
+    border: 1px solid black;
+    width: 350px;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.container{
+    position: relative;
+    left: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 75%;
+    margin-bottom: 20px;
+    
+}
+
+.container-item{
+    display: grid;
+    grid-template-columns: 0.5fr 5fr 2fr;
+    gap: 150px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.container-item:hover{
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    color: #0298cf;
+    cursor: pointer;
+}
+
+.delete-name h3{
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    margin: 10px;
+}
+
+.delete-name{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.container .container-item{
+    --delay: 0.1s;
+    transition: 0.4s ease-in-out var(--delay);
+}
+
+.container .container-item.hide{
+    display: none;
+}
+
+.container .container-item.hide div{
+    padding: 0;
+    font: 0 / 0 "Poppins", serif;
+    display: none;
+    transition: 0.4s ease-in-out 0.3s;
+}
+
+.message{
+    width: 200px;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    left: 83%; /* Adjust to ensure proper alignment */
+    bottom: 100px; /* Fixed position, no layout shifts */
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000; 
+}
+
+.delete, .cancel{
+    background-color: red;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    width: 70px;
+    height: 40px;
+}
+
+.display-type{
+    display: none;
+}
+
+.submit{
+    background-color: blue;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    width: 50px;
+}
+
+.submit, .cancel{
+    width: 80px;
+    padding: 10px;
+}

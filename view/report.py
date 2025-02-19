@@ -7,8 +7,12 @@ from datetime import datetime, timedelta
 import os
 import io
 
+report = Blueprint("report", __name__)
 report_route = apiBlueprint("report_route", __name__, url_prefix= '/api/report', description = 'Generate a report based on the period returned')
 
+@report.route('/report')
+def reportPage():
+    return render_template('report.html')
 
 @report_route.route('/')
 class weeklyReport(MethodView):
@@ -470,3 +474,52 @@ class yearlyReport(MethodView):
         except Exception as e:
             db.session.rollback()
             return jsonify({'message': 'Error generating report', 'error': str(e)}), 500
+
+
+@report_route.route('/all_reports')
+class allReport(MethodView):
+
+    def get(self):
+        reportNames = Report.query.all()
+        reportNames = [{'id': reportName.id, 'name': reportName.report_name} for reportName in reportNames]
+
+        return jsonify(reportNames), 200
+    
+
+@report_route.route('/reports/<int:id>')
+class allReport(MethodView):
+
+    def get(self, id):
+        report = Report.query.filter(Report.id == id).first()
+        print(report)
+
+        if not report:
+            return jsonify({"error": "File not found"}), 404  # JSON if no file found
+
+        file_data = io.BytesIO(report.report_data)
+
+        # Ensure proper headers
+        response = send_file(
+            file_data,
+            as_attachment=True,
+            download_name=report.report_name,
+            mimetype="application/octet-stream"  # Fallback MIME type
+        )
+        response.headers["Content-Disposition"] = f'attachment; filename="{report.report_name}"'
+        return response
+    
+    def delete(self, id):
+        try:
+            report = Report.query.filter(Report.id == id).first()
+            print(report)
+    
+            if not report:
+                return jsonify({"error": "File not found"}), 404  # JSON if no file found
+            
+            db.session.delete(report)
+            db.session.commit()
+            return jsonify({"message":"Report Deleted"}), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'message': 'error deleting report', 'error': str(e)}), 500
+

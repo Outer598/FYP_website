@@ -5,7 +5,7 @@ from view.dashboard import dashBoard, dashboard_route
 from view.category import category, category_route
 from view.product import product, product_route
 from view.description import description, description_route
-from view.report import *
+from view.report import report, report_route
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
@@ -91,6 +91,7 @@ app.register_blueprint(dashBoard)
 app.register_blueprint(category)
 app.register_blueprint(product)
 app.register_blueprint(description)
+app.register_blueprint(report)
 
 api.register_blueprint(dashboard_route)
 api.register_blueprint(category_route)
