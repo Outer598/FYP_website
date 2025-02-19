@@ -132,6 +132,7 @@ $(document).ready(function(){
     topProducts();
     leastProducts();
     categoryProducts();
+    supplier();
 });
 
 function topProducts(){
@@ -335,5 +336,25 @@ function categoryProducts(){
                 $(".container").remove();
             };
         },
+    });
+}
+
+function supplier() {
+    $.ajax({
+        url: '/api/Products/supplier',
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(response) {
+            if (response.length !== 0) {
+                const supplierSelect = $('#add-supply');
+                supplierSelect.empty();
+                
+                // Add suppliers to select
+                response.supplierName.forEach(supplier => {
+                    supplierSelect.append(new Option(supplier, supplier));
+                });
+                
+            }
+        }
     });
 }

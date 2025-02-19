@@ -137,7 +137,7 @@ $(document).ready(function(){
         e.preventDefault();
         
         const editCategoryId = editId;
-        const editedName = $(".edit-name .update-items #update").val();
+        const editedName = $(".edit-name #update").val();
         console.log(editCategoryId, editedName);
         $.ajax({
             url: `/api/category/upDelCat/${editCategoryId}`,

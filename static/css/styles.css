@@ -217,15 +217,13 @@ body{
 
 /* Updated Search and Profile Section */
 .search-profile {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    margin-left: 260px;
+    width: auto;
+    margin: 20px 0px 20px 260px;
     background: transparent;
+    display: flex;
 }
 
-.search {
+/* .search {
     display: flex;
     align-items: center;
 }
@@ -251,12 +249,14 @@ body{
     margin-left: -40px;
     margin-top: 5px;
     cursor: pointer;
-}
+} */
 
 .user-info {
+    width: auto;
     display: flex;
     align-items: center;
     gap: 15px;
+    margin-left: 43pc;
 }
 
 .user-info span {
@@ -295,14 +295,9 @@ body{
 
 /* Income Container */
 .income-container {
-    margin-left: 280px;
+    margin-left: 260px;
     margin-top: 20px;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-template-rows: 1fr;
-    gap: 20px;
     padding: 20px;
-    width: calc(100% - 300px);
 }
 
 .income-container > div {
@@ -310,8 +305,16 @@ body{
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
+.income {
+    margin-left: 270px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 61pc;
+}
 .highest-income{
     width: 600px;
     height: 500px;
@@ -320,8 +323,7 @@ body{
 .period-income{
     display: flex;
     gap: 25px;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
 }
 
 .daily, .weekly, .monthly, .yearly{
@@ -341,9 +343,9 @@ body{
 .recent-orders{
     display: flex;
     flex-direction: column;
-    width: 73%;
+    width: 60pc;
     background: white;
-    margin-left: 300px;
+    margin-left: 280px;
     margin-top: 20px;   
     border-radius: 10px;
     padding: 20px;
@@ -367,7 +369,7 @@ td, th{
 }
 
 .col1{
-    width: 150px;
+    width: 100px;
 }
 .col2{
     width: 350px;
@@ -376,10 +378,7 @@ td, th{
     width: 200px;
 }
 .col4{
-    width: 100px;
-}
-.col5{
-    width: 100px;
+    width: 150px;
 }
 
 
@@ -436,6 +435,11 @@ td, th{
 .search-profile.search-toggle .user-info {
     position: relative;
     left: 30px;
+}
+
+.topCat{
+    height: 100%;
+    padding: 10px;
 }
 
 /* Mobile Responsive */

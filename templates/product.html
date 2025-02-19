@@ -11,12 +11,16 @@
 <div class="pro-rank">
     <div class="chart-container top-pro">
         <span>Top Products</span>
-        <canvas id="myChart3"></canvas>
+        <div class="graph">
+            <canvas id="myChart3"></canvas>
+        </div>
     </div>
 
     <div class="chart-container least-pro">
         <span>Least Favourite</span>
-        <canvas id="myChart4"></canvas>
+        <div class="graph">
+            <canvas id="myChart4"></canvas>
+        </div>
     </div>
 </div>
 
@@ -43,18 +47,30 @@
 <div class="add-pro display-type">
     <h2>Add New Product</h2>
     <form action="">
-        <label for="add-product_name">
-            Name:
-        </label>
+        <div>
+            <label for="add-product_name">
+                Name:
+            </label>
+        </div>
         <input type="text" id="add-product_name">
-        <label for="add-price">Price:</label>
-        <input type="text" name="add-price" id="add-price">
-        <label for="add-in-stock">Stock Amount:</label>
-        <input type="text" name="add-in-stock" id="add-in-stock">
-        <label for="add-reorder">Reordering Threshold:</label>
-        <input type="text" name="add-reorder" id="add-reorder">
-        <label for="add-supply">Supplier Name:</label>
-        <input type="text" name="add-supply" id="add-supply">
+        <div>
+            <label for="add-price">Price:</label>
+        </div>
+        <input type="number" name="add-price" id="add-price">
+        <div>
+            <label for="add-in-stock">Stock Amount:</label>
+        </div>
+        <input type="number" name="add-in-stock" id="add-in-stock">
+        <div>
+            <label for="add-reorder">Reordering Threshold:</label>
+        </div>
+        <input type="number" name="add-reorder" id="add-reorder">
+        <div>
+            <label for="add-supply">Supplier Name:</label>
+        </div>
+        <select name="add-supply" id="add-supply">
+            <option value="option1" class="supplierName" selected>Test1</option>
+        </select>
         <input type="submit" id="add" value="Create">
         <input type="submit" id="add-cancel" value="Cancel">
     </form>

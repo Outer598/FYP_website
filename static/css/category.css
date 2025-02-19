@@ -96,15 +96,16 @@
     margin: 10px;
 }
 
-.update-items, .delete-items, .add-items{
+.delete-items{
     margin: 10px;
 }
 
-.update-items #update, .add-items #create{
+#update, #create{
     border: 1px solid black;
     height: 30px;
     border-radius: 10px;
     padding: 10px;
+    width: 100%;
 }
 
 .update-actions, .add-actions{

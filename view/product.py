@@ -145,5 +145,13 @@ class itemUpDel(MethodView):
             return jsonify({"message":"Product Deleted"}), 200
         except Exception as e:
             db.session.rollback()
-            return jsonify({"message": "Error deleting product", "Error": f"{str(e)}"}), 400   
+            return jsonify({"message": "Error deleting product", "Error": f"{str(e)}"}), 400
+
+@product_route.route('/supplier')
+class supplier(MethodView):
+    def get(self):
+        supplierNames = Supplier.query.all()
+        supplierNames = [supplierName.s_name for supplierName in supplierNames]
+        
+        return jsonify({'supplierName': supplierNames}), 200
             

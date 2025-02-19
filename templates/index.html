@@ -95,7 +95,7 @@
                             <a href="" class="nav-link dropdown-title">Notifications</a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link dropdown-link">Orders</a>
+                            <a href="" class="nav-link dropdown-link">Invoices</a>
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link dropdown-link">Messages</a>
@@ -119,11 +119,11 @@
     <!-- Adding a search bar and user profile nd name -->
     
     <div class="search-profile">
-        <div class="search">
+        <!-- <div class="search">
             <input type="text" placeholder="Search for suppliers, product, and categories" name="search">
             <button><span class="material-symbols-rounded">search</span></button>
         </div>
-        
+         -->
         <div class="user-info">
             <span>Welcome back - John Doe</span>
             <img src="../static/img/profileImage.png" alt="users profile image" class="profile-image">
@@ -131,22 +131,8 @@
     </div>
 
     {%block content%}
-    <!-- Adding chart.js combo chart -->
-    <div class="chart-container salrev">
-        <span>Sales & Revenue</span>
-        <canvas id="myChart"></canvas>
-    </div>
-
-    <div class="income-container">
-        <div class="chart-container highest-income">
-            <span>Top categories</span>
-            <canvas id="myChart2"></canvas>
-        </div>
+    <div class="income">
         <div class="period-income">
-            <div class="daily">
-                <p>Daily Revenue</p>
-                <h6>₦xxxx</h6>
-            </div>
             <div class="weekly">
                 <p>Weekly Revenue</p>
                 <h6>₦xxxxx</h6>
@@ -161,9 +147,23 @@
             </div>
         </div>
     </div>
+    <!-- Adding chart.js combo chart -->
+    <div class="chart-container salrev">
+        <span>Sales & Revenue</span>
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <div class="income-container">
+        <div class="chart-container highest-income">
+            <span>Top categories</span>
+            <div class="topCat">
+                <canvas id="myChart2"></canvas>
+            </div>
+        </div>
+    </div>
     <div class="recent-orders">
         <div class="order-head">
-            <span>Recent Order</span>
+            <span>Recent Invoice</span>
             <a href="#">See all</a>
         </div>
         <table>
@@ -176,18 +176,16 @@
             </colgroup>
             <tr>
                 <th>Date</th>
-                <th>Customers Name</th>
-                <th>Order Id</th>
-                <th>Amount</th>
-                <th>Satus</th>
+                <th>Supplier Name</th>
+                <th>Supplier Id</th>
+                <th>inovice Name</th>
             </tr>
 
             <tr>
                 <td>2024-05-19</td>
                 <td>Aasa Olufisayo</td>
                 <td>a23835-6</td>
-                <td>₦xxxxx</td>
-                <td>Paid</td>
+                <td>invo-123-15-16-12</td>
             </tr>
         </table>
     </div>
