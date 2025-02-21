@@ -135,5 +135,11 @@ $(document).ready(function(){
             }
         });
     });
+
+    $(document).on('keydown', function(event) {
+        if (event.key === "Escape" || event.key === "Enter" || event.key === "Delete") {
+            event.preventDefault();  // Prevent the default action
+        }
+    });
     
 })

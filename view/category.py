@@ -25,6 +25,7 @@ class Cat(MethodView):
     
     def post(self):
         data = request.get_json()
+        print(data)
         all_categories = Category.query.with_entities(Category.category_name).all()
         all_categories = [item[0] for item in all_categories]
 

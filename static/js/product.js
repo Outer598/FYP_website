@@ -129,6 +129,12 @@ $(document).ready(function(){
         window.location.href = `/product/description?id=${itemId}&name=${itemName}`
     });
 
+    $(document).on('keydown', function(event) {
+        if (event.key === "Escape" || event.key === "Enter" || event.key === "Delete") {
+            event.preventDefault();  // Prevent the default action
+        }
+    });
+
     topProducts();
     leastProducts();
     categoryProducts();

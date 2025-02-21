@@ -19,8 +19,8 @@ $(document).ready(function(){
 
     $(".name-add .add-actions .submit").on("click", function(e){
         e.preventDefault();
-        const newCat= $(".name-add .add-items #create").val();
-        
+        const newCat= $(".name-add #create").val();
+        console.log(newCat)
         $.ajax({
             url: "/api/category/all_categories",
             type: 'POST',
@@ -168,6 +168,12 @@ $(document).ready(function(){
                 $(".message").fadeIn(1000).fadeOut(1000)
             }
         });
+    });
+
+    $(document).on('keydown', function(event) {
+        if (event.key === "Escape" || event.key === "Enter" || event.key === "Delete") {
+            event.preventDefault();  // Prevent the default action
+        }
     });
 
     Categories();

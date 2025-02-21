@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String, DECIMAL, Date, DateTime, ForeignKey, extract, desc, Column, and_, func, LargeBinary, text
+from sqlalchemy import Integer, String, Text,DECIMAL, Date, DateTime, ForeignKey, extract, desc, Column, and_, func, LargeBinary, text
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -96,14 +96,26 @@ class User(db.Model):
     
 class Receipt(db.Model):
     __tablename__ = 'receipt'
-    id = Column(String(10), primary_key=True, nullable=False)
-    receipt_name = Column(String(50))
+    id = Column(Integer, primary_key=True, nullable=False)
+    receipt_name = Column(String(50), nullable=False)
     receipt_data = Column(LargeBinary, nullable=False)
+    supplier_id = Column(Integer, ForeignKey('suppliers.id'), nullable=False)
     date_issued = Column(DateTime, nullable=False)
+
+    supplier = relationship('Supplier', backref=db.backref('receipt', cascade='all, delete-orphan'))
 
 class Invoice(db.Model):
     __tablename__ = 'invoice'
-    id = Column(String(10), primary_key=True, nullable=False)
-    invoice_name = Column(String(50))
+    id = Column(Integer, primary_key=True, nullable=False)
+    invoice_name = Column(String(50), nullable=False)
     invoice_data = Column(LargeBinary, nullable=False)
+    supplier_id = Column(Integer, ForeignKey('suppliers.id'), nullable=False)
     date_issued = Column(DateTime, nullable=False)
+    supplier = relationship('Supplier', backref=db.backref('invoice', cascade='all, delete-orphan'))
+
+class Feedback(db.Model):
+    __tablename__ = 'feedback'
+    id = Column(String(10), primary_key=True, nullable=False)
+    feedback_name = Column(String(50), nullable=False)
+    feedbac_data = Column(Text, nullable=False)
+    date_submitted = Column(DateTime, nullable=False)

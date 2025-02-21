@@ -45,6 +45,12 @@ $(document).ready(function(){
       $(".search button").css("color", "rgba(21, 26, 46, 0.2)")
     })
 
+    $(document).on('keydown', function(event) {
+        if (event.key === "Escape" || event.key === "Enter" || event.key === "Delete") {
+            event.preventDefault();  // Prevent the default action
+        }
+    });
+
     // for graph data calls
     salRevenue();
     topCategories();

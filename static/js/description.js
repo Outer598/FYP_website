@@ -13,12 +13,12 @@ $(document).ready(function() {
         
         
         $(".edit .edit-items label").text(`${actor}: `);
-        $('.edit .edit-items #edit').attr('value', `${currentValue}`);
+        $('.edit #edit').attr('value', `${currentValue}`);
         $(".edit").removeClass("display");
     });
 
     $('.edit .edit-actions .submit').on('click', function(e){
-        let changes = $('.edit .edit-items #edit').val();
+        let changes = $('.edit #edit').val();
         
         let dataToSend = {}
         if (actor === 'reordering-level'){
@@ -42,6 +42,7 @@ $(document).ready(function() {
             dataToSend = {
                 'product_name': changes
             }
+            console.log(dataToSend)
         }
 
         console.log(dataToSend);
@@ -84,6 +85,12 @@ $(document).ready(function() {
 
         $(".edit .edit-items label").text(`${actor}: `);
         $(".edit").removeClass("display");
+    });
+
+    $(document).on('keydown', function(event) {
+        if (event.key === "Escape" || event.key === "Enter" || event.key === "Delete") {
+            event.preventDefault();  // Prevent the default action
+        }
     });
 
     productInfo();
