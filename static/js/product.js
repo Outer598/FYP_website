@@ -99,9 +99,6 @@ $(document).ready(function(){
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
             
-                // Remove deleted product from the DOM
-                $(`.container-item:has(.product-id:contains(${delId}))`).remove();
-            
                 $(".message").fadeIn(1000).fadeOut(1000);
                 $('.delete-name').addClass("display-type");
                 setTimeout(function() {

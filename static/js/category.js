@@ -34,13 +34,6 @@ $(document).ready(function(){
                 $(".message h6").html(`${response.message}`);
                 $(".message").fadeIn(1000).fadeOut(1000);
 
-                // Create new category row dynamically
-                let newRow = $(".container-item").first().clone(); // Clone existing row structure
-                newRow.find(".category-id").text(response.id);
-                newRow.find(".category-name").text(newCat);
-                newRow.find(".category-items").text("0-Products"); // Since it's new, no products yet
-
-                $(".container").append(newRow); // Append without reload
                 $(".name-add").addClass("display-type");
                 setTimeout(function() {
                     location.reload();
@@ -93,9 +86,6 @@ $(document).ready(function(){
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
                 $(".message").fadeIn(1000).fadeOut(1000);
-            
-                // Remove category row without reload
-                $(`.container-item:has(.category-id:contains(${delID}))`).remove();
             
                 $('.delete-name').addClass("display-type"); // Hide delete prompt
                 setTimeout(function() {
@@ -150,9 +140,6 @@ $(document).ready(function(){
                 $(".message").css("background", '#228B22');
                 $(".message h6").html(`${response.message}`);
                 $(".message").fadeIn(1000).fadeOut(1000);
-            
-                // Update category name dynamically
-                $(`.container-item:has(.category-id:contains(${editCategoryId})) .category-name`).text(editedName);
             
                 $(".edit-name").addClass("display-type"); // Hide edit form
                 setTimeout(function() {

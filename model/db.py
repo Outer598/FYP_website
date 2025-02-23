@@ -15,8 +15,8 @@ class Supplier(db.Model):
     __tablename__ = 'suppliers'
     id = Column(Integer, primary_key=True, nullable=False)
     s_name = Column(String(50), nullable=False)
-    contact = Column(String(20), nullable=False)
-    email = Column(String(100), nullable=False)
+    contact = Column(String(20), nullable=False, unique=True)
+    email = Column(String(100), nullable=False, unique=True)
     company_name = Column(String(100))
     p_picture = Column(LargeBinary, nullable=True)
     l_password = Column(String(255), nullable=False)  # Store hashed password
@@ -76,7 +76,7 @@ class User(db.Model):
 
     id = Column(Integer, primary_key=True, nullable=False)
     u_name = Column(String(50), nullable=False)
-    phone_no = Column(String(20), nullable=False)
+    phone_no = Column(String(20), nullable=False, unique=True)
     hire_date = Column(Date, nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     p_picture = Column(LargeBinary, nullable=True)
