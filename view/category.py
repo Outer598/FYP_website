@@ -41,9 +41,6 @@ class Cat(MethodView):
             db.session.commit()
             return jsonify({
                 "message": 'Category created successfully',
-                "id": newCategory.id,  # Send the ID for frontend update
-                "label": newCategory.category_name,
-                "productCount": 0  # New category starts with zero products
             }), 201
         except Exception as e:
             db.session.rollback()
@@ -74,8 +71,6 @@ class uDCat(MethodView):
             db.session.commit()
             return jsonify({
                 "message": "Category Name Updated",
-                "id": category.id,  # Send ID to match frontend
-                "label": category.category_name  # Send updated name
             }), 200
         except Exception as e:
             db.session.rollback()
@@ -92,7 +87,6 @@ class uDCat(MethodView):
             db.session.commit()
             return jsonify({
                 "message": "Deleted Category",
-                "id": id  # Send ID to remove from UI
             }), 200
         except Exception as e:
             db.session.rollback()

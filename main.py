@@ -7,6 +7,7 @@ from view.product import product, product_route
 from view.description import description, description_route
 from view.report import report, report_route
 from view.supplier import supplier, supplier_route
+from view.supplierDescription import supplierDes, supplierDes_route
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
@@ -94,6 +95,7 @@ app.register_blueprint(product)
 app.register_blueprint(description)
 app.register_blueprint(report)
 app.register_blueprint(supplier)
+app.register_blueprint(supplierDes)
 
 api.register_blueprint(dashboard_route)
 api.register_blueprint(category_route)
@@ -101,6 +103,7 @@ api.register_blueprint(product_route)
 api.register_blueprint(description_route)
 api.register_blueprint(report_route)
 api.register_blueprint(supplier_route)
+api.register_blueprint(supplierDes_route)
 
 # with app.app_context():
 #     db.create_all()

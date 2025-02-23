@@ -1,0 +1,176 @@
+.header{
+    position: relative;
+    left: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 0px 0px 20px 0px ;
+    width: 77%;
+}
+
+button{
+    border: none;
+    margin-left: 10px;
+    background-color: #E8E8E8;
+}
+
+.content{
+    position: relative;
+    left: 260px;
+    border-radius: 10px;
+    width: 78%;
+    height: auto;
+    margin-bottom: 20px;
+
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.edit{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    background-color: white;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.edit form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.edit-actions{
+    align-self: center;
+}
+
+.edit-actions input[type="button"]{
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+.submit{
+    background-color: blue;
+    margin-right: 10px;
+}
+
+.cancel{
+    background-color: red;
+    margin-left: 10px;
+}
+
+#edit{
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid black;
+    width: 100%;
+}
+
+.display{
+    display: none;
+}
+
+.productsec, .invoicesec, .receiptsec{
+    position: relative;
+    left: 280px;
+    width: 75%;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.productsec hr, .invoicesec hr, .receiptsec hr{
+    width: 100%;
+    border-top: 1.5px solid black;
+}
+
+
+.head-section{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#search-product, #search-invoices{
+    width: 400px;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid black;
+}
+
+.special{
+    display: flex;
+    gap: 25px;
+}
+
+#search-receipts{
+    width: 400px; 
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid black;  
+}
+
+.add-button{
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.product-container .contianer-items, .inovice-container .contianer-items, .receipt-container .contianer-items{
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.delete-button{
+    padding: 10px;
+    background-color: red;
+    color: white;
+    border-radius: 10px;
+}
+
+.download-button, .message-button, .reassign-button{
+    padding: 10px;
+    background-color: blue;
+    color: white;
+    border-radius: 10px;
+}
+
+.sections{
+    position: relative;
+    left: 290px;
+    width: 75%;
+    margin-top: 40px;
+
+}
+
+.sections nav ol{
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+    
+}
+
+.sections nav ol a{
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+}
+
+.active{
+    background-color: white;
+    padding: 10px;
+    font-weight: bold;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.5);
+    border-radius: 10px;
+}

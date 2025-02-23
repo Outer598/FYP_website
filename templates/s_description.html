@@ -1,0 +1,128 @@
+{% extends 'index.html'%}
+
+{%block title%}test{%endblock%}
+
+{%block extra_css%}
+<link rel="stylesheet" href="../static/css/s_description.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+{%endblock%}
+
+{%block content%}
+
+<div class="header">
+    <div class="Name">
+        <span class="bold">Suppliers Name: </span>
+        <span class="productName">Aasa</span>
+        <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+    </div>
+    <div class="Phone No">
+        <span class="bold">Suppliers Phone No: </span>
+        <span class="phoneno">07014189591</span>
+        <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+    </div>
+    <div class="Email">
+        <span class="bold">Email: </span>
+        <span class="supplieremail">fisayoaasa_@gmail.com</span>
+        <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+    </div>
+    <div class="Company">
+        <span class="bold">Company Name: </span>
+        <span class="company">test and co</span>
+        <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
+    </div>
+</div>
+
+<div class="sections">
+    <nav>
+        <ol>
+            <li><a href="#" class="product"><span class="active">Product</span></a></li>
+            <li><a href="#" class="invoice"><span>Invoice</span></a></li>
+            <li><a href="#" class="receipt"><span>Receipt</span></a></li>
+        </ol>
+    </nav>
+</div>
+
+<div class="productsec">
+    <div class="head-section">
+        <h2>Products Assigned</h2>
+        <input type="text" name="add-search" placeholder="Search for Product" id="search-product">
+    </div>
+    <hr>
+    <div class="product-container">
+        <div class="contianer-items">
+            <div class="product-id">1</div>
+            <div class="product-name">test</div>
+            <div class="stock">10-remains</div>
+            <div class="actions">
+                <button class="message-button" type="button">Message</button>
+                <button class="reassign-button" type="button">Reassign</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="invoicesec display">
+    <div class="head-section">
+        <h2>Invoices</h2>
+        <input type="text" name="add-search" placeholder="Search for Invoice" id="search-invoices">
+    </div>
+    <hr>
+    <div class="inovice-container">
+        <div class="contianer-items">
+            <div class="invoice-id">1</div>
+            <div class="invoice-name">test</div>
+            <div class="date">12/12/2024</div>
+            <div class="actions">
+                <button class="download-button" type="button">Download</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="receiptsec display">
+    <div class="head-section">
+        <h2>Receipts</h2>
+        <div class="special">
+            <input type="text" name="add-search" placeholder="Search for Receipt" id="search-receipts">
+            <button type="button" class="add-button"><span class="add-logo">&plus;</span> New Receipt</button>
+        </div>
+    </div>
+    <hr>
+    <div class="receipt-container">
+        <div class="contianer-items">
+            <div class="receipt-id">1</div>
+            <div class="receipt-name">test</div>
+            <div class="date">12/12/2024</div>
+            <div class="actions">
+                <button class="download-button" type="button">Download</button>
+                <button class="delete-button" type="button">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="edit display">
+    <div class="update-head-container">
+        <span class="update-header">Update</span>
+    </div>
+    <form action="">
+        <div class="edit-items">
+            <label for="edit">Something: </label>
+        </div>
+        <input type="text" id="edit" name="add">
+        <div class="edit-actions">
+            <input type="button" value="Update" class="submit">
+            <input type="button" value="Cancel" class="cancel">
+        </div>
+    </form>
+</div>
+<div class="message display">
+    <h6>Category Created Successfully</h6>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="../static/js/index.js"></script>
+<script src="../static/js/s_description.js"></script>
+{%endblock%}

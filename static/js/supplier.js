@@ -119,6 +119,14 @@ $(document).ready(function(){
         });
     });
 
+    $(document).on('click', '.container-item .supplier-id, .container-item .supplier-name, .container-item .supplier-items', function(){
+        let $row = $(this).closest('.container-item'); // or whatever your parent container class is
+        let supplierName = $row.find('.supplier-name').text();
+        let supplierId = $row.find('.supplier-id').text();
+        
+        window.location.href = `/supplier/description?id=${supplierId}&name=${supplierName}`;
+    })
+
     allSuppliers();
 })
 
