@@ -1,14 +1,23 @@
 $(document).ready(function(){
-    $(".search-add #search-category").on("input", function() {
-        var value = $(this).val().toLowerCase().trim(); // Ensure case-insensitive & no extra spaces
-    
-        $(".container .container-item").each(function(index, element) {
-            var productData = $(element).text().toLowerCase();
-            var match = productData.indexOf(value) >= 0;
-    
-            $(element)
-                .toggleClass("hide", !match) // Hide non-matching items
-                .css("--delay", index / 25 + "s");
+    $("#search-category").on("input", function() {
+        const searchValue = $(this).val().toLowerCase().trim();
+        
+        // Get all container items except the template
+        $(".container .container-item:not(:first)").each(function(index) {
+            const categoryName = $(this).find(".category-name").text().toLowerCase();
+            const categoryId = $(this).find(".category-id").text().toLowerCase();
+            const categoryItems = $(this).find(".category-items").text().toLowerCase();
+            
+            // Check if any of the fields match the search value
+            const matchFound = 
+                categoryName.includes(searchValue) || 
+                categoryId.includes(searchValue) || 
+                categoryItems.includes(searchValue);
+            
+            // Toggle visibility with animation
+            $(this)
+                .toggleClass("hide", !matchFound)
+                .css("--delay", index * 0.05 + "s");
         });
     });
 

@@ -1,4 +1,32 @@
 $(document).ready(function(){
+    function handleSearch(searchInput, containerSelector) {
+        const value = searchInput.toLowerCase().trim();
+        
+        $(containerSelector + " .contianer-item").each(function(index) {
+            const itemText = $(this).text().toLowerCase();
+            const shouldShow = itemText.includes(value);
+            
+            $(this)
+                .toggleClass("hide", !shouldShow)
+                .css("--delay", (index * 0.05) + "s");
+        });
+    }
+
+    // Product search
+    $("#search-product").on("input", function() {
+        handleSearch($(this).val(), ".productsec .container");
+    });
+
+    // Invoice search
+    $("#search-invoices").on("input", function() {
+        handleSearch($(this).val(), ".invoicesec .container");
+    });
+
+    // Receipt search
+    $("#search-receipts").on("input", function() {
+        handleSearch($(this).val(), ".receiptsec .container");
+    });
+
     $(document).on('click', '.sections nav ol li', function(){
         const trigger = $(this).text();
         console.log(trigger);

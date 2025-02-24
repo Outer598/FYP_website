@@ -123,7 +123,7 @@ button{
     border-radius: 10px;
 }
 
-.product-container .contianer-items, .inovice-container .contianer-items, .receipt-container .contianer-items{
+.container .contianer-item{
     margin: 10px;
     display: flex;
     justify-content: space-between;
@@ -173,4 +173,67 @@ button{
     font-weight: bold;
     box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.5);
     border-radius: 10px;
+}
+
+.container {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+/* Fix container item styling */
+.container .contianer-item {
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: all 0.4s ease-in-out var(--delay);
+}
+
+/* Update hide class for proper animation */
+.container .contianer-item.hide {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    height: 0;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+/* Ensure proper display for search inputs */
+#search-product, 
+#search-invoices,
+#search-receipts {
+    width: 400px;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+/* Ensure sections are properly hidden/shown */
+.productsec, 
+.invoicesec, 
+.receiptsec {
+    position: relative;
+    left: 280px;
+    width: 75%;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.productsec.display, 
+.invoicesec.display, 
+.receiptsec.display {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
 }
