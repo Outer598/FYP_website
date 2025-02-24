@@ -12,12 +12,12 @@
 <div class="header">
     <div class="Name">
         <span class="bold">Suppliers Name: </span>
-        <span class="productName">Aasa</span>
+        <span class="supplierName">Aasa</span>
         <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
     </div>
-    <div class="Phone No">
+    <div class="Phone-No">
         <span class="bold">Suppliers Phone No: </span>
-        <span class="phoneno">07014189591</span>
+        <span class="phoneNo">07014189591</span>
         <button type="button"><span class="material-symbols-rounded">Edit_square</span></button>
     </div>
     <div class="Email">
@@ -35,9 +35,9 @@
 <div class="sections">
     <nav>
         <ol>
-            <li><a href="#" class="product"><span class="active">Product</span></a></li>
-            <li><a href="#" class="invoice"><span>Invoice</span></a></li>
-            <li><a href="#" class="receipt"><span>Receipt</span></a></li>
+            <li><a href="#" class="product-header"><span class="active">Product</span></a></li>
+            <li><a href="#" class="invoice-header"><span>Invoice</span></a></li>
+            <li><a href="#" class="receipt-header"><span>Receipt</span></a></li>
         </ol>
     </nav>
 </div>
@@ -140,6 +140,74 @@
         <div class="edit-actions">
             <input type="button" value="Update" class="submit">
             <input type="button" value="Cancel" class="cancel">
+        </div>
+    </form>
+</div>
+
+<div class="reassign display">
+    <div class="reassign-head-container">
+        <span class="supplier-header">Reassign Product</span>
+    </div>
+    <form action="">
+        <div class="reassign-items">
+            <label for="reassign">Supplier Name: </label>
+        </div>
+        <select name="reassign" id="reassign">
+            <option value="Aasa">Aasa</option>
+            <option value="Aasa2">Aasa2</option>
+        </select>
+        <div class="reassign-actions">
+            <input type="button" value="Update" class="submit">
+            <input type="button" value="Cancel" class="cancel">
+        </div>
+    </form>
+</div>
+
+<div class="receipt display">
+    <div class="receipt-head-container">
+        <span class="supplier-header">Upload Receipt</span>
+    </div>
+    <form action="">
+        <div class="receipt-items">
+            <label for="receipt">Receipt Name: </label>
+        </div>
+        <input type="text" id="receipt" name="receipt">
+        
+        <div class="receipt-items">
+            <label for="receipt-file">File: </label>
+        </div>
+        <input type="file" id="receipt-file" name="receipt-file">
+        <div class="receipt-actions">
+            <input type="button" value="Add" class="submit">
+            <input type="button" value="Cancel" class="cancel">
+        </div>
+    </form>
+</div>
+
+<div class="email display">
+    <div class="email-head-container">
+        <span class="email-header">Mail</span>
+    </div>
+    <form action="">
+        <div class="eamil-items">
+            <label for="email">Amount Needed: </label>
+        </div>
+        <input type="text" id="email" name="email">
+        <div class="email-actions">
+            <input type="button" value="Message" class="submit">
+            <input type="button" value="Cancel" class="cancel">
+        </div>
+    </form>
+</div>
+
+<div class="delete display">
+    <div class="delete-head-container">
+        <span class="email-header">Delete Receipt</span>
+    </div>
+    <form action="">
+        <div class="delete-actions">
+            <input type="button" value="Delete" class="cancel">
+            <input type="button" value="Cancel" class="submit">
         </div>
     </form>
 </div>

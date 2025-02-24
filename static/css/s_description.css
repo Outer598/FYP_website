@@ -28,7 +28,7 @@ button{
     font-weight: bold;
 }
 
-.edit{
+.edit, .reassign, .email, .receipt{
     position: fixed;
     left: 50%;
     top: 50%;
@@ -38,10 +38,10 @@ button{
     border-radius: 10px;
 }
 
-.edit form{
+.edit form, .reassign form, .email form, .receipt form{
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 
 }
 
@@ -54,6 +54,60 @@ button{
     padding: 10px;
     border-radius: 10px;
     color: white;
+}
+
+.email-actions input[type="button"]{
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+.delete-actions input[type="button"]{
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+.receipt-actions input[type="button"]{
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+.reassign-actions input[type="button"]{
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+.reassign-actions, .email-actions, .receipt-actions{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+#reassign{
+    width: 250px;
+    height: 40px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#email, #receipt{
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+#receipt{
+    margin-bottom: 10px;
 }
 
 .submit{
@@ -236,4 +290,13 @@ button{
     display: none;
     opacity: 0;
     visibility: hidden;
+}
+
+.update-header, .supplier-header, .email-header{
+    font-weight: bold;
+}
+
+.update-head-container, .reassign-head-container, .receipt-head-container, .email-head-container{
+    text-align: center;
+    margin-bottom: 10px;
 }
