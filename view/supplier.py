@@ -6,6 +6,12 @@ from view.madepass import SecurePasswordGenerator
 from flask_mail import Mail, Message
 from email.mime.text import MIMEText
 import smtplib
+import os
+from dotenv import load_dotenv, dotenv_values
+
+
+load_dotenv()
+config = dotenv_values(".env")
 
 
 supplier = Blueprint("supplier", __name__)
@@ -53,6 +59,7 @@ class allSuppliers(MethodView):
 
         subject = 'Welcome to Babcock suppliers'
         body = f'''Dear {data["suppliersName"].title()},
+        
         Welcome to babcock suppliers teams see below the password and email you wil use to be able tpo logon to our platform for invoice and reciept upload and download respectively.
         Email: {data["suppliersEmail"]}
         Password: {data["suppliersPassword"]}
@@ -60,9 +67,9 @@ class allSuppliers(MethodView):
 
         Note: this is a no-reply email so messages sent wont be recieved on this email. 
         Thank you and welcome onboard'''
-        sender = 'no.reply.babcock@gmail.com'
+        sender = os.getenv("myemailaddress")
         recipient = data["suppliersEmail"]
-        app_password = 'jbxcvtllscshtimr'
+        app_password = os.getenv("myemailapppassword")
 
         try:
             newSupplier = Supplier(s_name=data['suppliersName'], 
