@@ -85,10 +85,45 @@ $(document).ready(function(){
         $('.receipt').removeClass('display');
     });
 
+    let clickedId = "";
+    $(document).on("click", ".receiptsec .container .contianer-item .actions .delete-button", function(){
+
+        var receiptName = $(this).closest('.actions').parent().find(".receipt-name").text();
+
+        clickedId = $(this).closest(".actions").parent().find(".receipt-id").text();
+        console.log("Report ID:", clickedId);
+
+        $('.delete .delete-head-container .email-header').text(`Are your sure you want to delete ${receiptName}?`);
+        $('.delete').removeClass("display");
+    });
+
     $(document).on('click', '.email .email-actions .cancel, .receipt .receipt-actions .cancel, .reassign .reassign-actions .cancel, .delete .delete-actions .submit, .edit .edit-actions .cancel', function(){
         $('.email').addClass('display');
         $('.reassign').addClass('display');
         $('.receipt').addClass('display');
         $(".edit").addClass("display");
+        $(".delete").addClass("display")
     });
+
+    supplier();
 })
+
+function supplier() {
+    $.ajax({
+        url: '/api/Products/supplier',
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(response) {
+            if (response.length !== 0) {
+                const supplierSelect = $('#reassign');
+                supplierSelect.empty();
+                
+                // Add suppliers to select
+                response.supplierName.forEach(supplier => {
+                    supplierSelect.append(new Option(supplier, supplier));
+                });
+                
+            }
+        }
+    });
+}

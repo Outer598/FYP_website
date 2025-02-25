@@ -28,7 +28,7 @@ button{
     font-weight: bold;
 }
 
-.edit, .reassign, .email, .receipt{
+.edit, .reassign, .email, .receipt, .delete{
     position: fixed;
     left: 50%;
     top: 50%;
@@ -299,4 +299,22 @@ button{
 .update-head-container, .reassign-head-container, .receipt-head-container, .email-head-container{
     text-align: center;
     margin-bottom: 10px;
+}
+
+.delete-actions{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.delete h3{
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    margin: 10px;
+}
+
+.delete-items{
+    margin: 10px;
 }
