@@ -60,13 +60,15 @@ class allSuppliers(MethodView):
         subject = 'Welcome to Babcock suppliers'
         body = f'''Dear {data["suppliersName"].title()},
         
-        Welcome to babcock suppliers teams see below the password and email you wil use to be able tpo logon to our platform for invoice and reciept upload and download respectively.
-        Email: {data["suppliersEmail"]}
-        Password: {data["suppliersPassword"]}
-        website link:  https://3b73-102-88-108-181.ngrok-free.app
+Welcome to babcock suppliers teams see below the password and email you wil use to be able tpo logon to our platform for invoice and reciept upload and download respectively.
+Email: {data["suppliersEmail"]}
+Password: {data["suppliersPassword"]}
+website link:  https://3b73-102-88-108-181.ngrok-free.app
 
-        Note: this is a no-reply email so messages sent wont be recieved on this email. 
-        Thank you and welcome onboard'''
+Thank you and welcome onboard.
+
+Note: this is a no-reply email so messages sent won't be recieved on this email. 
+        '''
         sender = os.getenv("myemailaddress")
         recipient = data["suppliersEmail"]
         app_password = os.getenv("myemailapppassword")

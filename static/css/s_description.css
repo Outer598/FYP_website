@@ -177,7 +177,7 @@ button{
     border-radius: 10px;
 }
 
-.container .contianer-item{
+.container .container-item{
     margin: 10px;
     display: flex;
     justify-content: space-between;
@@ -235,7 +235,7 @@ button{
 }
 
 /* Fix container item styling */
-.container .contianer-item {
+.container .container-item {
     margin: 10px;
     display: flex;
     justify-content: space-between;
@@ -249,7 +249,7 @@ button{
 }
 
 /* Update hide class for proper animation */
-.container .contianer-item.hide {
+.container .container-item.hide {
     opacity: 0;
     visibility: hidden;
     transform: translateY(-20px);
@@ -317,4 +317,16 @@ button{
 
 .delete-items{
     margin: 10px;
+}
+
+.message{
+    width: 200px;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    left: 83%; /* Adjust to ensure proper alignment */
+    bottom: 100px; /* Fixed position, no layout shifts */
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000; 
 }
