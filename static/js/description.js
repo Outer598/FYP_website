@@ -46,6 +46,7 @@ $(document).ready(function() {
         }
 
         console.log(dataToSend);
+        actor = ''
 
         $.ajax({
             url: `/api/description/update?id=${productId}`,

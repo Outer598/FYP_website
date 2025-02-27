@@ -50,7 +50,7 @@ class allSuppliers(MethodView):
             return jsonify({"message": "Missing required fields"}), 400  # Bad Request
 
         if data['suppliersEmail'] in supplierEmails or data['suppliersPhoneNo'] in supplierPhoneNos:
-            return jsonify({"message": "Supplier with Email or Phone No already exists"}), 409  # Conflict
+            return jsonify({"message": "Supplier with Email or Phone-No already exists"}), 409  # Conflict
 
         data.update({'suppliersPassword': generator.generate_password()})
         

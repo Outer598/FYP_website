@@ -80,6 +80,60 @@ $(document).ready(function(){
         $(".edit").removeClass("display");
     });
 
+    $('.edit .edit-actions .submit').on('click', function(e){
+        let changes = $('.edit #edit').val();
+        
+        let dataToSend = {}
+        if (actor === 'Company'){
+            dataToSend = {
+                'company_name': changes,
+            }
+        } else if (actor === 'Email'){
+            dataToSend = {
+                'email': changes
+            }
+        } else if (actor === 'Phone-No'){
+            dataToSend = {
+                'contact': changes
+            }
+        } else if (actor === 'Name'){
+            dataToSend = {
+                's_name': changes
+            }
+            
+        }
+
+        console.log(dataToSend);
+        actor = ''
+
+        $.ajax({
+            url: `/api/supplierDescription/update?id=${supplierId}`,
+            type: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify(dataToSend),
+            success: function(response) {
+                console.log(response);
+                
+                $(".message").css("background", '#228B22');
+                $(".message h6").html(`${response.message}`);
+
+                $(".edit").addClass("display");
+                $(".message").fadeIn(1000).fadeOut(1000)
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
+            error: function(xhr, status, error) {
+                console.log('error: ' + error)
+                let response = JSON.parse(xhr.responseText);
+
+                $(".message").css("background", '#FF3131');
+                $(".message h6").html(`${response.message}`);
+                $(".message").fadeIn(1000).fadeOut(1000)
+            }
+        });
+    });
+
     let productId = ''
     $(document).on('click', '.productsec .actions .message-button', function(){
         productId = $(this).closest(".actions").parent().find(".product-id").text();

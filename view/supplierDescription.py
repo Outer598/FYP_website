@@ -97,4 +97,41 @@ Note: this is a no-reply email so messages sent won't be recieved on this email.
             return jsonify({'message': 'Error sending email', 'error': str(e)}), 500
 
         return jsonify({'message': 'Mail sent succesfully'}), 202
+
+@supplierDes_route.route('/update')
+class sdesUpdate(MethodView):
+
+    def patch(self):
+        supId = request.args.get('id')
+        print(supId)
+        data = request.get_json()
+        print(data)
+
+        suppliers = Supplier.query.all()
+        supplierEmails = [supplierEmail.email for supplierEmail in suppliers]
         
+        supplierPhoneNos = [supplierphoneno.contact for supplierphoneno in suppliers]
+
+
+        supplier = Supplier.query.filter(Supplier.id == supId).first()
+        for key, value in data.items():
+            if value == '':
+                return {'message': "Field cannot be empty"}, 400
+            
+        
+        if 'email' in data and 'contact' in data:
+            if data['email'] in supplierEmails or data['contact'] in supplierPhoneNos:
+                return jsonify({"message": "Supplier with Email or Phone-No already exists"}), 409  # Conflict
+
+        
+        try:
+            for key, value in data.items():
+                if hasattr(supplier, key):
+                    setattr(supplier, key, value)
+        
+                db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return {'message': 'Unable to update item', 'error': str(e)}, 404
+
+        return {'message': 'Item updated Successfully'}, 200
