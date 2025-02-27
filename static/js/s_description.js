@@ -173,6 +173,79 @@ $(document).ready(function(){
         $(".delete").addClass("display")
     });
 
+    $(document).on('click', '.receiptsec .container .container-item .actions .download-button',function() {
+        let container = $(this).closest(".container-item");
+        let fileId = container.find(".receipt-id").text().trim();
+
+        if (!fileId) {
+            alert("File ID not found!");
+            return;
+        }
+
+        $.ajax({
+            url: `/api/supplierDescription/downReceipt?id=${fileId}`,
+            method: "GET",
+            xhrFields: {
+                responseType: 'blob'  // Treat response as binary data
+            },
+            success: function(data, status, xhr) {
+                let filename = "downloaded_file";  // Default filename
+
+                // Extract filename from Content-Disposition header if available
+                let disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    let matches = /filename="([^"]+)"/.exec(disposition);
+                    if (matches && matches[1]) filename = matches[1];
+                }
+
+                // Create a Blob URL and trigger download
+                let blob = new Blob([data], { type: xhr.getResponseHeader("Content-Type") });
+                let link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            error: function(xhr, status, error) {
+                console.log('error: ' + error);
+                
+                // For API errors that return JSON
+                if (xhr.getResponseHeader("Content-Type") && 
+                    xhr.getResponseHeader("Content-Type").includes("application/json")) {
+                    try {
+                        // Read the blob as text
+                        const reader = new FileReader();
+                        reader.onload = function() {
+                            try {
+                                const response = JSON.parse(reader.result);
+                                $(".message").css("background", '#FF3131');
+                                $(".message h6").html(response.error || "Unknown error");
+                                $(".message").fadeIn(1000).fadeOut(1000);
+                            } catch (e) {
+                                // Fallback if JSON parsing fails
+                                $(".message").css("background", '#FF3131');
+                                $(".message h6").html("Error downloading file");
+                                $(".message").fadeIn(1000).fadeOut(1000);
+                            }
+                        };
+                        reader.readAsText(xhr.response);
+                    } catch (e) {
+                        // Generic error message if we can't process the response
+                        $(".message").css("background", '#FF3131');
+                        $(".message h6").html("Error downloading file");
+                        $(".message").fadeIn(1000).fadeOut(1000);
+                    }
+                } else {
+                    // Generic error for non-JSON responses
+                    $(".message").css("background", '#FF3131');
+                    $(".message h6").html("Error downloading file");
+                    $(".message").fadeIn(1000).fadeOut(1000);
+                }
+            }
+        });
+    });
+
     supplier();
     supplierInfo();
     supplierProducts();
@@ -281,7 +354,7 @@ function supplierProducts(){
                     newProduct.find('.product-name').text(response[i].name);
                     newProduct.find('.stock').text(`${response[i].amount_remain} - remains`);
                     
-                    $('.container').append(newProduct);
+                    $('.productsec .container').append(newProduct);
 
                 } 
             } else {
@@ -346,6 +419,16 @@ function sendReceipt() {
             return;
         }
 
+        // Check file type is PDF
+        const file = $("#receipt-file")[0].files[0];
+        const fileType = file.type;
+        if (fileType !== "application/pdf") {
+            $(".message").css("background", '#FF3131');
+            $(".message h6").html("Only PDF files are accepted");
+            $(".message").fadeIn(1000).fadeOut(1000);
+            return;
+        }
+
         // Check if filename is provided
         const fileName = $("#receipt").val().trim();
         if (!fileName) {
@@ -355,11 +438,11 @@ function sendReceipt() {
             return;
         }
 
-        console.log("File:", $("#receipt-file")[0].files[0]);
+        console.log("File:", file);
         console.log("File name:", fileName);
 
         let formData = new FormData();
-        formData.append("file", $("#receipt-file")[0].files[0]);
+        formData.append("file", file);
         formData.append("file_name", fileName);
 
         console.log("FormData created, sending to server...");
@@ -422,7 +505,7 @@ function getReceipt(){
                     newProduct.find('.receipt-name').text(response[i].name);
                     newProduct.find('.date').text(response[i].date);
                     
-                    $('.container').append(newProduct);
+                    $('.receiptsec .container').append(newProduct);
 
                 } 
             } else {

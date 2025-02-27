@@ -1,4 +1,6 @@
-from flask import render_template, Blueprint, jsonify, request, current_app
+from flask import render_template, Blueprint, jsonify, request, current_app, send_file
+import mimetypes
+from werkzeug.utils import secure_filename
 from flask.views import MethodView
 from flask_smorest import Blueprint as apiBlueprint
 from model.db import *
@@ -7,6 +9,7 @@ from flask_mail import Mail, Message
 from email.mime.text import MIMEText
 import smtplib
 import os
+import io
 from dotenv import load_dotenv, dotenv_values
 from datetime import datetime
 
@@ -157,22 +160,84 @@ class getReceipt(MethodView):
         def post(self):
             supplier_id = request.args.get('id')
             file_name = request.form.get('file_name')
-            file = request.files['file']
+            file = request.files.get('file')  # Use .get() to avoid KeyError
 
+            # Check if the supplier has products assigned
             supplier_product = Supplier.query.join(Product, Supplier.id == Product.supplier_id).filter(Supplier.id == supplier_id).all()
-
             if not supplier_product:
                 return jsonify({"message": "Can't Upload File due to lack of product being assigned to supplier"}), 404
 
+            # Ensure required fields are provided
             if not supplier_id or not file_name or not file:
-                    return jsonify({"message": "Missing required fields"}), 400
+                return jsonify({"message": "Missing required fields"}), 400
 
             try:
-                receipt = Receipt(receipt_name=file_name, receipt_data=file_name, supplier_id=supplier_id, date_issued=datetime.now().strftime('%Y-%m-%d'))
-                receipt.receipt_data = file.read()
+                # Read the binary content before committing
+                file_data = file.read()
+
+                # Save receipt with actual binary data
+                receipt = Receipt(
+                    receipt_name=file_name,
+                    receipt_data=file_data,  # Store actual binary content
+                    supplier_id=supplier_id,
+                    date_issued=datetime.now().strftime('%Y-%m-%d')
+                )
+                
                 db.session.add(receipt)
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()
                 return jsonify({'message': 'Unable to add receipt', 'error': str(e)}), 500
+
             return jsonify({'message': 'Receipt added successfully'}), 201
+
+        
+
+@supplierDes_route.route('/downReceipt')
+class downReceipt(MethodView):
+    def get(self):
+        id = request.args.get('id')
+        receipt = Receipt.query.filter_by(id=id).first()
+
+        if not receipt or not receipt.receipt_data:
+            return jsonify({"error": "File not found or file data is empty"}), 404
+
+        try:
+            # Create BytesIO object to serve the file as it is
+            file_data = io.BytesIO(receipt.receipt_data)
+            file_data.seek(0)
+
+            # Get filename and attempt to determine MIME type
+            filename = receipt.receipt_name
+            mime_type, _ = mimetypes.guess_type(filename)
+
+            # If MIME type is not detected, analyze file signature
+            if not mime_type:
+                file_signature = receipt.receipt_data[:32]  # Read first 32 bytes
+                
+                if file_signature.startswith(b'%PDF'):
+                    mime_type = 'application/pdf'
+                else:
+                    mime_type = 'application/octet-stream'  # Default to binary stream
+
+            # Ensure a safe filename for download
+            safe_filename = secure_filename(filename) if filename else "downloaded_file"
+
+            # Send file exactly as stored with appropriate headers
+            response = send_file(
+                file_data,
+                mimetype=mime_type,
+                as_attachment=True,
+                download_name=safe_filename,
+                conditional=False  # Avoid transformations
+            )
+
+            # Set explicit headers to ensure proper handling
+            response.headers["Content-Type"] = mime_type
+            response.headers["Content-Disposition"] = f'attachment; filename="{safe_filename}"'
+
+            return response
+
+        except Exception as e:
+            current_app.logger.error(f"Error sending file: {str(e)}")
+            return jsonify({"error": f"Error processing file: {str(e)}"}), 500
