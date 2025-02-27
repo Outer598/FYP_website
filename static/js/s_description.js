@@ -176,6 +176,8 @@ $(document).ready(function(){
     supplier();
     supplierInfo();
     supplierProducts();
+    sendReceipt();
+    getReceipt();
 })
 
 function supplier() {
@@ -328,5 +330,104 @@ function mailSupplier(productId){
                 $(".message").fadeIn(1000).fadeOut(1000)
             }
         });
+    });
+}
+
+function sendReceipt() {
+    // Better to use one-time binding for the submit event
+    $(document).off("click", ".receipt .receipt-actions .submit").on("click", ".receipt .receipt-actions .submit", function(e) {
+        e.preventDefault();
+
+        // Check if file is selected
+        if (!$("#receipt-file")[0].files || !$("#receipt-file")[0].files[0]) {
+            $(".message").css("background", '#FF3131');
+            $(".message h6").html("Please select a file");
+            $(".message").fadeIn(1000).fadeOut(1000);
+            return;
+        }
+
+        // Check if filename is provided
+        const fileName = $("#receipt").val().trim();
+        if (!fileName) {
+            $(".message").css("background", '#FF3131');
+            $(".message h6").html("Please provide a file name");
+            $(".message").fadeIn(1000).fadeOut(1000);
+            return;
+        }
+
+        console.log("File:", $("#receipt-file")[0].files[0]);
+        console.log("File name:", fileName);
+
+        let formData = new FormData();
+        formData.append("file", $("#receipt-file")[0].files[0]);
+        formData.append("file_name", fileName);
+
+        console.log("FormData created, sending to server...");
+        console.log("Supplier ID:", supplierId);
+    
+        $.ajax({
+            url: `/api/supplierDescription/getReceipt?id=${supplierId}`,
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log("Success response:", response);
+                
+                $(".message").css("background", '#228B22');
+                $(".message h6").html(`${response.message}`);
+
+                $(".receipt").addClass("display"); // Hide the receipt form
+                $(".message").fadeIn(1000).fadeOut(1000);
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
+            error: function(xhr, status, error) {
+                console.log('AJAX error:', error);
+                console.log('Status:', status);
+                console.log('Response text:', xhr.responseText);
+                
+                try {
+                    let response = JSON.parse(xhr.responseText);
+                    $(".message").css("background", '#FF3131');
+                    $(".message h6").html(`${response.message}`);
+                } catch (e) {
+                    $(".message").css("background", '#FF3131');
+                    $(".message h6").html("An error occurred while uploading the receipt");
+                }
+                
+                $(".message").fadeIn(1000).fadeOut(1000);
+            }
+        });
+    });
+}
+
+function getReceipt(){
+    $.ajax({
+        url: `/api/supplierDescription/getReceipt?id=${supplierId}`,
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(response){
+            console.log(response);
+            if (response.length !== 0){
+                const reportRowTemplate = $('.receiptsec .container .container-item').first();
+                reportRowTemplate.find('.receipt-id').text(response[0].id);
+                reportRowTemplate.find('.receipt-name').text(response[0].name);
+                reportRowTemplate.find('.date').text(response[0].date);
+                
+                for (let i = 1; i < response.length; i++){
+                    let newProduct = reportRowTemplate.clone();
+                    newProduct.find('.receipt-id').text(response[i].id);
+                    newProduct.find('.receipt-name').text(response[i].name);
+                    newProduct.find('.date').text(response[i].date);
+                    
+                    $('.container').append(newProduct);
+
+                } 
+            } else {
+                $(".receiptsec .container").remove();
+            };
+        }
     });
 }

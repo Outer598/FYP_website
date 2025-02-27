@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_migrate import Migrate
 from model.db import *
 from view.dashboard import dashBoard, dashboard_route
 from view.category import category, category_route
@@ -86,6 +87,8 @@ CORS(app)
 
 #init db
 db.init_app(app=app)
+
+migrate = Migrate(app, db)
 
 api = Api(app)
 

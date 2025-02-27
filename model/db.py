@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Integer, String, Text,DECIMAL, Date, DateTime, ForeignKey, extract, desc, Column, and_, func, LargeBinary, text
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.dialects.mysql import LONGBLOB
 
 
 db = SQLAlchemy()
@@ -68,7 +69,7 @@ class Report(db.Model):
     __tablename__ = 'reports'
     id = Column(Integer, primary_key=True, nullable=False)
     report_name = Column(String(120), nullable=False)
-    report_data = Column(LargeBinary, nullable=False)
+    report_data = Column(LONGBLOB, nullable=False)
     date_issued = Column(DateTime, nullable=False)
 
 class User(db.Model):
@@ -98,7 +99,7 @@ class Receipt(db.Model):
     __tablename__ = 'receipt'
     id = Column(Integer, primary_key=True, nullable=False)
     receipt_name = Column(String(50), nullable=False)
-    receipt_data = Column(LargeBinary, nullable=False)
+    receipt_data = Column(LONGBLOB, nullable=False)
     supplier_id = Column(Integer, ForeignKey('suppliers.id'), nullable=False)
     date_issued = Column(DateTime, nullable=False)
 
@@ -108,7 +109,7 @@ class Invoice(db.Model):
     __tablename__ = 'invoice'
     id = Column(Integer, primary_key=True, nullable=False)
     invoice_name = Column(String(50), nullable=False)
-    invoice_data = Column(LargeBinary, nullable=False)
+    invoice_data = Column(LONGBLOB, nullable=False)
     supplier_id = Column(Integer, ForeignKey('suppliers.id'), nullable=False)
     date_issued = Column(DateTime, nullable=False)
     supplier = relationship('Supplier', backref=db.backref('invoice', cascade='all, delete-orphan'))

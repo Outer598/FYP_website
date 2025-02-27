@@ -8,6 +8,7 @@ from email.mime.text import MIMEText
 import smtplib
 import os
 from dotenv import load_dotenv, dotenv_values
+from datetime import datetime
 
 load_dotenv()
 config = dotenv_values(".env")
@@ -135,3 +136,43 @@ class sdesUpdate(MethodView):
             return {'message': 'Unable to update item', 'error': str(e)}, 404
 
         return {'message': 'Item updated Successfully'}, 200
+    
+
+@supplierDes_route.route('/getReceipt')
+class getReceipt(MethodView):
+    
+        def get(self):
+            data = request.args.get('id')
+
+            receipt = Receipt.query.join(Supplier, Receipt.supplier_id == Supplier.id).filter(Receipt.supplier_id == data).all()
+            all_receipts = []
+            for i in receipt:
+                all_receipts.append({
+                    'id': i.id,
+                    'name': i.receipt_name,
+                    'date': i.date_issued,
+                })
+            return jsonify(all_receipts), 200
+        
+        def post(self):
+            supplier_id = request.args.get('id')
+            file_name = request.form.get('file_name')
+            file = request.files['file']
+
+            supplier_product = Supplier.query.join(Product, Supplier.id == Product.supplier_id).filter(Supplier.id == supplier_id).all()
+
+            if not supplier_product:
+                return jsonify({"message": "Can't Upload File due to lack of product being assigned to supplier"}), 404
+
+            if not supplier_id or not file_name or not file:
+                    return jsonify({"message": "Missing required fields"}), 400
+
+            try:
+                receipt = Receipt(receipt_name=file_name, receipt_data=file_name, supplier_id=supplier_id, date_issued=datetime.now().strftime('%Y-%m-%d'))
+                receipt.receipt_data = file.read()
+                db.session.add(receipt)
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                return jsonify({'message': 'Unable to add receipt', 'error': str(e)}), 500
+            return jsonify({'message': 'Receipt added successfully'}), 201
