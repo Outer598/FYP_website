@@ -154,7 +154,7 @@ $(document).ready(function(){
     });
 
     let clickedId = "";
-    $(document).on("click", ".receiptsec .container .container-item.actions .delete-button", function(){
+    $(document).on("click", ".receiptsec .container .container-item .actions .delete-button", function(){
 
         var receiptName = $(this).closest('.actions').parent().find(".receipt-name").text();
 
@@ -163,6 +163,37 @@ $(document).ready(function(){
 
         $('.delete .delete-head-container .email-header').text(`Are your sure you want to delete ${receiptName}?`);
         $('.delete').removeClass("display");
+    });
+
+    // Handle Delete
+    $(document).on('click', '.delete .delete-actions .cancel',function() {
+        let fileId = clickedId;
+        console.log(fileId);
+        
+        $.ajax({
+            url: `/api/supplierDescription/downReceipt?id=${fileId}`,
+            method: "DELETE",
+            success: function(response) {
+                
+                $(".message").css("background", '#228B22');
+                $(".message h6").html(`${response.message}`);
+
+
+                $(".message").fadeIn(1000).fadeOut(1000);
+                $('.delete-name').addClass("display-type");
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
+            error: function(xhr, status, error) {
+                console.log('error: ' + error)
+                let response = JSON.parse(xhr.responseText);
+    
+                $(".message").css("background", '#FF3131');
+                $(".message h6").html(`${response.message}`);
+                $(".message").fadeIn(1000).fadeOut(1000)
+            }
+        });
     });
 
     $(document).on('click', '.email .email-actions .cancel, .receipt .receipt-actions .cancel, .reassign .reassign-actions .cancel, .delete .delete-actions .submit, .edit .edit-actions .cancel', function(){
@@ -419,19 +450,34 @@ function sendReceipt() {
             return;
         }
 
-        // Check file type is PDF
+        // Check file type is one of the accepted formats
         const file = $("#receipt-file")[0].files[0];
         const fileType = file.type;
-        if (fileType !== "application/pdf") {
+        const fileName = file.name;
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        
+        // Array of accepted MIME types and extensions
+        const acceptedMimeTypes = [
+            "application/pdf",                           // PDF
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
+            "text/plain",                                // TXT
+            "image/jpeg",                                // JPG/JPEG
+            "image/png",                                 // PNG
+            "image/tiff"                                 // TIF/TIFF
+        ];
+        
+        const acceptedExtensions = ["pdf", "docx", "txt", "jpg", "jpeg", "png", "tif", "tiff"];
+        
+        if (!acceptedMimeTypes.includes(fileType) && !acceptedExtensions.includes(fileExtension)) {
             $(".message").css("background", '#FF3131');
-            $(".message h6").html("Only PDF files are accepted");
+            $(".message h6").html("Only PDF, DOCX, TXT, JPG, PNG, and TIF files are accepted");
             $(".message").fadeIn(1000).fadeOut(1000);
             return;
         }
 
         // Check if filename is provided
-        const fileName = $("#receipt").val().trim();
-        if (!fileName) {
+        const inputFileName = $("#receipt").val().trim();
+        if (!inputFileName) {
             $(".message").css("background", '#FF3131');
             $(".message h6").html("Please provide a file name");
             $(".message").fadeIn(1000).fadeOut(1000);
@@ -439,11 +485,11 @@ function sendReceipt() {
         }
 
         console.log("File:", file);
-        console.log("File name:", fileName);
+        console.log("File name:", inputFileName);
 
         let formData = new FormData();
         formData.append("file", file);
-        formData.append("file_name", fileName);
+        formData.append("file_name", inputFileName);
 
         console.log("FormData created, sending to server...");
         console.log("Supplier ID:", supplierId);
