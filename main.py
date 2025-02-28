@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from flask_migrate import Migrate
 from model.db import *
@@ -9,9 +9,11 @@ from view.description import description, description_route
 from view.report import report, report_route
 from view.supplier import supplier, supplier_route
 from view.supplierDescription import supplierDes, supplierDes_route
+from view.login import login_manager, auth_bp, login_page
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
+from datetime import timedelta
 
 
 def insert_users():
@@ -68,6 +70,8 @@ app = Flask(__name__)
 load_dotenv()
 config = dotenv_values(".env")
 
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY") or os.urandom(24)
+
 class Apiconfig:
     API_TITLE = 'Sales Analyzer'
     API_VERSION = 'v1'
@@ -81,17 +85,23 @@ app.config.from_object(Apiconfig)
 #database init
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{os.getenv("myDatabaseUsername")}:{os.getenv("myDatabasePassword")}@{os.getenv("myDatabaseHost")}/{os.getenv("myDatabaseName")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['JWT_SECRET_KEY'] = os.getenv("JWT_KEY")
+# app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2)
 
-#init CORS {CROSS ORIGIN RESOURCE SHARING}
-CORS(app)
 
 #init db
 db.init_app(app=app)
 
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+
 migrate = Migrate(app, db)
 
 api = Api(app)
+login_manager.init_app(app)
 
+
+app.register_blueprint(login_page)
+app.register_blueprint(auth_bp)
 app.register_blueprint(dashBoard)
 app.register_blueprint(category)
 app.register_blueprint(product)
@@ -100,6 +110,7 @@ app.register_blueprint(report)
 app.register_blueprint(supplier)
 app.register_blueprint(supplierDes)
 
+# api.register_blueprint(auth_bp)
 api.register_blueprint(dashboard_route)
 api.register_blueprint(category_route)
 api.register_blueprint(product_route)
@@ -107,6 +118,7 @@ api.register_blueprint(description_route)
 api.register_blueprint(report_route)
 api.register_blueprint(supplier_route)
 api.register_blueprint(supplierDes_route)
+
 
 # with app.app_context():
 #     db.create_all()

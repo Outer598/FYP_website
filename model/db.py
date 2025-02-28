@@ -3,6 +3,7 @@ from sqlalchemy import Integer, String, Text,DECIMAL, Date, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.dialects.mysql import LONGBLOB
+from flask_login import UserMixin
 
 
 db = SQLAlchemy()
@@ -12,7 +13,7 @@ class Category(db.Model):
     id = Column(Integer, primary_key=True, nullable=False)
     category_name = Column(String(50), unique=True, nullable=False)
 
-class Supplier(db.Model):
+class Supplier(db.Model, UserMixin):
     __tablename__ = 'suppliers'
     id = Column(Integer, primary_key=True, nullable=False)
     s_name = Column(String(50), nullable=False)
@@ -72,7 +73,7 @@ class Report(db.Model):
     report_data = Column(LONGBLOB, nullable=False)
     date_issued = Column(DateTime, nullable=False)
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True, nullable=False)

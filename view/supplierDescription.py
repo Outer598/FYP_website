@@ -4,14 +4,15 @@ from werkzeug.utils import secure_filename
 from flask.views import MethodView
 from flask_smorest import Blueprint as apiBlueprint
 from model.db import *
-from view.madepass import SecurePasswordGenerator
-from flask_mail import Mail, Message
 from email.mime.text import MIMEText
 import smtplib
 import os
 import io
 from dotenv import load_dotenv, dotenv_values
 from datetime import datetime
+from flask_jwt_extended import jwt_required, get_jwt_identity
+import json
+from view.login import login_required, manager_required, supplier_required
 
 load_dotenv()
 config = dotenv_values(".env")
@@ -20,13 +21,15 @@ supplierDes = Blueprint("supplierDescription", __name__)
 supplierDes_route = apiBlueprint('supplierDescription_route', __name__, url_prefix='/api/supplierDescription', description='For supplier')
 
 @supplierDes.route("/supplier/description")
+@login_required
+@manager_required
 def supplierDescription():
     return render_template("s_description.html")
 
 
 @supplierDes_route.route('/info')
 class supplierInfo(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self):
         data = request.args.get('id')
 
@@ -42,7 +45,7 @@ class supplierInfo(MethodView):
 
 @supplierDes_route.route('/product')
 class supplierProduct(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self):
         data = request.args.get('id')
 
@@ -60,7 +63,7 @@ class supplierProduct(MethodView):
 
 @supplierDes_route.route('/mail')
 class mailSupplier(MethodView):
-
+    decorators = [login_required, manager_required]
     def post(self):
         data = request.get_json()
         print(data)
@@ -104,7 +107,7 @@ Note: this is a no-reply email so messages sent won't be recieved on this email.
 
 @supplierDes_route.route('/update')
 class sdesUpdate(MethodView):
-
+    decorators = [login_required, manager_required]
     def patch(self):
         supId = request.args.get('id')
         print(supId)
@@ -145,64 +148,66 @@ class sdesUpdate(MethodView):
 
 @supplierDes_route.route('/getReceipt')
 class getReceipt(MethodView):
+    decorators = [login_required, manager_required]
+    def get(self):
+        data = request.args.get('id')
+
+        receipt = Receipt.query.join(Supplier, Receipt.supplier_id == Supplier.id).filter(Receipt.supplier_id == data).all()
+        all_receipts = []
+        for i in receipt:
+            all_receipts.append({
+                'id': i.id,
+                'name': i.receipt_name,
+                'date': i.date_issued,
+            })
+        return jsonify(all_receipts), 200
     
-        def get(self):
-            data = request.args.get('id')
+    
+    def post(self):
+        supplier_id = request.args.get('id')
+        file_name = request.form.get('file_name')
+        file = request.files.get('file')  # Use .get() to avoid KeyError
 
-            receipt = Receipt.query.join(Supplier, Receipt.supplier_id == Supplier.id).filter(Receipt.supplier_id == data).all()
-            all_receipts = []
-            for i in receipt:
-                all_receipts.append({
-                    'id': i.id,
-                    'name': i.receipt_name,
-                    'date': i.date_issued,
-                })
-            return jsonify(all_receipts), 200
-        
-        def post(self):
-            supplier_id = request.args.get('id')
-            file_name = request.form.get('file_name')
-            file = request.files.get('file')  # Use .get() to avoid KeyError
+        # Check if the supplier has products assigned
+        supplier_product = Supplier.query.join(Product, Supplier.id == Product.supplier_id).filter(Supplier.id == supplier_id).all()
+        if not supplier_product:
+            return jsonify({"message": "Can't Upload File due to lack of product being assigned to supplier"}), 404
 
-            # Check if the supplier has products assigned
-            supplier_product = Supplier.query.join(Product, Supplier.id == Product.supplier_id).filter(Supplier.id == supplier_id).all()
-            if not supplier_product:
-                return jsonify({"message": "Can't Upload File due to lack of product being assigned to supplier"}), 404
+        # Ensure required fields are provided
+        if not supplier_id or not file_name or not file:
+            return jsonify({"message": "Missing required fields"}), 400
 
-            # Ensure required fields are provided
-            if not supplier_id or not file_name or not file:
-                return jsonify({"message": "Missing required fields"}), 400
+        try:
+            # Read the binary content before committing
+            file_data = file.read()
 
-            try:
-                # Read the binary content before committing
-                file_data = file.read()
+            # Get MIME type from filename
+            mime_type, _ = mimetypes.guess_type(file.filename)
 
-                # Get MIME type from filename
-                mime_type, _ = mimetypes.guess_type(file.filename)
+            # Ensure a secure filename
+            safe_filename = secure_filename(file_name)
 
-                # Ensure a secure filename
-                safe_filename = secure_filename(file_name)
+            # Save receipt with actual binary data
+            receipt = Receipt(
+                receipt_name=safe_filename,
+                receipt_data=file_data,  # Store actual binary content
+                supplier_id=supplier_id,
+                date_issued=datetime.now().strftime('%Y-%m-%d')
+            )
 
-                # Save receipt with actual binary data
-                receipt = Receipt(
-                    receipt_name=safe_filename,
-                    receipt_data=file_data,  # Store actual binary content
-                    supplier_id=supplier_id,
-                    date_issued=datetime.now().strftime('%Y-%m-%d')
-                )
+            db.session.add(receipt)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'message': 'Unable to add receipt', 'error': str(e)}), 500
 
-                db.session.add(receipt)
-                db.session.commit()
-            except Exception as e:
-                db.session.rollback()
-                return jsonify({'message': 'Unable to add receipt', 'error': str(e)}), 500
-
-            return jsonify({'message': 'Receipt added successfully'}), 201
+        return jsonify({'message': 'Receipt added successfully'}), 201
 
         
 
 @supplierDes_route.route('/downReceipt')
 class downReceipt(MethodView):
+    decorators = [login_required, manager_required]
     def get(self):
         id = request.args.get('id')
         receipt = Receipt.query.filter_by(id=id).first()
@@ -279,7 +284,6 @@ class downReceipt(MethodView):
             current_app.logger.error(f"Error sending file: {str(e)}")
             return jsonify({"error": f"Error processing file: {str(e)}"}), 500
         
-
     def delete(self):
         try:
             id = request.args.get('id')

@@ -3,19 +3,24 @@ from flask.views import MethodView
 from flask_smorest import Blueprint as apiBlueprint
 from model.db import *
 import pandas as pd
+from flask_jwt_extended import jwt_required, get_jwt_identity
+import json
+from view.login import login_required, manager_required, supplier_required
 
 product = Blueprint("product", __name__)
 product_route = apiBlueprint('product_route', __name__, url_prefix='/api/Products', description='Get the top three categories for sales')
 
 
 @product.route('/category/product')
+@login_required
+@manager_required
 def product_temp():
     return render_template("product.html")
 
 
 @product_route.route('/topProduct')
 class topP(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self):
         categoryId = request.args.get('id')
         
@@ -54,7 +59,7 @@ class topP(MethodView):
 
 @product_route.route('/product')
 class item(MethodView):
-    
+    decorators = [login_required, manager_required]
     def get(self):
         categoryId = request.args.get('id')
         categoryProducts = Product.query.filter_by(category_id=categoryId).join(Inventory, Product.id==Inventory.product_id).\
@@ -123,7 +128,7 @@ class item(MethodView):
 
 @product_route.route('/upDelProd/<int:id>')
 class itemUpDel(MethodView):
-
+    decorators = [login_required, manager_required]
     def delete(self, id):
         product = Product.query.filter_by(id=id).first()
 
@@ -144,6 +149,7 @@ class itemUpDel(MethodView):
 
 @product_route.route('/supplier')
 class supplier(MethodView):
+    decorators = [login_required, manager_required]
     def get(self):
         supplierNames = Supplier.query.all()
         supplierNames = [supplierName.s_name for supplierName in supplierNames]

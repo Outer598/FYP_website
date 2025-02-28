@@ -1,4 +1,43 @@
-$(document).ready(function(){
+$(document).ready(function() {
+    // Check if user is authenticated
+    const token = localStorage.getItem('access_token');
+    
+    // Global AJAX setup
+    $.ajaxSetup({
+        headers: {
+            'Authorization': token ? 'Bearer ' + token : '',
+            'Content-Type': 'application/json'
+        },
+        error: function(xhr, status, error) {
+            // Handle unauthorized access
+            if (xhr.status === 401) {
+                localStorage.removeItem('access_token');
+                window.location.href = '/';
+            }
+        }
+    });
+
+    // Protect routes that require authentication
+    function checkAuth() {
+        if (!token) {
+            window.location.href = '/';
+            return false;
+        }
+        return true;
+    }
+
+    // Add route protection for dashboard pages
+    if (window.location.pathname.includes('dashboard')) {
+        checkAuth();
+    }
+
+    // Logout functionality
+    $('#logout').on('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('access_token');
+        window.location.href = '/login';
+    });
+
     $(".sidebar-toggler, .sidebar-menu-button").each(function(){
        $(this).on("click", function(){
             closeAllDropdowns();
@@ -55,6 +94,7 @@ $(document).ready(function(){
     salRevenue();
     topCategories();
     periodicRevenue();
+    loginInfo();
 });
 
 function toggleDropdown(dropdown, menu, isOpen){
@@ -455,4 +495,18 @@ function periodicRevenue(){
       console.log('error: ' + error);
     }
   });
+}
+
+function loginInfo(){
+    $.ajax({
+        url: "/user-info",
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(response){
+        $(".search-profile .user-info span").html(`Welcome - ${response.user_type} ${response.name}`);
+        },
+        error: function(xhr, status, error){
+        console.log('error: ' + error);
+        }
+    });
 }

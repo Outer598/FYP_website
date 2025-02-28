@@ -154,14 +154,12 @@ $(document).ready(function(){
     });
 
     let clickedId = "";
-    $(document).on("click", ".receiptsec .container .container-item .actions .delete-button", function(){
-
+    $(document).on("click", ".container-item .actions .delete-button", function(){
         var receiptName = $(this).closest('.actions').parent().find(".receipt-name").text();
-
-        clickedId = $(this).closest(".actions").parent().find(".receipt-id").text();
-        console.log("Report ID:", clickedId);
-
-        $('.delete .delete-head-container .email-header').text(`Are your sure you want to delete ${receiptName}?`);
+        clickedId = $(this).closest(".container-item").find(".receipt-id").text();
+        console.log("Receipt ID:", clickedId);
+        
+        $('.delete .delete-head-container .email-header').text(`Are you sure you want to delete ${receiptName}?`);
         $('.delete').removeClass("display");
     });
 

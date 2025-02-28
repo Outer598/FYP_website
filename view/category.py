@@ -2,19 +2,24 @@ from flask import render_template, Blueprint, jsonify, request
 from flask.views import MethodView
 from flask_smorest import Blueprint as apiBlueprint
 from model.db import *
+from flask_jwt_extended import jwt_required, get_jwt_identity
+import json
+from view.login import login_required, manager_required, supplier_required
 
 
 category = Blueprint("category", __name__)
 category_route = apiBlueprint('category_route', __name__, url_prefix='/api/category', description='Get the top three categories for sales')
 
 @category.route("/category")
+@login_required
+@manager_required
 def categories():
     return render_template("category.html")
 
 
 @category_route.route("/all_categories")
 class Cat(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self):
         categories = Category.query.with_entities(Category.id, Category.category_name).order_by(Category.id).all()
         categories = [{"id":i[0], "label": i[1]} for i in categories]
@@ -22,6 +27,7 @@ class Cat(MethodView):
             item_count = len(Product.query.filter_by(category_id=category["id"]).all())
             category.update({"productCount": item_count})
         return jsonify(categories),200
+    
     
     def post(self):
         data = request.get_json()
@@ -49,8 +55,8 @@ class Cat(MethodView):
 
 @category_route.route("/upDelCat/<int:id>")
 class uDCat(MethodView):
-
-    def patch(self, id):
+    decorators = [login_required, manager_required]
+    def patch(self, id):        
         data = request.get_json()
         
         category = Category.query.filter_by(id=id).first()
@@ -75,6 +81,7 @@ class uDCat(MethodView):
         except Exception as e:
             db.session.rollback()
             return jsonify({"message": "Error updating category", "error": str(e)}), 400
+        
     
     def delete(self, id):
         category = Category.query.filter_by(id=id).first()

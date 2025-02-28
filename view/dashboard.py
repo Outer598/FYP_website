@@ -1,21 +1,35 @@
-from flask import render_template, Blueprint, jsonify
+from flask import render_template, Blueprint, jsonify, url_for
 from flask.views import MethodView
 from flask_smorest import Blueprint as apiBlueprint
 from model.db import *
 import pandas as pd
+import json
+from view.login import login_required, manager_required, supplier_required  # Import the new decorators
 
+# Regular Blueprint for page routes
 dashBoard = Blueprint("dashBoard", __name__)
-dashboard_route = apiBlueprint('dashboard_route', __name__, url_prefix='/api/dashboard', description='Get the top three categories for sales')
+
+# API Blueprint for API endpoints
+dashboard_route = apiBlueprint('dashboard_route', __name__, url_prefix='/api/dashboard', 
+                             description='Dashboard API endpoints')
 
 
-@dashBoard.route('/')
-def dashboard():
-    return render_template("index.html")
+@dashBoard.route('/manager-dashboard')
+@login_required
+@manager_required  # Add this decorator to restrict to managers only
+def manager_dashboard():
+    return render_template('index.html')
 
+
+@dashBoard.route('/supplier-dashboard')
+@login_required
+@supplier_required  # Add this decorator to restrict to suppliers only
+def supplier_dashboard():
+    return render_template('supplier_dashboard.html')
 
 @dashboard_route.route('/tCat')
 class top_categories(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self):
         a_decimal = 0.7
         data = {}
@@ -80,6 +94,7 @@ class top_categories(MethodView):
 
 @dashboard_route.route('/salRev')
 class SalRev(MethodView):
+    decorators = [login_required, manager_required]
     def get(self):
         #to get the sales and revenue data for each year from the database
         years = ProductIncome.query.with_entities(extract('year', ProductIncome.record_date).label('year')).distinct().all()
@@ -113,7 +128,7 @@ class SalRev(MethodView):
 
 @dashboard_route.route('/average')
 class avgCash(MethodView):
-    
+    decorators = [login_required, manager_required]
     def get(self):
         # Get product info and create a mapping
         products = Product.query.with_entities(Product.id, Product.product_name).all()
@@ -159,23 +174,20 @@ class avgCash(MethodView):
         return jsonify(time_periods), 200
     
 
-
-
 def getTop3Categories(data:dict, years:list):
-        
-        #to get the average of each category and store it in a dictionary called categories total
-        sales = pd.DataFrame.from_dict(data=data, orient="index")
-        product_average_sales = round(sales.mean(axis=1), 2)
-        categories_total = product_average_sales.to_dict()
+    #to get the average of each category and store it in a dictionary called categories total
+    sales = pd.DataFrame.from_dict(data=data, orient="index")
+    product_average_sales = round(sales.mean(axis=1), 2)
+    categories_total = product_average_sales.to_dict()
 
-        #to find the highest 3 categories and store them in a dictionary called final category
-        final_category = dict(sorted(categories_total.items(), key=lambda x: x[1],reverse=True)[:3])
-        final_dict = {}
-        #to store the original data of the highest values
-        for key, value in final_category.items():
-            final_dict[key] = data[key]
-        
-        return final_dict
+    #to find the highest 3 categories and store them in a dictionary called final category
+    final_category = dict(sorted(categories_total.items(), key=lambda x: x[1],reverse=True)[:3])
+    final_dict = {}
+    #to store the original data of the highest values
+    for key, value in final_category.items():
+        final_dict[key] = data[key]
+    
+    return final_dict
 
 
 def avgYrMonDay(wek:dict, mon: dict, year: dict):

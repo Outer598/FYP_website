@@ -16,7 +16,7 @@
     <aside class="sidebar">
         <header class="sidebar-header">
             <a href="#" class="header-logo">
-                <img src="" alt="SalesRev-logo">
+                <img src="../static/img/platform-logo.jpg" alt="SalesRev-logo">
             </a>
             <button class="sidebar-toggler">
                 <span class="material-symbols-rounded">chevron_left</span>
@@ -26,13 +26,13 @@
             <!-- primary nav bar -->
             <ul class="nav-list primary-nav">
                 <li class="nav-item">
-                    <a href="{{url_for('dashBoard.dashboard')}}" class="nav-link">
+                    <a href="{{url_for('dashBoard.manager_dashboard')}}" class="nav-link">
                         <span class="material-symbols-rounded">home</span>
                         <span class="nav-label">Dashboard</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li class="nav-item">
-                            <a href="{{url_for('dashBoard.dashboard')}}" class="nav-link dropdown-title">Dashboard</a>
+                            <a href="{{url_for('dashBoard.manager_dashboard')}}" class="nav-link dropdown-title">Dashboard</a>
                         </li>
                     </ul>
                 </li>
@@ -110,7 +110,7 @@
             <!-- secondary nav bar -->
              <ul class="nav-list secondary-nav">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{url_for('auth_bp.logout')}}" class="nav-link">
                         <span class="material-symbols-rounded">logout</span>
                         <span class="nav-label">Log Out</span>
                     </a>
@@ -196,6 +196,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../static/js/login.js"></script>
     <script src="../static/js/index.js"></script>
     {%endblock%}
 </body>

@@ -6,17 +6,22 @@ import pandas as pd
 from datetime import datetime, timedelta
 import os
 import io
+from flask_jwt_extended import jwt_required, get_jwt_identity
+import json
+from view.login import login_required, manager_required, supplier_required
 
 report = Blueprint("report", __name__)
 report_route = apiBlueprint("report_route", __name__, url_prefix= '/api/report', description = 'Generate a report based on the period returned')
 
 @report.route('/report')
+@login_required
+@manager_required
 def reportPage():
     return render_template('report.html')
 
 @report_route.route('/')
 class weeklyReport(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self):
         try:
             # Get all product IDs
@@ -152,7 +157,7 @@ class weeklyReport(MethodView):
 
 @report_route.route('/monthly')
 class monthlyReport(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self):
         try:
             # Get all product IDs from the database
@@ -328,7 +333,7 @@ class monthlyReport(MethodView):
     
 @report_route.route('/yearly')
 class yearlyReport(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self):
         try:
             # Get all product IDs from the database
@@ -478,7 +483,7 @@ class yearlyReport(MethodView):
 
 @report_route.route('/all_reports')
 class allReport(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self):
         reportNames = Report.query.all()
         reportNames = [{'id': reportName.id, 'name': reportName.report_name} for reportName in reportNames]
@@ -488,7 +493,7 @@ class allReport(MethodView):
 
 @report_route.route('/reports/<int:id>')
 class allReport(MethodView):
-
+    decorators = [login_required, manager_required]
     def get(self, id):
         report = Report.query.filter(Report.id == id).first()
         print(report)
