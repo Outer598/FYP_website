@@ -68,7 +68,7 @@ div.login form div #login:hover{
 
 .message{
     width: 200px;
-    height: 50px;
+    height: 10px;
     color: white;
     padding: 10px;
     position: fixed;
@@ -77,6 +77,10 @@ div.login form div #login:hover{
     border-radius: 10px;
     text-align: center;
     z-index: 1000;
+}
+
+.message h6{
+    margin: 0;
 }
 
 .display-type{
