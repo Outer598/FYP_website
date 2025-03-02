@@ -1,6 +1,7 @@
 body{
     margin: 0;
     background: whitesmoke;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 nav{
@@ -89,3 +90,144 @@ nav header img{
 
 }
 
+.search-add{
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#search{
+    width: 40%;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.add, #submit, .submit{
+    background-color: blue;
+    color: white;
+    border: 0px;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.add-invoice{
+    background-color: white;
+    padding: 30px;
+    width: 270px;
+    height: 230px;
+    box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+.add-invoice{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+}
+
+.add-invoice > form > label{
+    display: block;
+}
+
+.add-invoice h4{
+    text-align: center;
+}
+
+.add-invoice > form > #name{
+    width: 100%;
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 5px;   
+    margin: 0px 0px 20px 0px;
+}
+
+.add-invoice > form > #file{
+    margin: 0px 0px 20px 0px;
+}
+
+#cancel, .cancel{
+    background-color: red;
+    color: white;
+    border: 0px;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.upload-actions{
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.display-none{
+    display: none;
+}
+
+.container {
+    margin: 10px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.container .container-item {
+    background: white;
+    width: calc(50% - 20px); /* Adjust for the gap */
+    padding: 20px;
+    border-radius: 10px;
+    flex: 0 0 calc(50% - 20px); /* Don't grow, don't shrink, set basis width */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.container-item{
+    display: grid;
+    grid-template-columns: 1fr 3fr 2fr 2fr;
+    transition: opacity 0.3s ease;
+}
+
+.invoice-id, .invoice-name, .invoice-date, .receipt-id, .receipt-name, .receipt-date{
+    padding: 10px;
+}
+
+.message{
+    width: 200px;
+    height: auto;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    left: 83%; /* Adjust to ensure proper alignment */
+    bottom: 100px; /* Fixed position, no layout shifts */
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+}
+
+.message h6{
+    margin: 0;
+}
+
+.delete-name h3{
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    margin: 10px;
+}
+
+.delete-name{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    border-radius: 10px;
+}

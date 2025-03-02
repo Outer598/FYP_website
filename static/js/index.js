@@ -503,7 +503,7 @@ function loginInfo(){
         type: 'GET',
         contentType: 'application/json',
         success: function(response){
-        $(".search-profile .user-info span").html(`Welcome - ${response.user_type} ${response.name}`);
+        $(".search-profile .user-info span").html(`Welcome - ${response.name}`);
         },
         error: function(xhr, status, error){
         console.log('error: ' + error);

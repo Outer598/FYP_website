@@ -13,8 +13,8 @@
             <img src="../static/img/platform-logo.jpg" alt="salrev logo">
         </header>
         <ul class="main-nav">
-            <li class="main-nav-item bold"><a href="{{ url_for('dashBoard.supplier_dashboard') }}">Invoice</a></li>
-            <li class="main-nav-item"><a href="{{ url_for('supplier_receipt.receipt') }}">Receipt</a></li>
+            <li class="main-nav-item bold invoice"><a href="{{ url_for('dashBoard.supplier_dashboard') }}">Invoice</a></li>
+            <li class="main-nav-item receipt"><a href="{{ url_for('supplier_receipt.receipt') }}">Receipt</a></li>
         </ul>
         <ul class="profile-sec">
             <li class="profile-sec-item">Welcome - test</li>
@@ -28,6 +28,61 @@
 
     {%block content%}
 
+    <div class="search-add">
+        <input type="text" id="search" name="search" placeholder="Search Invoice">
+        <button type="button" class="add">&plus; <span>New Invoice</span></button>
+    </div>
+
+    <div class="container">
+        <div class="container-item">
+            <div class="invoice-id">1</div>
+            <div class="invoice-name">Test</div>
+            <div class="invoice-date">12/12/12</div>
+            <div class="actions">
+                <button type="button" class="add">Download</button>
+                <button type="button" class="cancel">Delete</button>
+            </div>
+        </div>
+        <div class="container-item">
+            <div class="invoice-id">2</div>
+            <div class="invoice-name">Test2</div>
+            <div class="invoice-date">12/12/12</div>
+            <div class="actions">
+                <button type="button" class="add">Download</button>
+                <button type="button" class="cancel">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-invoice display-none">
+        <h4>Upload Invoice</h4>
+        <form action="">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <label for="file">File:</label>
+            <input type="file" id="file" name="file">
+            <div class="upload-actions">
+                <input type="button" id="submit" value="Add">
+                <input type="button" id="cancel" value="Cancel">
+            </div>
+        </form>
+    </div>
+
+    <div class="delete-name display-none">
+        <h3>Are your sure you want to delete report</h3>
+        <form action="">
+            <div class="delete-actions">
+                <input type="button" value="delete" class="cancel">
+                <input type="button" value="Cancel" class="submit">
+            </div>
+        </form>
+    </div>
+
+    <div class="message display-none">
+        <h6>Category Created Successfully</h6>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../static/js/supplier_dashboard.js"></script>
     {% endblock %}
 
