@@ -3,9 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{% block title%}Supplier{% endblock %}</title>
+    <link rel="stylesheet" href="../static/css/suppliers_dashboard.css">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <p>Wlcome</p>
+    <nav>
+        <header>
+            <img src="../static/img/platform-logo.jpg" alt="salrev logo">
+        </header>
+        <ul class="main-nav">
+            <li class="main-nav-item bold"><a href="{{ url_for('dashBoard.supplier_dashboard') }}">Invoice</a></li>
+            <li class="main-nav-item"><a href="{{ url_for('supplier_receipt.receipt') }}">Receipt</a></li>
+        </ul>
+        <ul class="profile-sec">
+            <li class="profile-sec-item">Welcome - test</li>
+            <li class="profile-sec-item"><img src="../static/img/profileImage.png" alt="profile pic">
+                <ul class="log-out-nav">
+                    <li class="log-out"><a href="{{url_for('auth_bp.logout')}}">Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    {%block content%}
+
+    <script src="../static/js/supplier_dashboard.js"></script>
+    {% endblock %}
+
 </body>
 </html>

@@ -1,0 +1,91 @@
+body{
+    margin: 0;
+    background: whitesmoke;
+}
+
+nav{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    padding-bottom: 0px;
+    background: #151A2E;
+    color: white;
+    height: 80px;
+}
+
+nav header{
+    margin: 0px 50px 0px 0px;
+}
+
+nav header img{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.main-nav{
+    margin: 20px 0px 0px 0px;
+    padding-left: 0;
+    display: flex;
+    gap: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+}
+
+.main-nav-item{
+    list-style-type: none;
+}
+
+.profile-sec{
+    display: flex;
+    gap: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    position: relative;
+    left: 52%;
+}
+
+.profile-sec-item{
+    list-style-type: none;
+}
+
+.profile-sec-item img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: relative;
+    top: -15px;
+}
+
+.main-nav-item a{
+    text-decoration: none;
+    color: white;
+}
+
+.main-nav-item.bold{
+    font-weight: bold;
+}
+
+.log-out-nav .log-out{
+    background-color: white;
+    box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    position: absolute;
+    right: 20px;
+    top: 45px;
+    border-radius: 10px;
+    list-style-type: none;
+    font-family: Arial, Helvetica, sans-serif;
+    display: none;
+}
+
+.log-out-nav .log-out a{
+    text-decoration: none;
+    color: black;
+}
+
+.profile-sec-item img:hover + .log-out-nav .log-out, .log-out-nav .log-out:hover{
+    display: block;
+
+}
+

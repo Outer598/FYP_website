@@ -15,6 +15,7 @@ $(document).ready(function () {
             contentType: "application/json",
             data: JSON.stringify({ email: email, password: password }),
             success: function (response) {
+                console.log("Login response:", response);
                 // Redirect based on user type
                 if (response.redirect_url) {
                     $(".message").css("background", '#228B22');
@@ -23,11 +24,17 @@ $(document).ready(function () {
                     setTimeout(function() {
                         window.location.href = response.redirect_url;
                     }, 2000);
+                } else {
+                    console.log("No redirect URL in response");
+                    $(".message").css("background", '#FF3131');
+                    $(".message h6").html(`Login successful but no redirect.`);
+                    $(".message").fadeIn(1000).fadeOut(1000);
                 }
             },
             error: function (xhr) {
-                $(".message").css("background", '#228B22');
-                $(".message h6").html(`Login Failed. Please try again.`);
+                console.log("Login error:", xhr.responseJSON);
+                $(".message").css("background", '#FF3131');
+                $(".message h6").html(`Login Failed: ${xhr.responseJSON?.error || 'Unknown error'}`);
                 $(".message").fadeIn(1000).fadeOut(1000);
             }
         });

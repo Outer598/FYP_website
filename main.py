@@ -10,6 +10,7 @@ from view.report import report, report_route
 from view.supplier import supplier, supplier_route
 from view.supplierDescription import supplierDes, supplierDes_route
 from view.login import login_manager, auth_bp, login_page
+from view.supplier_receipt import supplier_receipt, supplier_receipt_route
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
@@ -109,6 +110,7 @@ app.register_blueprint(description)
 app.register_blueprint(report)
 app.register_blueprint(supplier)
 app.register_blueprint(supplierDes)
+app.register_blueprint(supplier_receipt)
 
 # api.register_blueprint(auth_bp)
 api.register_blueprint(dashboard_route)
@@ -118,6 +120,7 @@ api.register_blueprint(description_route)
 api.register_blueprint(report_route)
 api.register_blueprint(supplier_route)
 api.register_blueprint(supplierDes_route)
+api.register_blueprint(supplier_receipt_route)
 
 
 # with app.app_context():
