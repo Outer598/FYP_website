@@ -1,0 +1,34 @@
+{%extends 'index.html'%}
+
+{%block title%}Invoices{%endblock%}
+
+{%block extra_css%}
+<link rel="stylesheet" href="../static/css/invoice.css">
+{%endblock%}
+
+{%block content%}
+<div class="add-search">
+    <div class="head-container">
+        <div class="page-name head-item"><span>Invoices</span></div>
+        <div class="search-add head-item">
+            <input type="text" name="add-search" placeholder="Search for Invoice" id="search-invoice">
+        </div>
+    </div>
+</div>
+<div class="invoice container">
+    <div class="container-item">
+        <div class="invoice-id">teststss</div>
+        <div class="invoice-name">tutiti</div>
+        <div class="invoice-date">skjskjsks</div>
+        <div class="actions">
+            <button class="edit" type="button">Download</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="../static/js/index.js"></script>
+<script src="../static/js/invoice.js"></script>
+{%endblock%}

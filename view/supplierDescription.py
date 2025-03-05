@@ -10,7 +10,6 @@ import os
 import io
 from dotenv import load_dotenv, dotenv_values
 from datetime import datetime
-from flask_login import current_user
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from view.login_new import manager_required, supplier_required
 

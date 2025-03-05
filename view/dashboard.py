@@ -193,6 +193,22 @@ class avgCash(MethodView):
         return jsonify(time_periods), 200
     
 
+@dashboard_route.route('/five_invoice')
+class allInvoice(MethodView):
+    @jwt_required()
+    @manager_required
+    def get(self):
+
+        invoices = Invoice.query.join(Supplier, Invoice.supplier_id == Supplier.id).order_by(Invoice.id.desc()).limit(5).all()
+
+        invoices = [
+            {'date': invoice.date_issued.strftime("%Y-%m-%d"),
+             'name': invoice.invoice_name,
+             'supplier_name': (invoice.supplier.s_name).title()}
+        for invoice in invoices]
+
+        return jsonify(invoices), 200  
+
 def getTop3Categories(data:dict, years:list):
     #to get the average of each category and store it in a dictionary called categories total
     sales = pd.DataFrame.from_dict(data=data, orient="index")

@@ -94,6 +94,7 @@ $(document).ready(function() {
     topCategories();
     periodicRevenue();
     loginInfo();
+    getlatestInvoice();
     // test();
 });
 
@@ -531,3 +532,37 @@ function loginInfo(){
 //         }
 //     });
 // }
+
+function getlatestInvoice(){
+    $.ajax({
+        url: '/api/dashboard/five_invoice',
+        type:'GET',
+        contentType: 'application/json',
+        success: function(response){
+            if (response.length !== 0){
+                const tableBody = $('.recent-orders table tbody');
+                const tableRowTemplate = $('.recent-orders table .table-content').first();
+                
+                // Clear existing rows except the template
+                tableBody.find('.table-content:not(:first)').remove();
+
+                // Update the first row with the first response item
+                tableRowTemplate.find('.date').text(response[0].date);
+                tableRowTemplate.find('.name').text(response[0].supplier_name);
+                tableRowTemplate.find('.invoice-name').text(`${response[0].name}`);
+                
+                // Add additional rows for remaining items
+                for (let i = 1; i < response.length; i++){
+                    let newrow = tableRowTemplate.clone();
+                    newrow.find('.date').text(response[i].date);
+                    newrow.find('.name').text(response[i].supplier_name);
+                    newrow.find('.invoice-name').text(`${response[i].name}`);
+                    
+                    tableBody.append(newrow);
+                } 
+            } else {
+                $(".recent-orders").remove();
+            }
+        }
+    });
+}

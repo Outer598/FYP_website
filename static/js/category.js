@@ -190,15 +190,16 @@ function Categories(){
         type: 'GET',
         contentType: 'application/json',
         success: function(response){
-            // Assuming your first row is a template
+            if (response.length !== 0){
+                // Assuming your first row is a template
             const templateRow = $(".container-item").first();
 
             // Handle first row
             templateRow.find(".category-id").text(response[0].id);
             templateRow.find(".category-name").text(response[0].label);
             templateRow.find(".category-items").text(`${response[0].productCount}-Products`);
-
-            // Then create new rows for remaining items
+                
+                // Then create new rows for remaining items
             for (let i = 1; i < response.length; i++) {
                 // Clone the template row
                 let newRow = templateRow.clone();
@@ -211,6 +212,9 @@ function Categories(){
                 // Append the new row to the table body
                 $(".container").append(newRow);
             }
+            } else {
+                $(".container").remove();
+            };
 
         },
         error: function(xhr, status, error){

@@ -95,7 +95,7 @@
                             <a href="" class="nav-link dropdown-title">Notifications</a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link dropdown-link">Invoices</a>
+                            <a href="{{ url_for('invoice.invoice_page')}}" class="nav-link dropdown-link">Invoices</a>
                         </li>
                         <li class="nav-item">
                             <a href="" class="nav-link dropdown-link">Feed Backs</a>
@@ -171,21 +171,17 @@
                 <col class="col1">
                 <col class="col2">
                 <col class="col3">
-                <col class="col4">
-                <col class="col5">
             </colgroup>
             <tr>
                 <th>Date</th>
                 <th>Supplier Name</th>
-                <th>Supplier Id</th>
                 <th>inovice Name</th>
             </tr>
 
-            <tr>
-                <td>2024-05-19</td>
-                <td>Aasa Olufisayo</td>
-                <td>a23835-6</td>
-                <td>invo-123-15-16-12</td>
+            <tr class="table-content">
+                <td class="date">2024-05-19</td>
+                <td class="name">Aasa Olufisayo</td>
+                <td class="invoice-name">a23835-6</td>
             </tr>
         </table>
     </div>

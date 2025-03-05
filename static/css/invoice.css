@@ -1,0 +1,109 @@
+.add-search{
+    position: relative;
+    left: 280px;
+    width: 76%;
+    margin-bottom: 30px;
+}
+
+.head-container{
+    display: grid;
+    grid-template-columns: 3fr  2fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+}
+
+.search-add{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Update container and item styles */
+.container {
+    position: relative;
+    left: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 75%;
+    margin-bottom: 30px;
+}
+
+.container-item {
+    display: grid;
+    grid-template-columns: 5% 32% 20% 15%;
+    gap: 90px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: all 0.4s ease-in-out var(--delay);
+}
+
+/* Updated hide class for smooth transitions */
+.container-item.hide {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    height: 0;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+/* Search input styling */
+#search-invoice {
+    border: 1px solid black;
+    width: 350px;
+    padding: 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+#search-invoice:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.page-name{
+    font-size: 30px;
+}
+
+
+.container-item:hover{
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    color: #0298cf;
+    cursor: pointer;
+}
+
+.edit, .submit{
+    background-color: blue;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    color: white;
+    width: auto;
+}
+
+
+#update, #create{
+    border: 1px solid black;
+    height: 30px;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+}
+.submit, .cancel{
+    width: 80px;
+    padding: 10px;
+}
+
+.display-type{
+    display: none;
+}
+
+
+.container{
+    margin-bottom: 30px;
+}

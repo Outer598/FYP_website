@@ -243,11 +243,11 @@ def whoami():
     if claims.get('user_type') == 'manager':
         user_info['user_id'] = claims.get('user_id')
         user_info['email'] = claims.get('email')
-        user_info['user_name'] = claims.get('manager_name')
+        user_info['user_name'] = (claims.get('manager_name')).title()
     elif claims.get('user_type') == 'supplier':
         user_info['supplier_id'] = claims.get('supplier_id')
         user_info['email'] = claims.get('email')
-        user_info['user_name'] = claims.get('supplier_name')
+        user_info['user_name'] = (claims.get('supplier_name')).title()
     
     return jsonify(user_info), 200
 
