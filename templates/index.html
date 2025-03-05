@@ -98,9 +98,6 @@
                             <a href="" class="nav-link dropdown-link">Invoices</a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link dropdown-link">Messages</a>
-                        </li>
-                        <li class="nav-item">
                             <a href="" class="nav-link dropdown-link">Feed Backs</a>
                         </li>
                     </ul>
@@ -110,7 +107,7 @@
             <!-- secondary nav bar -->
              <ul class="nav-list secondary-nav">
                 <li class="nav-item">
-                    <a href="{{url_for('auth_bp.logout')}}" class="nav-link">
+                    <a href="{{ url_for('auth_bp.logout_user') }}" class="nav-link">
                         <span class="material-symbols-rounded">logout</span>
                         <span class="nav-label">Log Out</span>
                     </a>

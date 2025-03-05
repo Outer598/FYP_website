@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.dialects.mysql import LONGBLOB
 from flask_login import UserMixin
+from datetime import datetime, timezone
 
 
 db = SQLAlchemy()
@@ -117,7 +118,21 @@ class Invoice(db.Model):
 
 class Feedback(db.Model):
     __tablename__ = 'feedback'
-    id = Column(String(10), primary_key=True, nullable=False)
+    id = Column(Integer, primary_key=True, nullable=False)
     feedback_name = Column(String(50), nullable=False)
     feedbac_data = Column(Text, nullable=False)
     date_submitted = Column(DateTime, nullable=False)
+
+
+class TokenBlocklist(db.Model):
+    __tablename__ = 'tokenblocklist'
+    id = Column(Integer, primary_key=True)
+    jti = Column(String(1000), nullable=False)
+    created_at = Column(DateTime, default=datetime.now(timezone.utc))
+
+    def __repr__(self):
+        return f"<Token {self.jti}>"
+    
+    def save(self):
+        db.session.add(self)
+        db.session.commit()

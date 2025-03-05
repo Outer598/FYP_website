@@ -10,7 +10,7 @@ import os
 from dotenv import load_dotenv, dotenv_values
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import json
-from view.login import login_required, manager_required, supplier_required
+from view.login_new import manager_required, supplier_required
 
 
 load_dotenv()
@@ -21,7 +21,6 @@ supplier = Blueprint("supplier", __name__)
 supplier_route = apiBlueprint('supplier_route', __name__, url_prefix='/api/supplier', description='For supplier')
 
 @supplier.route("/supplier")
-@login_required
 @manager_required
 def suppliers():
     return render_template("supplier.html")
@@ -30,10 +29,11 @@ def suppliers():
 
 @supplier_route.route('/all_supplier')
 class allSuppliers(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         all_supplier = Supplier.query.all()
-        all_supplier = [{'id': supplier.id, 'name': supplier.s_name} for supplier in all_supplier]
+        all_supplier = [{'id': supplier.id, 'name': (supplier.s_name).title()} for supplier in all_supplier]
         
         for i in all_supplier:
             products = Product.query.filter(Product.supplier_id == i['id']).all()
@@ -41,7 +41,8 @@ class allSuppliers(MethodView):
 
         return jsonify(all_supplier), 200
     
-    
+    @jwt_required()
+    @manager_required
     def post(self):
         data = request.get_json()
     
@@ -103,7 +104,8 @@ Note: this is a no-reply email so messages sent won't be recieved on this email.
 
 @supplier_route.route('/all_supplier/<int:id>')
 class delSupplier(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def delete(self, id):
         supplier = Supplier.query.filter(Supplier.id == id).first()
 

@@ -468,7 +468,7 @@ function sendReceipt() {
         
         if (!acceptedMimeTypes.includes(fileType) && !acceptedExtensions.includes(fileExtension)) {
             $(".message").css("background", '#FF3131');
-            $(".message h6").html("Only PDF, DOCX, TXT, JPG, PNG, and TIF files are accepted");
+            $(".message h6").html("Only PDF, DOCX, DOC, TXT, JPG, PNG, and TIF files are accepted");
             $(".message").fadeIn(1000).fadeOut(1000);
             return;
         }
@@ -494,7 +494,7 @@ function sendReceipt() {
     
         $.ajax({
             url: `/api/supplierDescription/getReceipt?id=${supplierId}`,
-            type: "POST",
+            type: 'POST',
             data: formData,
             processData: false,
             contentType: false,

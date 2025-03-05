@@ -1,10 +1,11 @@
-from flask import render_template, Blueprint, jsonify, url_for
+from flask import render_template, Blueprint, jsonify, url_for, request
 from flask.views import MethodView
 from flask_smorest import Blueprint as apiBlueprint
 from model.db import *
 import pandas as pd
 import json
-from view.login import login_required, manager_required, supplier_required  # Import the new decorators
+from view.login_new import manager_required, supplier_required  # Import the new decorators
+from flask_jwt_extended import jwt_required, get_jwt, get_jwt_identity
 
 # Regular Blueprint for page routes
 dashBoard = Blueprint("dashBoard", __name__)
@@ -15,21 +16,37 @@ dashboard_route = apiBlueprint('dashboard_route', __name__, url_prefix='/api/das
 
 
 @dashBoard.route('/manager-dashboard')
-@login_required
-@manager_required  # Add this decorator to restrict to managers only
+@manager_required
 def manager_dashboard():
+    print(request.headers)
     return render_template('index.html')
 
 
 @dashBoard.route('/supplier-dashboard')
-@login_required
-@supplier_required  # Add this decorator to restrict to suppliers only
+@supplier_required
 def supplier_dashboard():
+    print(request.headers)
     return render_template('supplier_dashboard.html')
+
+
+@dashBoard.route('/auth-test')
+@jwt_required()
+def auth_test():
+    identity = get_jwt_identity()
+    claims = get_jwt()
+    user_type = claims.get('user_type')
+    
+    return jsonify({
+        'status': 'Authentication successful',
+        'identity': identity,
+        'user_type': user_type,
+        'all_claims': claims
+    })
 
 @dashboard_route.route('/tCat')
 class top_categories(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         a_decimal = 0.7
         data = {}
@@ -94,7 +111,8 @@ class top_categories(MethodView):
 
 @dashboard_route.route('/salRev')
 class SalRev(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         #to get the sales and revenue data for each year from the database
         years = ProductIncome.query.with_entities(extract('year', ProductIncome.record_date).label('year')).distinct().all()
@@ -128,7 +146,8 @@ class SalRev(MethodView):
 
 @dashboard_route.route('/average')
 class avgCash(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         # Get product info and create a mapping
         products = Product.query.with_entities(Product.id, Product.product_name).all()

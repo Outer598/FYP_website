@@ -10,9 +10,9 @@ import os
 import io
 from dotenv import load_dotenv, dotenv_values
 from datetime import datetime
+from flask_login import current_user
 from flask_jwt_extended import jwt_required, get_jwt_identity
-import json
-from view.login import login_required, manager_required, supplier_required
+from view.login_new import manager_required, supplier_required
 
 load_dotenv()
 config = dotenv_values(".env")
@@ -21,7 +21,6 @@ supplierDes = Blueprint("supplierDescription", __name__)
 supplierDes_route = apiBlueprint('supplierDescription_route', __name__, url_prefix='/api/supplierDescription', description='For supplier')
 
 @supplierDes.route("/supplier/description")
-@login_required
 @manager_required
 def supplierDescription():
     return render_template("s_description.html")
@@ -29,14 +28,15 @@ def supplierDescription():
 
 @supplierDes_route.route('/info')
 class supplierInfo(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         data = request.args.get('id')
 
         supplier_info = Supplier.query.filter(Supplier.id == data).first()
 
         return jsonify({
-            'name': supplier_info.s_name,
+            'name': (supplier_info.s_name).title(),
             'email': supplier_info.email,
             'phone': supplier_info.contact,
             'company': supplier_info.company_name,
@@ -45,7 +45,8 @@ class supplierInfo(MethodView):
 
 @supplierDes_route.route('/product')
 class supplierProduct(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         data = request.args.get('id')
 
@@ -63,7 +64,8 @@ class supplierProduct(MethodView):
 
 @supplierDes_route.route('/mail')
 class mailSupplier(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def post(self):
         data = request.get_json()
         print(data)
@@ -107,7 +109,8 @@ Note: this is a no-reply email so messages sent won't be recieved on this email.
 
 @supplierDes_route.route('/update')
 class sdesUpdate(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def patch(self):
         supId = request.args.get('id')
         print(supId)
@@ -144,11 +147,10 @@ class sdesUpdate(MethodView):
         return {'message': 'Item updated Successfully'}, 200
 
 
-
-
 @supplierDes_route.route('/getReceipt')
 class getReceipt(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         data = request.args.get('id')
 
@@ -162,20 +164,36 @@ class getReceipt(MethodView):
             })
         return jsonify(all_receipts), 200
     
-    
+    @jwt_required()
+    @manager_required
     def post(self):
         supplier_id = request.args.get('id')
+        print("=== DEBUGGING REQUEST ===")
+        print("Content-Type:", request.content_type)
+        print("Args:", request.args)
+        print("Form Data:", request.form)
+        print("Files:", request.files)
+        print("========================")
+        
+        # Check if the current user is authenticated
+        # if not current_user.is_authenticated:
+        #     return jsonify({"message": "Authentication required"}), 401
+        
+        # Check for required parameters
+        if not supplier_id:
+            return jsonify({"message": "Missing supplier ID"}), 400
+            
+        # Access form data and files
         file_name = request.form.get('file_name')
-        file = request.files.get('file')  # Use .get() to avoid KeyError
+        file = request.files.get('file')
+        
+        if not file_name or not file:
+            return jsonify({"message": "Missing file name or file"}), 400
 
         # Check if the supplier has products assigned
         supplier_product = Supplier.query.join(Product, Supplier.id == Product.supplier_id).filter(Supplier.id == supplier_id).all()
         if not supplier_product:
             return jsonify({"message": "Can't Upload File due to lack of product being assigned to supplier"}), 404
-
-        # Ensure required fields are provided
-        if not supplier_id or not file_name or not file:
-            return jsonify({"message": "Missing required fields"}), 400
 
         try:
             # Read the binary content before committing
@@ -207,7 +225,8 @@ class getReceipt(MethodView):
 
 @supplierDes_route.route('/downReceipt')
 class downReceipt(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         id = request.args.get('id')
         receipt = Receipt.query.filter_by(id=id).first()
@@ -284,6 +303,8 @@ class downReceipt(MethodView):
             current_app.logger.error(f"Error sending file: {str(e)}")
             return jsonify({"error": f"Error processing file: {str(e)}"}), 500
         
+    @jwt_required()
+    @manager_required     
     def delete(self):
         try:
             id = request.args.get('id')

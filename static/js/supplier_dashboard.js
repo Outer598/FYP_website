@@ -39,10 +39,11 @@ $(document).ready(function(){
 
     makeBold();
     uploadInvoice();
+    getReceipt();
+    loginInfo();
 })
 
 function makeBold(){
-
     if (window.location.pathname === '/supplier-dashboard') {
         $('.main-nav .invoice').addClass('bold');
         $('.main-nav .receipt').removeClass('bold');
@@ -50,7 +51,6 @@ function makeBold(){
         $('.main-nav .invoice').removeClass('bold');
         $('.main-nav .receipt').addClass('bold');
     }
-
 }
 
 function uploadInvoice(){
@@ -110,40 +110,85 @@ function uploadInvoice(){
         console.log("FormData created, sending to server...");
         console.log("Supplier ID:", supplierId);
     
-        // $.ajax({
-        //     url: `/api/supplierDescription/getReceipt?id=${supplierId}`,
-        //     type: "POST",
-        //     data: formData,
-        //     processData: false,
-        //     contentType: false,
-        //     success: function(response) {
-        //         console.log("Success response:", response);
+        // Uncomment this AJAX request to enable file uploads
+        $.ajax({
+            url: `/api/supplierDescription/getReceipt?id=${supplierId}`,
+            type: "POST",
+            data: formData,
+            processData: false,  // Important for FormData
+            contentType: false,  // Important for FormData
+            success: function(response) {
+                console.log("Success response:", response);
                 
-        //         $(".message").css("background", '#228B22');
-        //         $(".message h6").html(`${response.message}`);
+                $(".message").css("background", '#228B22');
+                $(".message h6").html(`${response.message}`);
 
-        //         $(".receipt").addClass("display"); // Hide the receipt form
-        //         $(".message").fadeIn(1000).fadeOut(1000);
-        //         setTimeout(function() {
-        //             location.reload();
-        //         }, 2000);
-        //     },
-        //     error: function(xhr, status, error) {
-        //         console.log('AJAX error:', error);
-        //         console.log('Status:', status);
-        //         console.log('Response text:', xhr.responseText);
+                $(".add-invoice").addClass("display-none"); // Hide the receipt form
+                $(".message").fadeIn(1000).fadeOut(1000);
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            },
+            error: function(xhr, status, error) {
+                console.log('AJAX error:', error);
+                console.log('Status:', status);
+                console.log('Response text:', xhr.responseText);
                 
-        //         try {
-        //             let response = JSON.parse(xhr.responseText);
-        //             $(".message").css("background", '#FF3131');
-        //             $(".message h6").html(`${response.message}`);
-        //         } catch (e) {
-        //             $(".message").css("background", '#FF3131');
-        //             $(".message h6").html("An error occurred while uploading the receipt");
-        //         }
+                try {
+                    let response = JSON.parse(xhr.responseText);
+                    $(".message").css("background", '#FF3131');
+                    $(".message h6").html(`${response.message}`);
+                } catch (e) {
+                    $(".message").css("background", '#FF3131');
+                    $(".message h6").html("An error occurred while uploading the receipt");
+                }
                 
-        //         $(".message").fadeIn(1000).fadeOut(1000);
-        //     }
-        // });
+                $(".message").fadeIn(1000).fadeOut(1000);
+            }
+        });
+    });
+}
+
+function getReceipt(){
+    $.ajax({
+        url: '/api/receipt/receipt',
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(response){
+            console.log(response);
+            if (response.length !== 0){
+                const receiptRowTemplate = $('.receipt .container-item').first();
+                receiptRowTemplate.find('.receipt-id').text(response[0].id);
+                receiptRowTemplate.find('.receipt-name').text(response[0].name);
+                receiptRowTemplate.find('.receipt-date').text(`${response[0].date}`);
+                console.log(response[0].supplier_id)
+                
+                for (let i = 1; i < response.length; i++){
+                    let newreceipt = receiptRowTemplate.clone();
+                    newreceipt.find('.receipt-id').text(response[i].id);
+                    newreceipt.find('.receipt-name').text(response[i].name);
+                    newreceipt.find('.receipt-date').text(`${response[i].date}`);
+                    
+                    $('.receipt.container').append(newreceipt);
+                } 
+            } else {
+                $(".receipt.container").remove();
+            };
+        }
+    })
+}
+
+function loginInfo(){
+    $.ajax({
+        url: "/whoami",
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(response){
+            console.log(response)
+            $(".profile-sec .profile-sec-item span").html(`Welcome - ${response.user_name}`);
+        },
+        error: function(xhr, status, error){
+        console.log('error: ' + error);
+        }
     });
 }

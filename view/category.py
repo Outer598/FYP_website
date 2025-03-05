@@ -4,14 +4,13 @@ from flask_smorest import Blueprint as apiBlueprint
 from model.db import *
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import json
-from view.login import login_required, manager_required, supplier_required
+from view.login_new import manager_required, supplier_required
 
 
 category = Blueprint("category", __name__)
 category_route = apiBlueprint('category_route', __name__, url_prefix='/api/category', description='Get the top three categories for sales')
 
 @category.route("/category")
-@login_required
 @manager_required
 def categories():
     return render_template("category.html")
@@ -19,7 +18,8 @@ def categories():
 
 @category_route.route("/all_categories")
 class Cat(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         categories = Category.query.with_entities(Category.id, Category.category_name).order_by(Category.id).all()
         categories = [{"id":i[0], "label": i[1]} for i in categories]
@@ -28,7 +28,8 @@ class Cat(MethodView):
             category.update({"productCount": item_count})
         return jsonify(categories),200
     
-    
+    @jwt_required()
+    @manager_required
     def post(self):
         data = request.get_json()
         print(data)
@@ -55,7 +56,8 @@ class Cat(MethodView):
 
 @category_route.route("/upDelCat/<int:id>")
 class uDCat(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def patch(self, id):        
         data = request.get_json()
         
@@ -82,7 +84,8 @@ class uDCat(MethodView):
             db.session.rollback()
             return jsonify({"message": "Error updating category", "error": str(e)}), 400
         
-    
+    @jwt_required()
+    @manager_required
     def delete(self, id):
         category = Category.query.filter_by(id=id).first()
 

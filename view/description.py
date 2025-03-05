@@ -5,13 +5,12 @@ from model.db import *
 import pandas as pd
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import json
-from view.login import login_required, manager_required, supplier_required
+from view.login_new import manager_required, supplier_required
 
 description = Blueprint("description", __name__)
 description_route = apiBlueprint('description_route', __name__, url_prefix='/api/description', description='Get the description of a product')
 
 @description.route('/product/description')
-@login_required
 @manager_required
 def des():
     return render_template('description.html')
@@ -19,7 +18,8 @@ def des():
 
 @description_route.route('/get_product_info')
 class prodInfo(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         prodId = request.args.get('id')
         
@@ -44,7 +44,8 @@ class prodInfo(MethodView):
 
 @description_route.route('/monthly')
 class monthlySR(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         prodId = request.args.get('id')
         
@@ -104,7 +105,8 @@ class monthlySR(MethodView):
 
 @description_route.route('/yearly')
 class yearlySR(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def get(self):
         prodId = request.args.get('id')
         productTotalIncome = 0
@@ -142,7 +144,8 @@ class yearlySR(MethodView):
 
 @description_route.route('/update')
 class desUpdate(MethodView):
-    decorators = [login_required, manager_required]
+    @jwt_required()
+    @manager_required
     def patch(self):
         proId = request.args.get('id')
         print(proId)

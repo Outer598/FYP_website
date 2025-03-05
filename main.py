@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
 from model.db import *
@@ -9,13 +9,15 @@ from view.description import description, description_route
 from view.report import report, report_route
 from view.supplier import supplier, supplier_route
 from view.supplierDescription import supplierDes, supplierDes_route
-from view.login import login_manager, auth_bp, login_page
 from view.supplier_receipt import supplier_receipt, supplier_receipt_route
+from view.login_new import jwt, auth_bp, login_page
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
 from datetime import timedelta
+from flask_session import Session  # Add this import
 
+# [rest of your imports]
 
 def insert_users():
     users = [
@@ -65,42 +67,70 @@ def insert_suppliers():
     db.session.commit()
     print("Suppliers inserted successfully!")
 
-#init app
+# init app
 app = Flask(__name__)
 
 load_dotenv()
 config = dotenv_values(".env")
 
-app.config['SECRET_KEY'] = os.getenv("SECRET_KEY") or os.urandom(24)
+# Use a fixed secret key, either from env or a hard-coded one for development
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")  
 
-class Apiconfig:
-    API_TITLE = 'Sales Analyzer'
-    API_VERSION = 'v1'
-    OPENAPI_VERSION = '3.0.2'
-    OPENAPI_URL_PREFIX = '/api'
-    OPENAPI_SWAGGER_UI_PATH = '/docs'
-    OPENAPI_SWAGGER_UI_URL = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
+# Flask-Smorest configuration - Apply these directly to app.config
+app.config['API_TITLE'] = 'Sales Analyzer'
+app.config['API_VERSION'] = 'v1'
+app.config['OPENAPI_VERSION'] = '3.0.2'
+app.config['OPENAPI_URL_PREFIX'] = '/api'
+app.config['OPENAPI_SWAGGER_UI_PATH'] = '/docs'
+app.config['OPENAPI_SWAGGER_UI_URL'] = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
 
-app.config.from_object(Apiconfig)
-
-#database init
+# database init
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{os.getenv("myDatabaseUsername")}:{os.getenv("myDatabasePassword")}@{os.getenv("myDatabaseHost")}/{os.getenv("myDatabaseName")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['JWT_SECRET_KEY'] = os.getenv("JWT_KEY")
-# app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2)
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret")
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=15)
+app.config["JWT_HEADER_NAME"] = "Authorization"  # Default, but explicit
+app.config["JWT_HEADER_TYPE"] = "Bearer"  # Default, but explicit
+app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies"]  # Allow both headers and cookies
+app.config["JWT_COOKIE_SECURE"] = False  # Set to True in production with HTTPS
+app.config["JWT_COOKIE_CSRF_PROTECT"] = False  # Enable for production
+app.config["JWT_ACCESS_COOKIE_PATH"] = "/"
+app.config["JWT_COOKIE_SAMESITE"] = "Lax"
 
 
-#init db
+# init db
 db.init_app(app=app)
+jwt.init_app(app=app)
 
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+@jwt.expired_token_loader
+def expired_token(jwt_header, jwt_data):
+    return jsonify({"message": "Token Expired", "error": "Token Required"})
+
+
+@jwt.invalid_token_loader
+def invalid_token(error):
+    return jsonify({"message": "Signature Verification Failed", "error": "Invalid Token"})
+
+@jwt.unauthorized_loader
+def unauthorized(error):
+    return jsonify({'message':"Request does not contain a valid token", "error": "authorization header required"})
+
+# Better CORS configuration
+# In main.py, update your CORS configuration
+CORS(
+    app,
+    supports_credentials=True,
+    resources={r"/*": {"origins": "*"}},
+    expose_headers=['Authorization', 'Content-Type'],
+    allow_headers=['Authorization', 'Content-Type', 'Accept']
+)
 
 migrate = Migrate(app, db)
 
+# Initialize Flask-Smorest Api
 api = Api(app)
-login_manager.init_app(app)
 
-
+# Register blueprints
 app.register_blueprint(login_page)
 app.register_blueprint(auth_bp)
 app.register_blueprint(dashBoard)
@@ -122,10 +152,11 @@ api.register_blueprint(supplier_route)
 api.register_blueprint(supplierDes_route)
 api.register_blueprint(supplier_receipt_route)
 
+# Create session directory if it doesn't exist
+os.makedirs(os.path.join(os.getcwd(), 'flask_session'), exist_ok=True)
 
 # with app.app_context():
 #     db.create_all()
-
 #     insert_users()
 #     insert_suppliers()
 

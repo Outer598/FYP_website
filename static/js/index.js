@@ -1,101 +1,102 @@
 $(document).ready(function() {
-    // Check if user is authenticated
-    const token = localStorage.getItem('access_token');
+     // Check for token in localStorage first
+     let token = localStorage.getItem('access_token');
     
-    // Global AJAX setup
-    $.ajaxSetup({
-        headers: {
-            'Authorization': token ? 'Bearer ' + token : '',
-            'Content-Type': 'application/json'
-        },
-        error: function(xhr, status, error) {
-            // Handle unauthorized access
-            if (xhr.status === 401) {
-                localStorage.removeItem('access_token');
-                window.location.href = '/';
-            }
-        }
-    });
-
-    // Protect routes that require authentication
-    function checkAuth() {
-        if (!token) {
-            window.location.href = '/';
-            return false;
-        }
-        return true;
-    }
-
-    // Add route protection for dashboard pages
-    if (window.location.pathname.includes('dashboard')) {
-        checkAuth();
-    }
-
+     // If no token in localStorage, check for cookie
+     if (!token) {
+         const cookies = document.cookie.split(';');
+         for (let i = 0; i < cookies.length; i++) {
+             const cookie = cookies[i].trim();
+             if (cookie.startsWith('access_token_cookie=')) {
+                 token = cookie.substring('access_token_cookie='.length, cookie.length);
+                 // Save it to localStorage to keep it consistent
+                 localStorage.setItem('access_token', token);
+                 break;
+             }
+         }
+     }
+ 
+     console.log("Found token:", token ? "Yes" : "No");
+ 
+     if (!token) {
+         // If no token found anywhere, redirect to login
+         window.location.href = '/';
+         return;
+     }
+ 
+     // More consistent way to set headers for all AJAX requests
+     $.ajaxSetup({
+         headers: {
+             'Authorization': 'Bearer ' + token
+         },
+         beforeSend: function(xhr) {
+             // This ensures the header is set on every request
+             xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+             console.log("Authorization Header Set:", 'Bearer ' + token);
+         }
+     });
+ 
     // Logout functionality
     $('#logout').on('click', function(e) {
         e.preventDefault();
         localStorage.removeItem('access_token');
-        window.location.href = '/login';
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user_type');
+        
+        // Also clear the cookie
+        document.cookie = "access_token_cookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        
+        window.location.href = '/';
     });
 
     $(".sidebar-toggler, .sidebar-menu-button").each(function(){
-       $(this).on("click", function(){
-            closeAllDropdowns();
-    
-    
-            const toggled = $(".sidebar").toggleClass("collapsed");
-            if(toggled){
-              $(".chart-container.salrev").toggleClass("fit-toggle");
-              $(".income-container").toggleClass("income-container-toggle");
-              $(".recent-orders").toggleClass("recent-orders-toggle");
-              $(".search-profile").toggleClass("search-toggle");
-            }else{
-              $(".chart-container.salrev").togglClass("fit-toggle");
-            $(".income-container").toggleClass("income-container-toggle");
-            $(".recent-orders").toggleClass("recent-orders-toggle");
-            $(".search-profile").toggleClass("search-toggle");
-            }
-       });
-    });
-
-    $(".dropdown-toggle").each(function() {
-        $(this).on("click", function(e){
-            e.preventDefault();
-
-            const dropdown = $(e.target).closest(".dropdown-container");
-            const menu  = dropdown.find(".dropdown-menu")[0];
-            const isOpen = dropdown.hasClass("open");
-
-            closeAllDropdowns();
-
-            toggleDropdown(dropdown, menu, !isOpen);
+        $(this).on("click", function(){
+             closeAllDropdowns();
+     
+     
+             const toggled = $(".sidebar").toggleClass("collapsed");
+             if(toggled){
+               $(".chart-container.salrev").toggleClass("fit-toggle");
+               $(".income-container").toggleClass("income-container-toggle");
+               $(".recent-orders").toggleClass("recent-orders-toggle");
+               $(".search-profile").toggleClass("search-toggle");
+             }else{
+               $(".chart-container.salrev").togglClass("fit-toggle");
+             $(".income-container").toggleClass("income-container-toggle");
+             $(".recent-orders").toggleClass("recent-orders-toggle");
+             $(".search-profile").toggleClass("search-toggle");
+             }
         });
-        
-    });
+     });
+ 
+     $(".dropdown-toggle").each(function() {
+         $(this).on("click", function(e){
+             e.preventDefault();
+ 
+             const dropdown = $(e.target).closest(".dropdown-container");
+             const menu  = dropdown.find(".dropdown-menu")[0];
+             const isOpen = dropdown.hasClass("open");
+ 
+             closeAllDropdowns();
+ 
+             toggleDropdown(dropdown, menu, !isOpen);
+         });
+         
+     });
+ 
+     if (window.innerWidth <= 1024) {
+         $(".sidebar").toggleClass("collapsed");
+     }
+ 
 
-    if (window.innerWidth <= 1024) {
-        $(".sidebar").toggleClass("collapsed");
-    }
-
-    $(".search input").on("focus", function(){
-      $(".search button").css("color", "rgba(21, 26, 46, 0.5)")
-    })
-    $(".search input").on("blur", function(){
-      $(".search button").css("color", "rgba(21, 26, 46, 0.2)")
-    })
-
-    $(document).on('keydown', function(event) {
-        if (event.key === "Escape" || event.key === "Enter" || event.key === "Delete") {
-            event.preventDefault();  // Prevent the default action
-        }
-    });
-
-    // for graph data calls
+    // Call your data loading functions
     salRevenue();
     topCategories();
     periodicRevenue();
     loginInfo();
+    // test();
 });
+
 
 function toggleDropdown(dropdown, menu, isOpen){
     $(dropdown).toggleClass("open", isOpen);
@@ -499,14 +500,34 @@ function periodicRevenue(){
 
 function loginInfo(){
     $.ajax({
-        url: "/user-info",
+        url: "/whoami",
         type: 'GET',
         contentType: 'application/json',
         success: function(response){
-        $(".search-profile .user-info span").html(`Welcome - ${response.name}`);
+            console.log(response)
+            $(".search-profile .user-info span").html(`Welcome - ${response.user_name}`);
         },
         error: function(xhr, status, error){
         console.log('error: ' + error);
         }
     });
 }
+
+// function test() {
+//     const token = localStorage.getItem('access_token');
+    
+//     $.ajax({
+//         url: '/test-auth',  // Updated URL to match your blueprint prefix
+//         type: 'GET',
+//         headers: {
+//             'Authorization': 'Bearer ' + token,
+//             'Content-Type': 'application/json'
+//         },
+//         success: function(response) {
+//             console.log("Test Auth Response:", response);
+//         },
+//         error: function(xhr, status, error) {
+//             console.log("Test Auth Error:", xhr.status, xhr.responseJSON);
+//         }
+//     });
+// }
