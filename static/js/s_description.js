@@ -280,6 +280,8 @@ $(document).ready(function(){
     supplierProducts();
     sendReceipt();
     getReceipt();
+    getInvoice();
+    downInvoice();
 })
 
 function supplier() {
@@ -556,5 +558,109 @@ function getReceipt(){
                 $(".receiptsec .container").remove();
             };
         }
+    });
+}
+
+function getInvoice(){
+    $.ajax({
+        url: `/api/supplierDescription/getInvoice?id=${supplierId}`,
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(response){
+            console.log(response);
+            if (response.length !== 0){
+                const invoiceRowTemplate = $('.invoicesec .container .container-item').first();
+                invoiceRowTemplate.find('.invoice-id').text(response[0].id);
+                invoiceRowTemplate.find('.invoice-name').text(response[0].name);
+                invoiceRowTemplate.find('.date').text(response[0].date);
+                
+                for (let i = 1; i < response.length; i++){
+                    let newProduct = invoiceRowTemplate.clone();
+                    newProduct.find('.invoice-id').text(response[i].id);
+                    newProduct.find('.invoice-name').text(response[i].name);
+                    newProduct.find('.date').text(response[i].date);
+                    
+                    $('.invoicesec .container').append(newProduct);
+
+                } 
+            } else {
+                $(".invoicesec .container").remove();
+            };
+        }
+    });
+}
+
+function downInvoice(){
+    $(document).on('click', '.invoicesec .container .container-item .actions .download-button',function() {
+        let container = $(this).closest(".container-item");
+        let fileId = container.find(".invoice-id").text().trim();
+
+        if (!fileId) {
+            alert("File ID not found!");
+            return;
+        }
+
+        $.ajax({
+            url: `/api/supplierDescription/downInvoice?id=${fileId}`,
+            method: "GET",
+            xhrFields: {
+                responseType: 'blob'  // Treat response as binary data
+            },
+            success: function(data, status, xhr) {
+                let filename = "downloaded_file";  // Default filename
+
+                // Extract filename from Content-Disposition header if available
+                let disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    let matches = /filename="([^"]+)"/.exec(disposition);
+                    if (matches && matches[1]) filename = matches[1];
+                }
+
+                // Create a Blob URL and trigger download
+                let blob = new Blob([data], { type: xhr.getResponseHeader("Content-Type") });
+                let link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            error: function(xhr, status, error) {
+                console.log('error: ' + error);
+                
+                // For API errors that return JSON
+                if (xhr.getResponseHeader("Content-Type") && 
+                    xhr.getResponseHeader("Content-Type").includes("application/json")) {
+                    try {
+                        // Read the blob as text
+                        const reader = new FileReader();
+                        reader.onload = function() {
+                            try {
+                                const response = JSON.parse(reader.result);
+                                $(".message").css("background", '#FF3131');
+                                $(".message h6").html(response.error || "Unknown error");
+                                $(".message").fadeIn(1000).fadeOut(1000);
+                            } catch (e) {
+                                // Fallback if JSON parsing fails
+                                $(".message").css("background", '#FF3131');
+                                $(".message h6").html("Error downloading file");
+                                $(".message").fadeIn(1000).fadeOut(1000);
+                            }
+                        };
+                        reader.readAsText(xhr.response);
+                    } catch (e) {
+                        // Generic error message if we can't process the response
+                        $(".message").css("background", '#FF3131');
+                        $(".message h6").html("Error downloading file");
+                        $(".message").fadeIn(1000).fadeOut(1000);
+                    }
+                } else {
+                    // Generic error for non-JSON responses
+                    $(".message").css("background", '#FF3131');
+                    $(".message h6").html("Error downloading file");
+                    $(".message").fadeIn(1000).fadeOut(1000);
+                }
+            }
+        });
     });
 }
