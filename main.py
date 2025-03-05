@@ -85,6 +85,16 @@ app.config['OPENAPI_URL_PREFIX'] = '/api'
 app.config['OPENAPI_SWAGGER_UI_PATH'] = '/docs'
 app.config['OPENAPI_SWAGGER_UI_URL'] = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
 
+
+app.config['EXTERNAL_API_TITLE'] = 'External Sales Analyzer'
+app.config['EXTERNAL_API_VERSION'] = 'v1'
+app.config['EXTERNAL_OPENAPI_VERSION'] = '3.0.2'
+app.config['EXTERNAL_OPENAPI_URL_PREFIX'] = '/external-api'
+app.config['EXTERNAL_OPENAPI_SWAGGER_UI_PATH'] = '/external-docs'
+app.config['EXTERNAL_OPENAPI_SWAGGER_UI_URL'] = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
+
+
+
 # database init
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{os.getenv("myDatabaseUsername")}:{os.getenv("myDatabasePassword")}@{os.getenv("myDatabaseHost")}/{os.getenv("myDatabaseName")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -130,6 +140,19 @@ migrate = Migrate(app, db)
 
 # Initialize Flask-Smorest Api
 api = Api(app)
+external_app = Flask("external_api")
+external_app.config.update(
+    API_TITLE=app.config['EXTERNAL_API_TITLE'],
+    API_VERSION=app.config['EXTERNAL_API_VERSION'],
+    OPENAPI_VERSION=app.config['EXTERNAL_OPENAPI_VERSION'],
+    OPENAPI_URL_PREFIX=app.config['EXTERNAL_OPENAPI_URL_PREFIX'],
+    OPENAPI_SWAGGER_UI_PATH=app.config['EXTERNAL_OPENAPI_SWAGGER_UI_PATH'],
+    OPENAPI_SWAGGER_UI_URL=app.config['EXTERNAL_OPENAPI_SWAGGER_UI_URL']
+)
+
+# Initialize Flask-Smorest Api for external application
+external_api = Api(external_app)
+
 
 # Register blueprints
 app.register_blueprint(login_page)
