@@ -1,0 +1,78 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "Product Inventory API",
+      "description": "API for Connecting to external point of Sales System",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "/api"
+      }
+    ],
+    "tags": [
+      {
+        "name": "external",
+        "description": "External API endpoints for Point of sales system"
+      }
+    ],
+    "paths": {
+      "/external/all_product": {
+        "get": {
+          "tags": [
+            "external"
+          ],
+          "summary": "Get all products",
+          "description": "Returns a list of all products with their current inventory levels",
+          "operationId": "getAllProducts",
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Products returned successfully"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/ProductWithInventory"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "ProductWithInventory": {
+          "type": "object",
+          "properties": {
+            "product_id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            },
+            "product_name": {
+              "type": "string",
+              "example": "Product Name"
+            },
+            "current_stock": {
+              "type": "integer",
+              "format": "int32",
+              "example": 100
+            }
+          }
+        }
+      }
+    }
+  }

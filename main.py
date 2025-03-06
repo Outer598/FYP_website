@@ -12,11 +12,13 @@ from view.supplierDescription import supplierDes, supplierDes_route
 from view.supplier_receipt import supplier_receipt, supplier_receipt_route
 from view.invoice import invoice, invoice_route
 from view.login_new import jwt, auth_bp, login_page
+from view.system_api import external_api_route
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
 from datetime import timedelta
 from flask_session import Session  # Add this import
+from flask_swagger_ui import get_swaggerui_blueprint
 
 # [rest of your imports]
 
@@ -86,13 +88,25 @@ app.config['OPENAPI_SWAGGER_UI_PATH'] = '/docs'
 app.config['OPENAPI_SWAGGER_UI_URL'] = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
 
 
-app.config['EXTERNAL_API_TITLE'] = 'External Sales Analyzer'
-app.config['EXTERNAL_API_VERSION'] = 'v1'
-app.config['EXTERNAL_OPENAPI_VERSION'] = '3.0.2'
-app.config['EXTERNAL_OPENAPI_URL_PREFIX'] = '/external-api'
-app.config['EXTERNAL_OPENAPI_SWAGGER_UI_PATH'] = '/external-docs'
-app.config['EXTERNAL_OPENAPI_SWAGGER_UI_URL'] = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist/'
+SWAGGER_URL = '/external-api/docs'  # URL for exposing Swagger UI (without trailing '/')
+API_URL = '/static/swagger.json'  # Our API url (can of course be a local resource)
 
+# Call factory function to create our blueprint
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,  # Swagger UI static files will be mapped to '{SWAGGER_URL}/dist/'
+    API_URL,
+    config={  # Swagger UI config overrides
+        'app_name': "Test application"
+    },
+    # oauth_config={  # OAuth config. See https://github.com/swagger-api/swagger-ui#oauth2-configuration .
+    #    'clientId': "your-client-id",
+    #    'clientSecret': "your-client-secret-if-required",
+    #    'realm': "your-realms",
+    #    'appName': "your-app-name",
+    #    'scopeSeparator': " ",
+    #    'additionalQueryStringParams': {'test': "hello"}
+    # }
+)
 
 
 # database init
@@ -140,19 +154,7 @@ migrate = Migrate(app, db)
 
 # Initialize Flask-Smorest Api
 api = Api(app)
-external_app = Flask("external_api")
-external_app.config.update(
-    API_TITLE=app.config['EXTERNAL_API_TITLE'],
-    API_VERSION=app.config['EXTERNAL_API_VERSION'],
-    OPENAPI_VERSION=app.config['EXTERNAL_OPENAPI_VERSION'],
-    OPENAPI_URL_PREFIX=app.config['EXTERNAL_OPENAPI_URL_PREFIX'],
-    OPENAPI_SWAGGER_UI_PATH=app.config['EXTERNAL_OPENAPI_SWAGGER_UI_PATH'],
-    OPENAPI_SWAGGER_UI_URL=app.config['EXTERNAL_OPENAPI_SWAGGER_UI_URL']
-)
-
-# Initialize Flask-Smorest Api for external application
-external_api = Api(external_app)
-
+app.register_blueprint(swaggerui_blueprint)
 
 # Register blueprints
 app.register_blueprint(login_page)
@@ -166,6 +168,7 @@ app.register_blueprint(supplier)
 app.register_blueprint(supplierDes)
 app.register_blueprint(supplier_receipt)
 app.register_blueprint(invoice)
+app.register_blueprint(external_api_route)
 
 # api.register_blueprint(auth_bp)
 api.register_blueprint(dashboard_route)
