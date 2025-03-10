@@ -38,7 +38,7 @@
 
 .container-item {
     display: grid;
-    grid-template-columns: 5% 32% 20% 15%;
+    grid-template-columns: 5% 32% 15% 20%;
     gap: 90px;
     background-color: white;
     border-radius: 10px;
@@ -141,7 +141,7 @@
     gap: 30px;
 }
 
-.submit, .cancel{
+.submit, .cancel, .delete, .edit{
     width: 80px;
     padding: 10px;
 }

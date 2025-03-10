@@ -1,0 +1,170 @@
+.add-search{
+    position: relative;
+    left: 280px;
+    width: 76%;
+    margin-bottom: 30px;
+}
+
+.head-container{
+    display: grid;
+    grid-template-columns: 3fr  2fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+}
+
+/* Update container and item styles */
+.container {
+    position: relative;
+    left: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 75%;
+    margin-bottom: 30px;
+}
+
+.container-item {
+    display: grid;
+    grid-template-columns: 5% 32% 15% 20%;
+    gap: 90px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: all 0.4s ease-in-out var(--delay);
+}
+
+/* Updated hide class for smooth transitions */
+.container-item.hide {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    height: 0;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+/* Search input styling */
+#search-feedback {
+    border: 1px solid black;
+    width: 95%;
+    padding: 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+#search-feedback:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.page-name{
+    font-size: 30px;
+}
+
+
+.container-item:hover{
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    color: #0298cf;
+    cursor: pointer;
+}
+
+.submit{
+    background-color: blue;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    width: 50px;
+}
+
+.delete, .cancel{
+    background-color: red;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    width: 50px;
+}
+
+
+.delete-name h3{
+    font-size: 18px;
+    font-weight: normal;
+    text-align: center;
+    margin: 10px;
+}
+
+.delete-items{
+    margin: 10px;
+}
+
+.submit, .cancel, .delete{
+    width: 80px;
+    padding: 10px;
+}
+
+.delete-name{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    border-radius: 10px;
+}
+
+
+.container{
+    margin-bottom: 30px;
+}
+
+.message{
+    width: 200px;
+    color: white;
+    padding: 10px;
+    position: fixed;
+    left: 83%; /* Adjust to ensure proper alignment */
+    bottom: 100px; /* Fixed position, no layout shifts */
+    border-radius: 10px;
+    text-align: center;
+    z-index: 1000;
+}
+
+.feedback-view{
+    position: fixed;
+    top: 40%;
+    left: 30%;
+    width: 50%;
+    background: white;
+    padding: 30px;
+    box-shadow: 0px 8px 8px 0px rgba(0,0,0, 0.2);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.feedback-view h2{
+    font-weight: normal;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.view{
+    text-align: justify;
+}
+
+.feedback-view button{
+    margin-top: 20px;
+    align-self: center;   
+}
+
+.display-type{
+    display: none;
+}

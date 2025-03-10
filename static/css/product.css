@@ -179,7 +179,7 @@
     gap: 30px;
 }
 
-.submit, .cancel{
+.submit, .cancel, .edit, .delete{
     width: 80px;
     padding: 10px;
 }

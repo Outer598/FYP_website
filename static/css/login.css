@@ -21,7 +21,7 @@ div.login{
 div.login form{
     background-color: white;
     width: 50%;
-    height: 300px;
+    height: 400px;
     box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.2);
     padding: 50px;
     display: flex;
@@ -44,6 +44,10 @@ div.login img{
     width: 100px;
     height: 100px;
     border-radius: 50%;
+    align-self: center;
+}
+
+div.login h2{
     align-self: center;
 }
 

@@ -13,6 +13,9 @@ from view.supplier_receipt import supplier_receipt, supplier_receipt_route
 from view.invoice import invoice, invoice_route
 from view.login_new import jwt, auth_bp, login_page
 from view.system_api import external_api_route
+from view.contact import contact_route, contact_api_route
+from view.feedback import feedback_route, feedback_api_route
+from view.home import home_route
 from dotenv import load_dotenv, dotenv_values
 import os
 from flask_smorest import Api
@@ -168,7 +171,9 @@ app.register_blueprint(supplier)
 app.register_blueprint(supplierDes)
 app.register_blueprint(supplier_receipt)
 app.register_blueprint(invoice)
-app.register_blueprint(external_api_route)
+app.register_blueprint(home_route)
+app.register_blueprint(contact_route)
+app.register_blueprint(feedback_route)
 
 # api.register_blueprint(auth_bp)
 api.register_blueprint(dashboard_route)
@@ -180,6 +185,9 @@ api.register_blueprint(supplier_route)
 api.register_blueprint(supplierDes_route)
 api.register_blueprint(supplier_receipt_route)
 api.register_blueprint(invoice_route)
+api.register_blueprint(external_api_route)
+api.register_blueprint(contact_api_route)
+api.register_blueprint(feedback_api_route)
 
 # Create session directory if it doesn't exist
 os.makedirs(os.path.join(os.getcwd(), 'flask_session'), exist_ok=True)

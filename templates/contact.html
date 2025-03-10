@@ -1,0 +1,29 @@
+{%extends 'home.html'%}
+
+{%block title%}Contact{%endblock%}
+{%block extra_css%}
+<link rel="stylesheet" href="../static/css/contact.css">
+{%endblock%}
+
+{%block content%}
+<div class="message">
+    <h2>We Appreciate your Feed Back</h2>
+    <form action="">
+        <label for="title">
+            Title:
+        </label>
+        <input type="text" id="title" name="title" required>
+        <label for="feedback">Feed Back:</label>
+        <textarea name="feedback" id="feedback" required>
+
+        </textarea>
+        <input type="button" id='submit' name="submit" value="Submit">
+    </form>
+</div>
+
+<div class="note display-type">
+    <h6></h6>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="../static/js/contact.js"></script>
+{%endblock%}

@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 login_page = Blueprint("login_page", __name__)
 auth_bp = Blueprint("auth_bp", __name__)
 
-@login_page.route('/')
+@login_page.route('/login')
 def login():
     return render_template("login.html")
 

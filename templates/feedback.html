@@ -1,0 +1,56 @@
+{%extends 'index.html'%}
+
+{%block title%}Category{%endblock%}
+
+{%block extra_css%}
+<link rel="stylesheet" href="../static/css/feedback.css">
+{%endblock%}
+
+{%block content%}
+<div class="add-search">
+    <div class="head-container">
+        <div class="page-name head-item"><span>Feed Back</span></div>
+        <div class="search-add head-item">
+            <input type="text" name="add-search" placeholder="Search feedback" id="search-feedback">
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="container-item">
+        <div class="review-id"></div>
+        <div class="review-name"></div>
+        <div class="date"></div>
+        <div class="actions">
+            <button class="submit" type="button">View</button>
+            <button class="delete" type="button">Delete</button>
+        </div>
+    </div>
+</div>
+
+<div class="feedback-view display-type">
+    <h2>Anonymous-1</h2>
+    <p class="view">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veritatis, dolor ex aut recusandae deleniti dolores architecto voluptatem tempora aspernatur quae ipsam atque alias error magni accusamus reprehenderit, velit dolorem autem.
+    </p>
+    <button type="button" class="delete">Close</button>
+</div>
+
+<div class="delete-name display-type">
+    <h3>Delete a Feedback</h3>
+    <form action="">
+        <div class="delete-actions">
+            <input type="button" value="delete" class="cancel">
+            <input type="button" value="Cancel" class="submit">
+        </div>
+    </form>
+</div>
+
+<div class="message display-type">
+    <h6></h6>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="../static/js/index.js"></script>
+<script src="../static/js/feedback.js"></script>
+{%endblock%}

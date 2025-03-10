@@ -1,47 +1,46 @@
 {
-    "openapi": "3.0.3",
-    "info": {
-      "title": "Product Inventory API",
-      "description": "API for Connecting to external point of Sales System",
-      "version": "1.0.0"
-    },
-    "servers": [
-      {
-        "url": "/api"
-      }
-    ],
-    "tags": [
-      {
-        "name": "external",
-        "description": "External API endpoints for Point of sales system"
-      }
-    ],
-    "paths": {
-      "/external/all_product": {
-        "get": {
-          "tags": [
-            "external"
-          ],
-          "summary": "Get all products",
-          "description": "Returns a list of all products with their current inventory levels",
-          "operationId": "getAllProducts",
-          "responses": {
-            "200": {
-              "description": "Successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Products returned successfully"
-                      },
-                      "data": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/components/schemas/ProductWithInventory"
-                        }
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Product Inventory API",
+    "description": "API for Connecting to external point of Sales System",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "tags": [
+    {
+      "name": "external",
+      "description": "External API endpoints for Point of sales system"
+    }
+  ],
+  "paths": {
+    "/external/all_product": {
+      "get": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Get all products",
+        "description": "Returns a list of all products with their current inventory levels",
+        "operationId": "getAllProducts",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Products returned successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ProductWithInventory"
                       }
                     }
                   }
@@ -52,27 +51,130 @@
         }
       }
     },
-    "components": {
-      "schemas": {
-        "ProductWithInventory": {
-          "type": "object",
-          "properties": {
-            "product_id": {
-              "type": "integer",
-              "format": "int64",
-              "example": 1
-            },
-            "product_name": {
-              "type": "string",
-              "example": "Product Name"
-            },
-            "current_stock": {
-              "type": "integer",
-              "format": "int32",
-              "example": 100
+    "/external/updateProduct": {
+      "patch": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Update product inventory after sale",
+        "description": "Updates inventory levels and records sales data for specified products",
+        "operationId": "updateProduct",
+        "requestBody": {
+          "description": "Sale information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "product_ids",
+                  "amount_being_sold"
+                ],
+                "properties": {
+                  "product_ids": {
+                    "type": "array",
+                    "description": "List of product IDs being sold",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "example": [1]
+                  },
+                  "amount_being_sold": {
+                    "type": "array",
+                    "description": "List of quantities being sold (must match length of product_ids)",
+                    "items": {
+                      "type": "integer"
+                    },
+                    "example": [1]
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Customer email for feedback request (optional)",
+                    "example": "johndoe@something.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sales processed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Sales processed successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error: product_ids and amount_being_sold must have same length"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error processing request"
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Error details"
+                    }
+                  }
+                }
+              }
             }
           }
         }
       }
     }
+  },
+  "components": {
+    "schemas": {
+      "ProductWithInventory": {
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "product_name": {
+            "type": "string",
+            "example": "Product Name"
+          },
+          "current_stock": {
+            "type": "integer",
+            "format": "int32",
+            "example": 100
+          }
+        }
+      }
+    }
   }
+}

@@ -32,7 +32,7 @@ $(document).ready(function() {
          beforeSend: function(xhr) {
              // This ensures the header is set on every request
              xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-             console.log("Authorization Header Set:", 'Bearer ' + token);
+            //  console.log("Authorization Header Set:", 'Bearer ' + token);
          }
      });
  

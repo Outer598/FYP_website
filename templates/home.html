@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/home.css">
+    <title>{% block title%}Welcome{%endblock%}</title>
+    {%block extra_css%}{%endblock%}
+</head>
+<body>
+    <nav>
+        <header>
+            <img src="../static/img/platform-logo.jpg" alt="salrev logo">
+            <span>Salrev</span>
+        </header>
+        
+        <ul>
+            <li class="list-item">
+                <ul>
+                    <li><a href="{{url_for('home.home')}}">Home</a></li>
+                    <li><a href="{{url_for('contact.contact')}}">Contact Us</a></li>
+                </ul>
+            </li>
+            <li class="list-item end">
+                <a href="{{url_for('login_page.login')}}">Login</a>
+            </li>
+        </ul>
+    </nav>
+    {%block content%}
+    <div class="home">
+        <p>{{quote['quote']}}</p>
+        <span>By - {{quote['author']}}</span>
+    </div>
+    {%endblock%}
+</body>
+</html>
