@@ -1,38 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/login.css">
-    <title>Login</title>
-</head>
-<body>
-    <div class="login">
-        <form action="">
-            <img src="../static/img/platform-logo.png" alt="salRev logo">
-            <h2>Login</h2>
-            <div class="requirement">
-                <label for="email">Email:</label>
-                <div>
-                    <input type="email" name="email" id="email">
-                </div>
+{%extends 'home.html'%}
+
+{%block title%}Login{%endblock%}
+
+{%block extra_css%}
+<link rel="stylesheet" href="../static/css/login.css">
+{%endblock%}
+
+{%block content%}
+<div class="login">
+    <form action="">
+        <img src="../static/img/platform-logo.png" alt="salRev logo">
+        <h2>Login</h2>
+        <div class="requirement">
+            <label for="email">Email:</label>
+            <div>
+                <input type="email" name="email" id="email">
             </div>
-            <div class="requirement">
-                <label for="password">Password:</label>
-                <div>
-                    <input type="password" name="password" id="password">
-                </div>
+        </div>
+        <div class="requirement">
+            <label for="password">Password:</label>
+            <div>
+                <input type="password" name="password" id="password">
             </div>
-            <div class="login-button">
-                <input type="button" value="Login" id="login">
-            </div>
-        </form>
-    </div>
-    <div class="message display-type">
-        <h6>Category Created Successfully</h6>
-    </div>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="../static/js/login.js"></script>
-</body>
-</html>
+        </div>
+        <div class="login-button">
+            <input type="button" value="Login" id="login">
+        </div>
+    </form>
+</div>
+<div class="message display-type">
+    <h6>Category Created Successfully</h6>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="../static/js/login.js"></script>
+{%endblock%}
