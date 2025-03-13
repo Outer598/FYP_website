@@ -143,6 +143,6 @@
 }
 
 .submit, .cancel{
-    width: 80px;
+    width: auto;
     padding: 10px;
 }

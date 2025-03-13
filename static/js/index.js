@@ -87,7 +87,12 @@ $(document).ready(function() {
      if (window.innerWidth <= 1024) {
          $(".sidebar").toggleClass("collapsed");
      }
- 
+
+    $(document).on('keydown', function(event) {
+        if (event.key === "Escape" || event.key === "Enter" || event.key === "Delete") {
+            event.preventDefault();  // Prevent the default action
+        }
+    });
 
     // Call your data loading functions
     salRevenue();
