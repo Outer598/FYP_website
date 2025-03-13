@@ -7,7 +7,7 @@ $(document).ready(function(){
         const searchValue = $(this).val().toLowerCase().trim();
         
         // Get all container items except the template
-        $(".container .container-item:not(:first)").each(function(index) {
+        $(".container .container-item").each(function(index) {
             const categoryName = $(this).find(".category-name").text().toLowerCase();
             const categoryId = $(this).find(".category-id").text().toLowerCase();
             const categoryItems = $(this).find(".category-items").text().toLowerCase();
