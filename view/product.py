@@ -27,13 +27,11 @@ class topP(MethodView):
         
         topProduct = Product.query.join(Inventory, Product.id == Inventory.product_id)\
         .filter(Product.category_id == categoryId).order_by(desc(Inventory.original_stock_level - Inventory.current_stock_level))\
-        .with_entities(Product.product_name, (Inventory.original_stock_level - Inventory.current_stock_level))\
         .limit(3).all()
         print(topProduct)
         
         leastProduct = Product.query.join(Inventory, Product.id == Inventory.product_id)\
         .filter(Product.category_id == categoryId).order_by((Inventory.original_stock_level - Inventory.current_stock_level))\
-        .with_entities(Product.product_name, (Inventory.original_stock_level - Inventory.current_stock_level))\
         .limit(3).all()
         print(leastProduct)
         
@@ -41,16 +39,16 @@ class topP(MethodView):
         amount_sold = []
         favourite = {}
         for item in topProduct:
-            name.append(item[0])
-            amount_sold.append(item[1])
+            name.append(item.product_name)
+            amount_sold.append((item.inventory.original_stock_level) - (item.inventory.current_stock_level))
         
         favourite.update({"topProducts": [name, amount_sold]})
 
         name = []
         amount_sold = []
         for item in leastProduct:
-            name.append(item[0])
-            amount_sold.append(item[1])
+            name.append(item.product_name)
+            amount_sold.append((item.inventory.original_stock_level) - (item.inventory.current_stock_level))
         
         favourite.update({"leastProducts": [name, amount_sold]})
         return jsonify(favourite), 200
@@ -63,17 +61,17 @@ class item(MethodView):
     @manager_required
     def get(self):
         categoryId = request.args.get('id')
-        categoryProducts = Product.query.filter_by(category_id=categoryId).join(Inventory, Product.id==Inventory.product_id).\
-        with_entities(Product.id, Product.product_name, Inventory.current_stock_level).all()
+        categoryProducts = Product.query.filter_by(category_id=categoryId).join(Inventory, Product.id==Inventory.product_id)\
+        .all()
     
         items = []
         for item in categoryProducts:
 
             items.append(
                 {
-                    'id': item[0],
-                    'name': item[1],
-                    'in-stock': item[2],
+                    'id': item.id,
+                    'name': item.product_name,
+                    'in-stock': item.inventory.current_stock_level,
                 }
             )
 
@@ -85,8 +83,8 @@ class item(MethodView):
     def post(self):
         itemId = request.args.get('id')
         data = request.get_json()
-        all_products = Product.query.with_entities(Product.product_name).all()
-        all_products = [item[0] for item in all_products]
+        all_products = Product.query.all()
+        all_products = [item.product_name for item in all_products]
 
         if data["productName"].title() in all_products:
             return jsonify({"message":'Item already in Database'}), 400

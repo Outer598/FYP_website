@@ -21,8 +21,8 @@ class Cat(MethodView):
     @jwt_required()
     @manager_required
     def get(self):
-        categories = Category.query.with_entities(Category.id, Category.category_name).order_by(Category.id).all()
-        categories = [{"id":i[0], "label": i[1]} for i in categories]
+        categories = Category.query.order_by(Category.id).all()
+        categories = [{"id":i.id, "label": i.category_name} for i in categories]
         for category in categories:
             item_count = len(Product.query.filter_by(category_id=category["id"]).all())
             category.update({"productCount": item_count})
@@ -33,8 +33,8 @@ class Cat(MethodView):
     def post(self):
         data = request.get_json()
         print(data)
-        all_categories = Category.query.with_entities(Category.category_name).all()
-        all_categories = [item[0] for item in all_categories]
+        all_categories = Category.query.all()
+        all_categories = [item.category_name for item in all_categories]
 
         if data["categoryName"].title() in all_categories:
             return jsonify({"message": 'Item already in Database'}), 400
@@ -62,8 +62,8 @@ class uDCat(MethodView):
         data = request.get_json()
         
         category = Category.query.filter_by(id=id).first()
-        category_names = Category.query.with_entities(Category.category_name).all()
-        category_names = [category_name[0] for category_name in category_names]
+        category_names = Category.query.all()
+        category_names = [category_name.category_name for category_name in category_names]
 
         if category is None:
             return jsonify({"message": "Category does not exist"}), 404

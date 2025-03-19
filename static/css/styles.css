@@ -252,8 +252,9 @@ body{
 } */
 
 .user-info {
-    width: auto;
+    width: 100%;
     display: flex;
+    justify-items: flex-end;
     align-items: center;
     gap: 15px;
     margin-left: 43pc;

@@ -26,17 +26,16 @@ class prodInfo(MethodView):
 
         info = Product.query.join(Inventory, Product.id == Inventory.product_id)\
             .join(Supplier, Product.supplier_id == Supplier.id).filter(Product.id == prodId)\
-            .with_entities(Product.product_name, Supplier.s_name, Product.price, Inventory.current_stock_level, Inventory.original_stock_level, Inventory.reordering_threshold)\
-                .all()
+                .first()
 
         productInfo = {
-            'productName': info[0][0].title(),
-            'SupplierName': info[0][1],
-            'price': info[0][2],
-            'currentStockLevel': info[0][3],
-            'originalStockLevel': info[0][4],
-            'reorderingThreshold': info[0][5],
-            'AmountSold': info[0][4] - info[0][3]
+            'productName': info.product_name.title(),
+            'SupplierName': info.supplier.s_name.title(),
+            'price': info.price,
+            'currentStockLevel': info.inventory.current_stock_level,
+            'originalStockLevel': info.inventory.original_stock_level,
+            'reorderingThreshold': info.inventory.reordering_threshold,
+            'AmountSold': info.inventory.original_stock_level - info.inventory.current_stock_level
         }
 
         return productInfo, 200
@@ -88,12 +87,11 @@ class monthlySR(MethodView):
                                             extract('year', ProductIncome.record_date)==latest_year,
                                             ProductIncome.product_id==prodId),
                                             ProductIncome.period_type=='monthly')\
-                                                .with_entities(ProductIncome.product_specific_income, 
-                                                               ProductIncome.total_units_sold).all()
+                                                .all()
             
             for item in queryData:
-                revenue.append(round(float(item[0]), 2))
-                sales.append(item[1])
+                revenue.append(round(float(item.product_specific_income), 2))
+                sales.append(item.total_units_sold)
 
         productMonthlyData = {
             'months': monthNames,
@@ -126,11 +124,11 @@ class yearlySR(MethodView):
         for year in years:
             amountSoldQuery = ProductIncome.query\
             .filter(and_(ProductIncome.period_type == 'monthly', ProductIncome.product_id == prodId, ProductIncome.record_date.like(f'%{year}%')))\
-                .with_entities(ProductIncome.product_specific_income, ProductIncome.total_units_sold).all()
+                .all()
             
             for items in amountSoldQuery:
-                productTotalIncome += float(items[0])
-                amountSold += int(items[1])
+                productTotalIncome += float(items.product_specific_income)
+                amountSold += int(items.total_units_sold)
                 
             revenue.append(round(productTotalIncome, 2))
             sales.append(round(amountSold, 2))
@@ -159,8 +157,8 @@ class desUpdate(MethodView):
                 return {'message': "Field cannot be empty"}, 400
         
         if 'current_stock_level' in data:
-            stock  = Inventory.query.filter(Inventory.product_id == proId).with_entities(Inventory.current_stock_level).first()
-            original = stock[0] + int(data['current_stock_level'])
+            stock  = Inventory.query.filter(Inventory.product_id == proId).first()
+            original = stock.current_stock_level + int(data['current_stock_level'])
             data.update({
                 'current_stock_level': original,
                 'original_stock_level': original,
@@ -168,10 +166,10 @@ class desUpdate(MethodView):
         print(data)
         if 'supplier_id' in data:
             supplier_id = Supplier.query.filter(Supplier.s_name.like(f"%{data['supplier_id']}%"))\
-                                                        .with_entities(Supplier.id).all()[0][0]
+                                                        .first()
             
             data.update({
-                'supplier_id': supplier_id
+                'supplier_id': supplier_id.id
             })
         
         try:
