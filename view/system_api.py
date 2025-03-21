@@ -8,6 +8,7 @@ import io
 from dotenv import load_dotenv, dotenv_values
 from datetime import datetime, timedelta
 from flask.views import MethodView
+from view.madepass import SecurePasswordGenerator
 
 
 external_api_route = apiBlueprint(
@@ -453,3 +454,526 @@ Note: this is a no-reply email so messages sent won't be recieved on this email.
             smtp_sever.login(sender, app_password)
             smtp_sever.sendmail(sender, recipient, msg.as_string())
         return True
+
+@external_api_route.route('/getuser')
+class getuser(MethodView):
+    """Get all User within the database"""
+
+    @external_api_route.response(200, "Users retrieved successfully")
+    @external_api_route.doc(
+        description="Retrieve all Users",
+        summary="Get all Users"
+    )
+    def get(self):
+        """
+        Retrieve all users
+        ---
+        tags:
+          - external
+        responses:
+          200:
+            description: Users returned successfully
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Users returned successfully
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      user_id:
+                        type: integer
+                        example: 1
+                      user_name:
+                        type: string
+                        example: John doe
+                      phone_no:
+                        type: string
+                        example: 080707058656
+                      hire_date:
+                        type: string
+                        example: 1999-06-04
+                      user_email:
+                        type: string
+                        example: email@example.com
+        """
+        all_users = User.query.all()
+
+        all_users = [
+            {
+                'user_id': user.id,
+                'user_name': user.u_name,
+                'phone_no': user.phone_no,
+                'hire_date': user.hire_date.strftime('%Y-%m-%d'),
+                'user_email': user.email,
+            }
+            for user in all_users
+        ]
+        
+        return jsonify(
+            {
+                'message': 'users returned successfully',
+                'data': all_users
+            }
+        ), 200
+
+@external_api_route.route('/adduser')
+class adduser(MethodView):
+
+    @external_api_route.response(201, "User added successfully")
+    @external_api_route.response(500, "Server error")
+    @external_api_route.doc(
+        description="Add a new user to the system",
+        summary="Create a new user",
+        requestBody={
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "required": ["name", "phone_no", "hire_date", "email"],
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "example": "John Doe",
+                                "description": "Full name of the user"
+                            },
+                            "phone_no": {
+                                "type": "string",
+                                "example": "080707058656",
+                                "description": "Phone number of the user"
+                            },
+                            "hire_date": {
+                                "type": "string",
+                                "format": "date",
+                                "example": "2023-03-21",
+                                "description": "Date when the user was hired"
+                            },
+                            "email": {
+                                "type": "string",
+                                "format": "email",
+                                "example": "user@example.com",
+                                "description": "Email address of the user (must be unique)"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    )
+    def post(self): 
+        """
+        Create a new user
+        ---
+        tags:
+          - external
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - name
+                  - phone_no
+                  - hire_date
+                  - email
+                properties:
+                  name:
+                    type: string
+                    description: Full name of the user
+                    example: John Doe
+                  phone_no:
+                    type: string
+                    description: Phone number of the user
+                    example: 080707058656
+                  hire_date:
+                    type: string
+                    format: date
+                    description: Date when the user was hired
+                    example: 2023-03-21
+                  email:
+                    type: string
+                    format: email
+                    description: Email address of the user (must be unique)
+                    example: user@example.com
+        responses:
+          201:
+            description: User added successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: User Added Successfully
+          500:
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Error adding supplier
+                    error:
+                      type: string
+                      example: Error details
+        """
+        data = request.get_json()
+
+        generator = SecurePasswordGenerator(length=16, use_digits=True, use_special_chars=True)
+
+        if data.get('name') == None or data.get('name') == "":
+            return jsonify({'message': "error adding manager due to missing name"}), 500
+        
+        if data.get('phone_no') == None or data.get('phone_no') == "":
+            return jsonify({'message': "error adding manager due to missing phone number"}), 500
+
+        if data.get('hire_date') == None or data.get('hire_date') == "":
+            return jsonify({'message': "error adding manager due to missing hire date"}), 500
+        
+        if data.get('email') == None or data.get('email') == "":
+            return jsonify({'message': "error adding manager due to missing email"}), 500
+        
+        check_email = User.query.filter(User.email == data['email']).all()
+
+        if check_email != []:
+            return jsonify({'message': "Email must be unique"}), 500
+        
+        password = generator.generate_password()
+
+        try:
+            user = User(
+                u_name=data["name"],
+                phone_no=data["phone_no"],
+                hire_date=data["hire_date"],
+                email=data["email"]
+            )
+            user.password = password  # This will use the password property setter
+            db.session.add(user)
+
+            self.send_review(data['email'], password, data['name'])
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'message': 'Erro adding supplier', 'error': str(e)}), 500
+        
+        db.session.commit()
+
+        return jsonify({'message': 'User Added Successfully'}), 201
+    
+    def send_review(self, email, password, name):
+        subject = 'Welcome to Babcock Superstore'
+        body = f'''Dear {name},
+        
+Welcome to babcock superstore we thank you on reaching this far in our application and we are happy to work with you. Kindly find the email and password along with the link you will use to be able to use to login into our system.
+
+Email: {email}
+Password: {password}
+
+website link:  https://3b73-102-88-108-181.ngrok-free.app
+
+We hope to have a wonderful journey with you.
+
+Your Faithfully,
+Babcock Admin team
+
+Note: this is a no-reply email so messages sent won't be recieved on this email. 
+        '''
+        sender = os.getenv("myemailaddress")
+        recipient = email
+        app_password = os.getenv("myemailapppassword")
+
+        msg = MIMEText(body)
+        msg['Subject'] = subject
+        msg['From'] = sender
+        msg['To'] = recipient
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp_sever:
+            smtp_sever.login(sender, app_password)
+            smtp_sever.sendmail(sender, recipient, msg.as_string())
+        return True
+    
+
+    @external_api_route.response(200, "User updated successfully")
+    @external_api_route.response(400, "Bad request")
+    @external_api_route.response(404, "User not found")
+    @external_api_route.response(409, "Conflict - duplicate values")
+    @external_api_route.response(500, "Server error")
+    @external_api_route.doc(
+        description="Update an existing user's information",
+        summary="Update a user",
+        params={
+            "id": {
+                "description": "User ID to update",
+                "in": "query",
+                "type": "integer",
+                "required": True,
+                "example": 1
+            }
+        },
+        requestBody={
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "example": "John Doe",
+                                "description": "Full name of the user"
+                            },
+                            "phone_no": {
+                                "type": "string",
+                                "example": "080707058656",
+                                "description": "Phone number of the user"
+                            },
+                            "hire_date": {
+                                "type": "string",
+                                "format": "date",
+                                "example": "2023-03-21",
+                                "description": "Date when the user was hired"
+                            },
+                            "email": {
+                                "type": "string",
+                                "format": "email",
+                                "example": "user@example.com",
+                                "description": "Email address of the user (must be unique)"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    )
+    def patch(self):
+        """
+        Update a user's information
+        ---
+        tags:
+          - external
+        parameters:
+          - name: id
+            in: query
+            description: User ID to update
+            required: true
+            schema:
+              type: integer
+              example: 1
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: Full name of the user
+                    example: John Doe
+                  phone_no:
+                    type: string
+                    description: Phone number of the user
+                    example: 080707058656
+                  hire_date:
+                    type: string
+                    format: date
+                    description: Date when the user was hired
+                    example: 2023-03-21
+                  email:
+                    type: string
+                    format: email
+                    description: Email address of the user (must be unique)
+                    example: user@example.com
+        responses:
+          200:
+            description: User updated successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: User updated successfully
+          400:
+            description: Bad request
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Field 'name' cannot be empty
+          404:
+            description: User not found
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: User not found
+          409:
+            description: Conflict due to duplicate values
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Email must be unique
+          500:
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Error updating user
+                    error:
+                      type: string
+                      example: Error details
+        """
+        try:
+            user_id = request.args.get('id')
+            if not user_id:
+                return jsonify({'message': 'User ID is required'}), 400
+                
+            data = request.get_json()
+            if not data:
+                return jsonify({'message': 'Invalid request: No JSON data provided'}), 400
+            
+            # Find the user to update
+            user = User.query.filter(User.id == user_id).first()
+            if not user:
+                return jsonify({'message': 'User not found'}), 404
+            
+            # Check for empty values
+            for key, value in data.items():
+                if value == '':
+                    return jsonify({'message': f"Field '{key}' cannot be empty"}), 400
+            
+            # Check uniqueness constraints if updating email or phone
+            all_users = User.query.all()
+            user_emails = [u.email for u in all_users if u.id != int(user_id)]
+            user_phone_nos = [u.phone_no for u in all_users if u.id != int(user_id)]
+            
+            if 'email' in data and data['email'] in user_emails:
+                return jsonify({'message': 'Email must be unique'}), 409
+                
+            if 'phone_no' in data and data['phone_no'] in user_phone_nos:
+                return jsonify({'message': 'Phone number must be unique'}), 409
+            
+            # Update user fields
+            for key, value in data.items():
+                # Handle the name field mapping to u_name in the model
+                if key == 'name':
+                    setattr(user, 'u_name', value)
+                elif hasattr(user, key):
+                    setattr(user, key, value)
+            
+            db.session.commit()
+            return jsonify({'message': 'User updated successfully'}), 200
+            
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'message': 'Error updating user', 'error': str(e)}), 500
+    
+@external_api_route.route('/deluser')
+class removeUser(MethodView):
+    @external_api_route.response(200, "User deleted successfully")
+    @external_api_route.response(500, "Server error")
+    @external_api_route.doc(
+        description="Delete a user by their email address",
+        summary="Delete a user",
+        requestBody={
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "email": {
+                                "type": "string",
+                                "example": "user@example.com",
+                                "description": "Email address of the user to delete"
+                            }
+                        },
+                        "required": ["email"]
+                    }
+                }
+            }
+        }
+    )
+    def delete(self):
+        """
+    Delete a user by email
+    ---
+    tags:
+      - external
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - email
+            properties:
+              email:
+                type: string
+                description: Email address of the user to delete
+                example: user@example.com
+    responses:
+      200:
+        description: User deleted successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Manager deleted successfully
+      500:
+        description: Server error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: Error deleting manager
+                error:
+                  type: string
+                  example: Error details
+    """
+        data = request.get_json()
+
+        if data.get('email') == None or data.get('email') == "":
+            return jsonify({"message": "Manager email required"})
+
+        check_email =  User.query.filter(User.email == data['email']).first()
+
+        if check_email == "":
+            return jsonify({'message': "Manager doesn't exsist"}), 500
+        
+        try:
+            db.session.delete(check_email)
+        
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'message': "Error deleting manager", "error": str(e)}), 500
+
+        db.session.commit()
+        return jsonify({'message': "Manager deleted successfully"}), 200
+

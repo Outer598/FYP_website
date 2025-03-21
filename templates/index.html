@@ -15,7 +15,7 @@
 
     <aside class="sidebar">
         <header class="sidebar-header">
-            <a href="#" class="header-logo">
+            <a href="{{url_for('dashBoard.manager_dashboard')}}" class="header-logo">
                 <img src="../static/img/platform-logo.jpg" alt="SalesRev-logo">
             </a>
             <button class="sidebar-toggler">
@@ -84,13 +84,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="/external-api/docs" class="nav-link">
+                    <a href="/external-api/docs" class="nav-link" target="_blank">
                         <span class="material-symbols-rounded">Api</span>
                         <span class="nav-label">Api</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li class="nav-item">
-                            <a href="/external-api/docs" class="nav-link dropdown-title">Api</a>
+                            <a href="/external-api/docs" class="nav-link dropdown-title" target="_blank">Api</a>
                         </li>
                     </ul>
                 </li>

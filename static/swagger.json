@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Product Inventory API",
-    "description": "API for Connecting to external point of Sales System",
+    "description": "API for Connecting to external point of Sales System and managing users",
     "version": "1.0.0"
   },
   "servers": [
@@ -152,6 +152,334 @@
           }
         }
       }
+    },
+    "/external/getuser": {
+      "get": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Get all users",
+        "description": "Returns a list of all users in the database",
+        "operationId": "getAllUsers",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "users returned successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/User"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external/adduser": {
+      "post": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Add a new user",
+        "description": "Creates a new user account and sends welcome email with credentials",
+        "operationId": "addUser",
+        "requestBody": {
+          "description": "User information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "phone_no",
+                  "hire_date",
+                  "email"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User's full name",
+                    "example": "John Doe"
+                  },
+                  "phone_no": {
+                    "type": "string",
+                    "description": "User's phone number",
+                    "example": "08012345678"
+                  },
+                  "hire_date": {
+                    "type": "string",
+                    "description": "Date when user was hired",
+                    "example": "2023-01-15"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "User's email address (must be unique)",
+                    "example": "johndoe@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User Added Successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error adding supplier"
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Error details"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Update user information",
+        "description": "Updates an existing user's information",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "ID of the user to update",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "User information to update",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User's updated name",
+                    "example": "John Smith"
+                  },
+                  "phone_no": {
+                    "type": "string",
+                    "description": "User's updated phone number",
+                    "example": "08087654321"
+                  },
+                  "hire_date": {
+                    "type": "string",
+                    "description": "User's updated hire date",
+                    "example": "2023-02-15"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "User's updated email address (must be unique)",
+                    "example": "johnsmith@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User updated successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Field 'name' cannot be empty"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email must be unique"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error updating user"
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Error details"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external/deluser": {
+      "delete": {
+        "tags": [
+          "external"
+        ],
+        "summary": "Delete a user",
+        "description": "Removes a user from the system",
+        "operationId": "deleteUser",
+        "requestBody": {
+          "description": "User information",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Email of the user to delete",
+                    "example": "johndoe@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Manager deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Error deleting manager"
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Error details"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -172,6 +500,25 @@
             "type": "integer",
             "format": "int32",
             "example": 100
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "user_name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "user_email": {
+            "type": "string",
+            "format": "email",
+            "example": "johndoe@example.com"
           }
         }
       }
